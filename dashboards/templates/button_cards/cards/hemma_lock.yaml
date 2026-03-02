@@ -7,9 +7,9 @@ hemma_lock:
 
   entity_picture: |
     [[[
-      return entity.state === 'unlocked'
-        ? '/local/hemma/icons/lock_open.svg'
-        : '/local/hemma/icons/lock.svg';
+      if (entity.state === 'unlocked') return '/local/hemma/icons/lock-open.svg';
+      if (entity.state === 'unlocking') return '/local/hemma/icons/lock-unlocking.svg';
+      return '/local/hemma/icons/lock.svg';
     ]]]
 
   state_display: |
@@ -50,17 +50,15 @@ hemma_lock:
     entity: '[[[ return entity.entity_id ]]]'
 
   styles:
-    entity_picture:
-      - opacity: 0.8
-      - transition: opacity 0.2s ease, filter 0.2s ease, transform 0.15s ease
-      - cursor: pointer
     img_cell:
-      - background: transparent !important
-      - box-shadow: none !important
-      - transition: filter 0.2s ease
-      - cursor: pointer
+      - color: var(--hemma-entity-active, var(--primary-text-color)) !important
+    entity_picture:
+      - opacity: var(--hemma-entity-picture-active-opacity, 1) !important
+    icon:
+      - color: var(--hemma-entity-active, var(--primary-text-color)) !important
 
   extra_styles: |
+    #img-cell { overflow: visible !important; }
     /* Hover effect for desktop */
     @media (hover: hover) {
       #img-cell:hover img {

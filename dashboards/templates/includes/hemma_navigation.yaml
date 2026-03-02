@@ -97,6 +97,7 @@ card:
             --ha-card-background: transparent;
             --ha-card-border-color: transparent;
             --ha-card-box-shadow: none;
+            --ha-card-backdrop-filter: none;
           }
           ha-card{
             margin: 0 !important;
@@ -383,6 +384,7 @@ card:
 
               const scenes = Object.values(hass.states || {})
                 .filter(e => e?.entity_id?.startsWith('scene.'))
+                .filter(s => !s.entity_id.startsWith('scene.hemma_restore_'))
                 .filter(s => !isHidden(s.entity_id))
                 .slice()
                 .sort((a,b) => (a.attributes?.friendly_name || a.entity_id)

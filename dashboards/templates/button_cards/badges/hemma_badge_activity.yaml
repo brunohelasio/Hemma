@@ -34,16 +34,25 @@ hemma_badge_activity:
 
   styles:
     card:
+      - padding: 0 14px 0 8px !important
       - background: rgba(0,0,0,0.18) !important
       - -webkit-backdrop-filter: blur(14px) saturate(1.2) !important
       - backdrop-filter: blur(14px) saturate(1.2) !important
-      - justify-self: start
-      - align-self: start
-      - place-self: start
-      - margin-inline-start: 0px !important
-      - margin-left: 0px !important
-      - --badge-after-z: 0
-      - --badge-before-z: 1
+      - border-radius: 9999px !important
+      - overflow: hidden !important
+      - width: fit-content !important
+      - max-width: var(--badge-media-max-width-current, none) !important
+      - min-height: calc(var(--badge-min-height-current, var(--badge-min-height, 50px)) + 3px) !important
+      - align-items: center !important
+      - justify-content: flex-start !important
+      - text-align: left !important
+      - gap: 6px !important
+      - isolation: isolate
+      - margin: 0 !important
+      - justify-self: start !important
+      - align-self: start !important
+      - place-self: start !important
+      - --badge-icon-size-current: var(--badge-media-icon-size-current, var(--badge-media-icon-size, 44px))
 
       - display: >
           [[[
@@ -107,6 +116,10 @@ hemma_badge_activity:
 
     entity_picture:
       - display: block
+      - width: var(--badge-media-icon-size-current, var(--badge-media-icon-size, 44px)) !important
+      - height: var(--badge-media-icon-size-current, var(--badge-media-icon-size, 44px)) !important
+      - min-width: var(--badge-media-icon-size-current, var(--badge-media-icon-size, 44px)) !important
+      - min-height: var(--badge-media-icon-size-current, var(--badge-media-icon-size, 44px)) !important
 
   name: >
     [[[
@@ -124,14 +137,19 @@ hemma_badge_activity:
         .replace(/'/g,'&#39;');
 
       return `
-        <div class="mp-wrap">
-          <div class="mp-title">${esc(friendly)}</div>
-          <div class="mp-sub">${esc(sub || '')}</div>
+        <div class="badge-wrap">
+          <div class="badge-title">${esc(friendly)}</div>
+          <div class="badge-sub">${esc(sub || '')}</div>
         </div>
       `;
     ]]]
 
   extra_styles: |
+    :host{
+      --badge-after-z: 0;
+      --badge-before-z: 1;
+    }
+
     :host ha-card::after{
       content:"";
       position:absolute;
@@ -145,7 +163,6 @@ hemma_badge_activity:
       filter: blur(26px) saturate(1.5);
       opacity: .45;
       transform: scale(1.25);
-      z-index: 0;
     }
 
     :host ha-card::before{
@@ -157,7 +174,6 @@ hemma_badge_activity:
       box-shadow:
         inset 0 0 0 1px rgba(255,255,255,0.18),
         0 0 0 1px rgba(255,255,255,0.14);
-      z-index: 1;
     }
 
     #name{
@@ -167,7 +183,7 @@ hemma_badge_activity:
       overflow: visible !important;
     }
 
-    .mp-wrap{
+    .badge-wrap{
       display:flex;
       flex-direction:column;
       align-items:flex-start;
@@ -179,7 +195,7 @@ hemma_badge_activity:
       min-height: 0 !important;
     }
 
-    .mp-title{
+    .badge-title{
       font-size: var(--badge-font-size-current, 13px);
       font-weight: 700;
       line-height: 1.2;
@@ -190,7 +206,7 @@ hemma_badge_activity:
       text-shadow: 0 0 3px rgba(0,0,0,0.25);
     }
 
-    .mp-sub{
+    .badge-sub{
       font-size: calc(var(--badge-font-size-current, 13px) - 1px);
       font-weight: 500;
       line-height: 1.15;
@@ -219,5 +235,4 @@ hemma_badge_activity:
       opacity: 1 !important;
     }
 
-    :host ha-card::after{ z-index: 0 !important; }
-    :host ha-card::before{ z-index: 1 !important; }
+

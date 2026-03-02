@@ -36,6 +36,7 @@ hemma_menu_icon:
       - cursor: pointer
       - pointer-events: all
       - transition: background 120ms ease
+      - backdrop-filter: none
     card:hover:
       - background: rgba(255,255,255,0.10)
 

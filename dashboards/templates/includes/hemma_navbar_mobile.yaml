@@ -163,11 +163,11 @@ cards:
         }
 
         .icon, .image{
-          transition: opacity .18s ease !important;
           margin: 0 !important;
           background: transparent !important;
           box-shadow: none !important;
         }
+
         .route.active .icon, .route.active .image,
         .icon.active, .image.active{
           opacity: 1 !important;
@@ -209,7 +209,7 @@ cards:
           border: 1px solid var(--wa-color-surface-border, rgba(255,255,255,.08)) !important;
           box-shadow: none !important;
           border-radius: var(--hemma-popup-br, 22px) !important;
-          padding: 4px !important;
+          padding: 7px !important;
           width: max-content !important;
           max-width: calc(100vw - (var(--hemma-popup-edge) * 2)) !important;
           max-height: calc(100vh - 140px) !important;
@@ -223,7 +223,9 @@ cards:
           text-align: left !important;
           transform: none !important;
           transform-origin: bottom center !important;
-          transition: all 0.22s cubic-bezier(.2,.8,.2,1) !important;
+          transition: all 0.2s cubic-bezier(.2,.8,.2,1) !important;
+
+          --hemma-popup-icon-size: 18px;
           --hemma-popup-label-size: 15px;
           --hemma-popup-label-weight: 400;
           --hemma-popup-label-active-weight: 550;
@@ -246,7 +248,7 @@ cards:
         }
 
         .navbar-popup.visible .popup-item{
-          transition-delay: calc(var(--index) * 0.03s) !important;
+          transition-delay: calc(var(--index) * 0.01s) !important;
         }
 
         .navbar-popup,
@@ -259,7 +261,7 @@ cards:
 
         .navbar-popup .popup-item{
           display: grid !important;
-          grid-template-columns: 18px max-content !important;
+          grid-template-columns: var(--hemma-popup-icon-size) max-content !important; /* FIX */
           align-items: center !important;
           justify-items: start !important;
           column-gap: 9px !important;
@@ -275,15 +277,30 @@ cards:
         .navbar-popup .popup-item:active{ background: rgba(255,255,255,0.10) !important; }
 
         .navbar-popup .popup-item ha-icon{
-          width: 18px !important;
-          height: 18px !important;
-          --mdc-icon-size: 18px !important;
+          width: var(--hemma-popup-icon-size) !important;   /* FIX */
+          height: var(--hemma-popup-icon-size) !important;  /* FIX */
+          --mdc-icon-size: var(--hemma-popup-icon-size) !important; /* FIX */
           display: inline-flex !important;
           align-items: center !important;
           justify-content: center !important;
           line-height: 1 !important;
           color: rgba(255,255,255,0.92) !important;
           opacity: var(--hemma-popup-label-inactive-opacity) !important;
+        }
+
+        /* FIX: clamp popup SVG <img> icons */
+        .navbar-popup .popup-item .image,
+        .navbar-popup .popup-item .image img,
+        .navbar-popup .popup-item img.image{
+          width: var(--hemma-popup-icon-size) !important;
+          height: var(--hemma-popup-icon-size) !important;
+          max-width: none !important;
+          max-height: none !important;
+          object-fit: contain !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          flex: 0 0 auto !important;
         }
 
         .navbar-popup .popup-item .label{
@@ -306,6 +323,35 @@ cards:
         }
 
         .navbar-card, .navbar-card *{ box-sizing: border-box !important; }
+
+        .navbar-card img,
+        .navbar-card .image,
+        .navbar-card .image img{
+          -webkit-touch-callout: none !important;
+          -webkit-user-select: none !important;
+          user-select: none !important;
+          -webkit-user-drag: none !important;
+          pointer-events: none !important;
+        }
+
+        .navbar-card .route,
+        .navbar-card .button{
+          -webkit-touch-callout: none !important;
+          -webkit-user-select: none !important;
+          user-select: none !important;
+        }
+
+        .navbar.mobile{
+          --navbar-route-icon-size: 26px !important;
+        }
+
+        .navbar.mobile .image,
+        .navbar.mobile .image img{
+          width: var(--navbar-route-icon-size) !important;
+          height: var(--navbar-route-icon-size) !important;
+          max-width: none !important;
+          max-height: none !important;
+        }
 
         :host, :host *{
           -webkit-tap-highlight-color: transparent !important;
@@ -337,26 +383,28 @@ cards:
         # Home
         - url: /dashboard-hemma/home
           label: Home
-          icon: mdi:home-variant
-          icon_selected: mdi:home-variant
+          image: /local/hemma/icons/home.svg
+          image_selected: /local/hemma/icons/home.svg
+          icon: /local/hemma/icons/home.svg
+          icon_selected: /local/hemma/icons/home.svg
 
         # Rooms (Dropdown Menu)
         - label: Rooms
-          icon: >
+          image: >
             [[[
               const p = window.location.pathname || '';
-              if (p === '/dashboard-hemma/bedroom') return 'mdi:bed-king';
-              if (p === '/dashboard-hemma/kitchen') return 'mdi:fridge';
-              if (p === '/dashboard-hemma/living-room') return 'mdi:sofa';
-              return 'mdi:sofa';
+              if (p === '/dashboard-hemma/bedroom') return '/local/hemma/icons/bedroom.svg';
+              if (p === '/dashboard-hemma/kitchen') return '/local/hemma/icons/kitchen.svg';
+              if (p === '/dashboard-hemma/living-room') return '/local/hemma/icons/living-room.svg';
+              return '/local/hemma/icons/living-room.svg';
             ]]]
-          icon_selected: >
+          image_selected: >
             [[[
               const p = window.location.pathname || '';
-              if (p === '/dashboard-hemma/bedroom') return 'mdi:bed-king';
-              if (p === '/dashboard-hemma/kitchen') return 'mdi:fridge';
-              if (p === '/dashboard-hemma/living-room') return 'mdi:sofa';
-              return 'mdi:sofa';
+              if (p === '/dashboard-hemma/bedroom') return '/local/hemma/icons/bedroom.svg';
+              if (p === '/dashboard-hemma/kitchen') return '/local/hemma/icons/kitchen.svg';
+              if (p === '/dashboard-hemma/living-room') return '/local/hemma/icons/living-room.svg';
+              return '/local/hemma/icons/living-room.svg';
             ]]]
           tap_action:
             action: open-popup
@@ -369,18 +417,20 @@ cards:
           popup:
             - label: Bedroom
               url: /dashboard-hemma/bedroom
-              icon: mdi:bed-king
+              image: /local/hemma/icons/bedroom.svg
             - label: Kitchen
               url: /dashboard-hemma/kitchen
-              icon: mdi:fridge
+              image: /local/hemma/icons/kitchen.svg
             - label: Living Room
               url: /dashboard-hemma/living-room
-              icon: mdi:sofa
+              image: /local/hemma/icons/living-room.svg
 
         # Scenes (Dropdown Menu)
         - label: Scenes
-          icon: mdi:layers
-          icon_selected: mdi:layers
+          image: /local/hemma/icons/scenes.svg
+          image_selected: /local/hemma/icons/scenes.svg
+          icon: /local/hemma/icons/scenes.svg
+          icon_selected: /local/hemma/icons/scenes.svg
           tap_action:
             action: open-popup
           popup: |
@@ -401,6 +451,7 @@ cards:
 
               const scenes = Object.values(hass.states || {})
                 .filter(e => e?.entity_id?.startsWith('scene.'))
+                .filter(s => !s.entity_id.startsWith('scene.hemma_restore_'))
                 // Keep only scenes that are NOT hidden/disabled in HA
                 .filter(s => !isHidden(s.entity_id))
                 .slice()
@@ -591,7 +642,7 @@ cards:
           align-items: stretch !important;
           justify-content: flex-start !important;
           text-align: left !important;
-          transition: all 0.22s cubic-bezier(.2,.8,.2,1) !important;
+          transition: all 0.2s cubic-bezier(.2,.8,.2,1) !important;
           --hemma-popup-label-size: 15px;
           --hemma-popup-label-weight: 400;
           --hemma-popup-label-active-weight: 550;
@@ -664,7 +715,7 @@ cards:
         }
 
         .navbar-popup.visible .popup-item{
-          transition-delay: calc(var(--index) * 0.02s) !important;
+          transition-delay: calc(var(--index) * 0.01s) !important;
         }
 
         .navbar-popup ha-ripple{ display:none !important; }
@@ -776,6 +827,7 @@ cards:
 
               const scenes = Object.values(hass.states || {})
                 .filter(e => e?.entity_id?.startsWith('scene.'))
+                .filter(s => !s.entity_id.startsWith('scene.hemma_restore_'))
                 .filter(s => !isHidden(s.entity_id))
                 .slice()
                 .sort((a,b) => (a.attributes?.friendly_name || a.entity_id)
@@ -964,7 +1016,7 @@ cards:
           align-items: stretch !important;
           justify-content: flex-start !important;
           text-align: left !important;
-          transition: all 0.22s cubic-bezier(.2,.8,.2,1) !important;
+          transition: all 0.2s cubic-bezier(.2,.8,.2,1) !important;
           --hemma-popup-label-size: 15px;
           --hemma-popup-label-weight: 400;
           --hemma-popup-label-active-weight: 550;
@@ -1031,7 +1083,7 @@ cards:
         }
 
         .navbar-popup.visible .popup-item{
-          transition-delay: calc(var(--index) * 0.02s) !important;
+          transition-delay: calc(var(--index) * 0.01s) !important;
         }
 
         .navbar-popup ha-ripple{ display:none !important; }
@@ -1150,6 +1202,7 @@ cards:
 
               const scenes = Object.values(hass.states || {})
                 .filter(e => e?.entity_id?.startsWith('scene.'))
+                .filter(s => !s.entity_id.startsWith('scene.hemma_restore_'))
                 .filter(s => !isHidden(s.entity_id))
                 .slice()
                 .sort((a,b) => (a.attributes?.friendly_name || a.entity_id)
@@ -1382,7 +1435,7 @@ cards:
           align-items: stretch !important;
           justify-content: flex-start !important;
           text-align: left !important;
-          transition: all 0.22s cubic-bezier(.2,.8,.2,1) !important;
+          transition: all 0.2s cubic-bezier(.2,.8,.2,1) !important;
           --hemma-popup-label-size: 15px;
           --hemma-popup-label-weight: 400;
           --hemma-popup-label-active-weight: 550;
@@ -1481,7 +1534,7 @@ cards:
         }
 
         .navbar-popup.visible .popup-item{
-          transition-delay: calc(var(--index) * 0.02s) !important;
+          transition-delay: calc(var(--index) * 0.01s) !important;
         }
 
         .navbar-popup ha-ripple{ display:none !important; }
@@ -1576,6 +1629,7 @@ cards:
 
               const scenes = Object.values(hass.states || {})
                 .filter(e => e?.entity_id?.startsWith('scene.'))
+                .filter(s => !s.entity_id.startsWith('scene.hemma_restore_'))
                 .filter(s => !isHidden(s.entity_id))
                 .slice()
                 .sort((a,b) => (a.attributes?.friendly_name || a.entity_id)

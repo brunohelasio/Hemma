@@ -11,15 +11,25 @@
 button_card_templates: !include_dir_merge_named /config/dashboards/templates/button_cards
 
 # Kiosk Mode (optional - requires kiosk-mode HACS integration)
-# Uncomment and customize if you want to hide certain elements
+# Uncomment and customize if you want to hide certain UI elements
 # kiosk_mode:
-#   hide_header: false
+#   hide_header: true
 #   hide_sidebar: false
 #   hide_dialog_light_settings_actions: true
 #   hide_dialog_logbook: true
 #   mobile_settings:
 #     hide_header: true
 #     hide_sidebar: false
+#   user_settings:
+#     - users:
+#       - "tablet"
+#       hide_header: true
+#       hide_sidebar: false
+#       hide_dialog_logbook: true
+#       hide_dialog_light_settings_actions: true
+#       hide_dialog_header_breadcrumb_navigation: true
+#       hide_dialog_header_history: true
+#       hide_dialog_attributes: true
 
 views:
   # ------------------------------------------------------
@@ -44,19 +54,36 @@ views:
           image: home
           image_position: center center
 
-          # Temperature
-          show_temp: false
-          temp_sensor:
+          # Climate (shows group badge + expandable sub-badges for temp/humidity/quality)
+          show_climate: false
+          # climate_entity_1: climate.YOUR_THERMOSTAT
+          # climate_entity_2: climate.YOUR_THERMOSTAT_2   # optional, up to 3
+
+          # Sensors (used by the climate sub-badges when show_climate is true)
+          # temp_sensor_1: sensor.YOUR_HOME_TEMPERATURE
+          # temp_sensor_2: sensor.YOUR_TEMPERATURE_2      # optional additional temp sensor
+          # temp_sensor_3: sensor.YOUR_TEMPERATURE_3      # optional additional temp sensor
+          # temp_sensor_4: sensor.YOUR_TEMPERATURE_4      # optional additional temp sensor
+          # humidity_sensor: sensor.YOUR_HUMIDITY
+          # quality_sensor: sensor.YOUR_AIR_QUALITY
+
+          # Lights Badge (optional - shows a light group badge)
+          show_lights: false
+          # light_entity_1: light.YOUR_LIGHT_GROUP_1
+          # light_entity_2: light.YOUR_LIGHT_GROUP_2
+          # light_entity_3: light.YOUR_LIGHT_GROUP_3
+          # light_entity_4: light.YOUR_LIGHT_GROUP_4
 
           # Presence Badges (optional - requires person/status sensors)
-          # These show who's home on the hero card
-          show_presence: true
-          presence_entity_1: sensor.YOUR_PERSON_1
-          presence_entity_2: sensor.YOUR_PERSON_2
+          # Shows a group badge on the hero card; tap to expand individual badges
+          show_presence: false
+          # presence_entity_1: sensor.YOUR_PERSON_1_STATUS  # optional, up to 4
+          # presence_entity_2: sensor.YOUR_PERSON_2_STATUS
+          # presence_entity_3: sensor.YOUR_PERSON_3_STATUS
+          # presence_entity_4: sensor.YOUR_PERSON_4_STATUS
 
           # Media Player Badges (shows what's playing across rooms)
-          show_media_badge: true
-          pause_timeout_minutes: 5                        # Hide paused players after X min (0 = no timeout)
+          show_media: true
           show_media_player_1: true
           media_player_1: media_player.YOUR_ENTITY        # e.g., media_player.spotify
           show_media_player_2: true
@@ -68,7 +95,6 @@ views:
 
           # Weather Widget
           show_weather: true
-          weather_mode: outdoor                           # Use 'outdoor' for Home view
           weather_entity: weather.YOUR_WEATHER            # e.g., weather.home, weather.pirateweather
           weather_temp_sensor: sensor.YOUR_OUTDOOR_TEMP   # e.g., sensor.outdoor_temperature
 
@@ -94,12 +120,13 @@ views:
 
           # Front Door Lock
           - type: custom:button-card
-            template: hemma_entity
+            template: hemma_lock
             entity: lock.YOUR_FRONT_DOOR  # e.g., lock.front_door
             name: Front Door
             variables:
               icon: door
-              battery_entity: sensor.YOUR_LOCK_BATTERY  # Optional
+              battery_entity: sensor.YOUR_LOCK_BATTERY          # Optional
+              lock_toggle_helper: input_boolean.hemma_lock_overlay  # Optional - for tap-to-confirm overlay
 
           # All Lights
           - type: custom:button-card
@@ -111,7 +138,7 @@ views:
 
           # Doorbell Camera (optional)
           - type: custom:button-card
-            template: hemma_entity
+            template: hemma_doorbell
             entity: camera.YOUR_DOORBELL  # e.g., camera.front_door
             name: Doorbell
             variables:
@@ -134,20 +161,34 @@ views:
           image: livingroom
           image_position: center center
 
-          # Room Sensors
-          show_temp: true
-          temp_sensor: sensor.YOUR_LIVING_ROOM_TEMP  # e.g., sensor.living_room_temperature
+          # Climate (optional - shows group badge + expandable sub-badges for temp/humidity/quality)
+          show_climate: false
+          # climate_entity_1: climate.YOUR_LIVING_ROOM_CLIMATE
 
-          show_humidity: true
-          humidity_sensor: sensor.YOUR_LIVING_ROOM_HUMIDITY
+          # Sensors (used by the climate sub-badges when show_climate is true)
+          # temp_sensor_1: sensor.YOUR_LIVING_ROOM_TEMP
+          # temp_sensor_2: sensor.YOUR_TEMP_2          # optional additional sensors
+          # humidity_sensor: sensor.YOUR_LIVING_ROOM_HUMIDITY
+          # quality_sensor: sensor.YOUR_AIR_QUALITY
 
-          show_quality: true
-          quality_sensor: sensor.YOUR_AIR_QUALITY  # e.g., sensor.air_quality_level
+          # Light Badge (optional)
+          show_lights: false
+          # light_entity_1: light.YOUR_LIVING_ROOM_LIGHTS
 
-          # Weather (room mode shows indoor conditions)
-          show_weather: true
-          weather_mode: room
+          # Media Player Badges (optional - shows what's playing in this room)
+          show_media: false
+          # show_media_player_1: true
+          # media_player_1: media_player.YOUR_LIVING_ROOM_PLAYER
+
+          # Weather Widget (optional - set show_weather: true and add weather_entity to enable)
+          show_weather: false
+          # weather_entity: weather.YOUR_WEATHER
+          # weather_temp_sensor: sensor.YOUR_OUTDOOR_TEMP
           temp_unit: 'F'                                  # 'F' for Fahrenheit, 'C' for Celsius
+
+          # Motion Sensor (optional)
+          show_motion: false
+          # motion_sensor: binary_sensor.YOUR_LIVING_ROOM_MOTION
 
       # MOBILE NAVBAR
       - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
@@ -170,7 +211,7 @@ views:
             entity: media_player.YOUR_LIVING_ROOM_TV
             name: Apple TV
             variables:
-              icon: apple
+              icon: apple_tv
 
           - type: custom:button-card
             template: hemma_light
@@ -180,7 +221,7 @@ views:
               icon: light
 
           - type: custom:button-card
-            template: hemma_entity
+            template: hemma_media
             entity: media_player.YOUR_TV
             name: TV
             variables:
@@ -192,6 +233,13 @@ views:
             name: Sonos
             variables:
               icon: speaker
+
+          - type: custom:button-card
+            template: hemma_curtain
+            entity: cover.YOUR_CURTAIN
+            name: Curtain
+            variables:
+              icon: curtain
 
           - type: custom:button-card
             template: hemma_fan
@@ -216,18 +264,32 @@ views:
           image: kitchen
           image_position: center center
 
-          show_temp: true
-          temp_sensor: sensor.YOUR_KITCHEN_TEMP
+          # Climate (optional - shows group badge + expandable sub-badges for temp/humidity/quality)
+          show_climate: false
+          # climate_entity_1: climate.YOUR_KITCHEN_CLIMATE
 
-          show_humidity: true
-          humidity_sensor: sensor.YOUR_KITCHEN_HUMIDITY
+          # Sensors (used by the climate sub-badges when show_climate is true)
+          # temp_sensor_1: sensor.YOUR_KITCHEN_TEMP
+          # humidity_sensor: sensor.YOUR_KITCHEN_HUMIDITY
+          # quality_sensor: sensor.YOUR_AIR_QUALITY
 
-          show_quality: true
-          quality_sensor: sensor.YOUR_AIR_QUALITY
+          # Light Badge (optional)
+          show_lights: false
+          # light_entity_1: light.YOUR_KITCHEN_LIGHTS
 
-          show_weather: true
-          weather_mode: room
+          # Media Player Badges (optional)
+          show_media: false
+          # show_media_player_1: true
+          # media_player_1: media_player.YOUR_KITCHEN_PLAYER
+
+          show_weather: false
+          # weather_entity: weather.YOUR_WEATHER
+          # weather_temp_sensor: sensor.YOUR_OUTDOOR_TEMP
           temp_unit: 'F'
+
+          # Motion Sensor (optional)
+          show_motion: false
+          # motion_sensor: binary_sensor.YOUR_KITCHEN_MOTION
 
       # MOBILE NAVBAR
       - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
@@ -246,7 +308,7 @@ views:
               icon: light
 
           - type: custom:button-card
-            template: hemma_entity
+            template: hemma_vacuum
             entity: vacuum.YOUR_VACUUM
             name: Robot Vacuum
             variables:
@@ -275,22 +337,32 @@ views:
           image: bedroom
           image_position: center center
 
-          show_temp: true
-          temp_sensor: sensor.YOUR_BEDROOM_TEMP
+          # Climate (optional - shows group badge + expandable sub-badges for temp/humidity/quality)
+          show_climate: false
+          # climate_entity_1: climate.YOUR_BEDROOM_CLIMATE
 
-          show_humidity: true
-          humidity_sensor: sensor.YOUR_BEDROOM_HUMIDITY
+          # Sensors (used by the climate sub-badges when show_climate is true)
+          # temp_sensor_1: sensor.YOUR_BEDROOM_TEMP
+          # humidity_sensor: sensor.YOUR_BEDROOM_HUMIDITY
+          # quality_sensor: sensor.YOUR_BEDROOM_AIR_QUALITY
 
-          show_quality: true
-          quality_sensor: sensor.YOUR_BEDROOM_AIR_QUALITY
+          # Light Badge (optional)
+          show_lights: false
+          # light_entity_1: light.YOUR_BEDROOM_LIGHTS
 
-          show_weather: true
-          weather_mode: room
+          # Media Player Badges (optional)
+          show_media: false
+          # show_media_player_1: true
+          # media_player_1: media_player.YOUR_BEDROOM_PLAYER
+
+          show_weather: false
+          # weather_entity: weather.YOUR_WEATHER
+          # weather_temp_sensor: sensor.YOUR_OUTDOOR_TEMP
           temp_unit: 'F'
 
           # Motion Sensor (optional)
-          show_motion: true
-          motion_sensor: binary_sensor.YOUR_MOTION_SENSOR
+          show_motion: false
+          # motion_sensor: binary_sensor.YOUR_BEDROOM_MOTION
 
       # MOBILE NAVBAR
       - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
@@ -313,7 +385,7 @@ views:
             entity: media_player.YOUR_BEDROOM_TV
             name: Apple TV
             variables:
-              icon: apple
+              icon: apple_tv
 
           - type: custom:button-card
             template: hemma_light
@@ -351,8 +423,22 @@ views:
               icon: fan
 
           - type: custom:button-card
-            template: hemma_fan
+            template: hemma_curtain
+            entity: cover.YOUR_BEDROOM_CURTAIN
+            name: Curtain
+            variables:
+              icon: curtain
+
+          - type: custom:button-card
+            template: hemma_air_purifier
             entity: fan.YOUR_AIR_PURIFIER
             name: Air Purifier
             variables:
-              icon: fan
+              icon: air-purifier
+
+          - type: custom:button-card
+            template: hemma_humidifier
+            entity: humidifier.YOUR_HUMIDIFIER
+            name: Humidifier
+            variables:
+              icon: humidifier

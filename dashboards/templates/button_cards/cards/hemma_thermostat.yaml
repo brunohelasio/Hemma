@@ -77,10 +77,9 @@ hemma_thermostat:
             - background: |
                 [[[
                   const s = String(entity?.state || '').toLowerCase();
-                  const active = ["cool","heat"].includes(s);
-                  return active
-                    ? 'rgba(255,255,255,0.06)'
-                    : 'rgba(255,255,255,0.02)';
+                  if (s === 'cool') return 'rgba(180, 180, 180, 0.02)';
+                  if (s === 'heat') return 'rgba(0, 0, 0, 0.08)';
+                  return 'rgba(255,255,255,0)';
                 ]]]
             - border: 1.5px solid
             - border-color: |
@@ -90,15 +89,12 @@ hemma_thermostat:
                   const c = isActive
                     ? 'var(--hemma-entity-active, var(--primary-text-color))'
                     : 'var(--hemma-entity-inactive, var(--secondary-text-color))';
-                  return `color-mix(in srgb, ${c} 55%, transparent)`;
+                  return `color-mix(in srgb, ${c} 75%, transparent)`;
                 ]]]
             - border-radius: 50%
             - width: 100%
             - height: 100%
-            - min-width: 0
-            - min-height: 0
-            - padding: 6px
-            - margin: 0
+            - padding: var(--puck-padding, 6px)
             - box-shadow: none
             - opacity: 0.8
             - transition: opacity 0.2s ease, transform 0.15s ease, filter 0.2s ease
@@ -121,18 +117,17 @@ hemma_thermostat:
                     const s = String(entity?.state || '').toLowerCase();
                     const isActive = ["cool","heat"].includes(s);
                     const c = isActive
-                      ? 'var(--hemma-entity-active, var(--primary-text-color))'
+                      ? 'var(--hemma-entity-active, var(--secondary-text-color))'
                       : 'var(--hemma-entity-inactive, var(--secondary-text-color))';
-                    return `color-mix(in srgb, ${c} 75%, transparent)`;
+                    return `color-mix(in srgb, ${c} 100%, transparent)`;
                   ]]]
               - font-weight: 500
               - line-height: 1
               - font-size: |
                   [[[
                     const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
-                    return isMobile ? '12px' : '16px';
+                    return isMobile ? '13px' : '16px';
                   ]]]
-              - letter-spacing: -0.5px
         extra_styles: |
           @media (hover: hover) {
             :host ha-card:hover {
@@ -169,7 +164,12 @@ hemma_thermostat:
           - type: custom:button-card
             template: [hemma_default]
             show_entity_picture: true
-            entity_picture: /local/hemma/icons/power_off.svg
+            entity_picture: |
+              [[[
+                return ['cool','heat'].includes(entity.state)
+                  ? '/local/hemma/icons/power_on.svg'
+                  : '/local/hemma/icons/power_off.svg';
+              ]]]
             tap_action:
               action: call-service
               service: climate.set_hvac_mode
@@ -182,14 +182,14 @@ hemma_thermostat:
                 - min-height: 0
                 - padding: 0
                 - box-shadow: none !important
+                - backdrop-filter: none !important
                 - background: |
                     [[[
                       return entity.state === 'off'
                         ? 'var(--hemma-control-on)'
                         : 'var(--hemma-control-off)';
                     ]]]
-              img_cell: [ { width: '30%' } ]
-              icon: [ { width: '100%' }, { height: '100%' } ]
+              img_cell: [ { width: '70%' }, { aspect-ratio: '1' } ]
 
           - type: custom:button-card
             template: [hemma_default]
@@ -229,14 +229,14 @@ hemma_thermostat:
                 - min-height: 0
                 - padding: 0
                 - box-shadow: none !important
+                - backdrop-filter: none !important
                 - background: |
                     [[[
                       return ['cool','heat'].includes(entity.state)
                         ? 'var(--hemma-control-on)'
                         : 'var(--hemma-control-off)';
                     ]]]
-              img_cell: [ { width: '35%' } ]
-              icon: [ { width: '100%' }, { height: '100%' } ]
+              img_cell: [ { width: '74%' }, { aspect-ratio: '1' } ]
 
     target_temperature:
       card:
@@ -317,8 +317,8 @@ hemma_thermostat:
                       - background: var(--hemma-control-on)
                       - border-bottom: "0.5px solid rgba(255,255,255,0.1)"
                       - box-shadow: none !important
-                    img_cell: [ { width: '30%' } ]
-                    icon: [ { transform: 'rotate(-90deg)' } ]
+                      - backdrop-filter: none !important
+                    img_cell: [ { width: '54%' }, { aspect-ratio: '1' } ]
 
                 - type: custom:button-card
                   template: [hemma_default]
@@ -342,6 +342,7 @@ hemma_thermostat:
                       - background: var(--hemma-control-on)
                       - box-shadow: none !important
                       - border-bottom: "0.5px solid rgba(255,255,255,0.1)"
+                      - backdrop-filter: none !important
                     name:
                       - font-size: 10px
                       - letter-spacing: 2px
@@ -363,9 +364,9 @@ hemma_thermostat:
                       - min-height: 0
                       - padding: 0
                       - box-shadow: none !important
+                      - backdrop-filter: none !important
                       - background: var(--hemma-control-on)
-                    img_cell: [ { width: '30%' } ]
-                    icon: [ { transform: 'rotate(-90deg)' } ]
+                    img_cell: [ { width: '54%' }, { aspect-ratio: '1' } ]
 
   styles:
     card:
@@ -373,6 +374,11 @@ hemma_thermostat:
           [[[
             const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
             return isMobile ? '48px' : '60px';
+          ]]]
+      - --puck-padding: |
+          [[[
+            const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
+            return isMobile ? '5px' : '7px';
           ]]]
     name:
       - opacity: |
@@ -392,10 +398,6 @@ hemma_thermostat:
     custom_fields:
       temp_puck:
         - position: absolute
-        - top: var(--hemma-entity-inner-pad-current, 16px)
-        - left: var(--hemma-entity-inner-pad-current, 16px)
-        - width: var(--hemma-temp-puck-size, 44px)
-        - height: var(--hemma-temp-puck-size, 44px)
         - z-index: 4
         - pointer-events: auto
         - '--mdc-ripple-color': transparent

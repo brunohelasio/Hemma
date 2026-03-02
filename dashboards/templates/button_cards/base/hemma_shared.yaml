@@ -26,9 +26,9 @@ hemma_shared:
   styles:
     grid:
       - grid-template-columns: 1fr max-content
-      - grid-template-areas: '"temperature weather" "n weather" "badges badges" "badges_media badges_media"'
-      - grid-template-rows: var(--hero-temp-reserve, 22px) min-content min-content min-content
-      - row-gap: var(--hero-header-gap-current, 6px)
+      - grid-template-areas: '"n n" "badges badges" "badges_climate badges_climate" "badges_presence badges_presence" "badges_media badges_media" "badges_lights badges_lights"'
+      - grid-template-rows: min-content min-content min-content min-content min-content min-content
+      - row-gap: 0
       - align-content: start
 
   extra_styles: |
@@ -154,15 +154,6 @@ hemma_shared:
       }
     }
 
-    .hero-temp-line{
-      font-size: var(--hero-temp-font-size);
-      font-weight: var(--hero-temp-font-weight, 600);
-      letter-spacing: var(--hero-temp-letter-spacing, 0.04em);
-      line-height: 1.2;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
     /* Tablet */
     @media (min-width:768px) and (max-width:1249px){
       :host{
@@ -235,10 +226,6 @@ hemma_shared:
         --hero-temp-reserve: 0px;
       }
 
-      .hero-temp-line{
-        display: none !important;
-      }
-
       #name,
       .name,
       .button-card-name{
@@ -262,62 +249,10 @@ hemma_shared:
       }
     }
 
-    /* Weather Formatting */
-    .hemma-weather-glance{
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 5px;
-      max-width: min(60vw, 520px);
-      overflow: visible;
-    }
-
-    .hemma-weather-glance .hw-text{
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      justify-content: center;
-      min-width: 0;
-      max-width: 100%;
-      overflow: visible;
-    }
-
-    .hemma-weather-glance .hw-title{
-      font-size: var(--hero-weather-title-size, 12px);
-      font-weight: 700;
-      letter-spacing: -0.2px;
-      opacity: 0.95;
-      line-height: 1.1;
-      white-space: nowrap;
-    }
-
-    .hemma-weather-glance .hw-sub{
-      font-size: var(--hero-weather-sub-size, 12px);
-      font-weight: 500;
-      opacity: 0.76;
-      line-height: 1.1;
-      white-space: normal;
-      overflow: visible;
-      text-overflow: unset;
-      max-width: 100%;
-    }
-
-    .hemma-weather-glance .hw-ico{
-      flex: 0 0 auto;
-      width: var(--hero-weather-icon-size, 30px);
-      height: var(--hero-weather-icon-size, 30px);
-      opacity: 0.92;
-    }
-
     @media (max-width: 767px){
       :host{
-        --hero-weather-title-size: 12px;
+        --hero-weather-title-size: 13px;
         --hero-weather-sub-size: 12px;
-        --hero-weather-icon-size: 30px;
-      }
-
-      .hemma-weather-glance{
-        max-width: min(72vw, 520px);
       }
     }
 
@@ -325,8 +260,8 @@ hemma_shared:
            (max-width: 767px) and (orientation: portrait) and (hover: none) {
       :host .button-card-content,
       :host .grid {
-        grid-template-areas: "n weather" "badges badges" "badges_media badges_media" !important;
-        grid-template-rows: min-content min-content min-content !important;
+        grid-template-areas: "n weather" "badges badges" "badges_climate badges_climate" "badges_presence badges_presence" "badges_media badges_media" "badges_lights badges_lights" !important;
+        grid-template-rows: min-content min-content min-content min-content min-content min-content !important;
       }
     }
 

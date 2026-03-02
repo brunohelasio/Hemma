@@ -1,0 +1,113 @@
+# Light Badge
+# Shows individual light entity with on/off state and brightness.
+# Tap/hold for more-info dialog.
+hemma_badge_light:
+  template: [hemma_badge_base]
+
+  variables:
+    enabled: true
+
+  show_state: false
+  show_label: false
+  show_icon: true
+  icon: mdi:lightbulb
+
+  tap_action:
+    action: call-service
+    service: script.turn_on
+    service_data:
+      entity_id: script.hemma_light_smart_toggle
+      variables:
+        light_entity: '[[[ return entity.entity_id ]]]'
+
+  hold_action:
+    action: more-info
+
+  double_tap_action:
+    action: none
+
+  extra_styles: >
+    [[[
+      const SVG_URL  = "/local/hemma/icons/light-fill.svg";
+      const ICON_PCT = 85;
+
+      return `
+        #img-cell, .img-cell{ position: relative; }
+
+        #img-cell #icon, .img-cell #icon{
+          color: transparent !important;
+          opacity: 0 !important;
+        }
+
+        #img-cell::before,
+        .img-cell::before{
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-color: var(--hemma-icon-color, var(--primary-text-color)) !important;
+
+          -webkit-mask: url('${SVG_URL}') no-repeat center / ${ICON_PCT}% ${ICON_PCT}%;
+          mask: url('${SVG_URL}') no-repeat center / ${ICON_PCT}% ${ICON_PCT}%;
+
+          transform: translateZ(0);
+        }
+      `;
+    ]]]
+
+  styles:
+    card:
+      - display: >
+          [[[
+            const v = variables?.enabled;
+            const enabled = (v === undefined || v === null) ? true :
+              (typeof v === 'boolean') ? v :
+              (typeof v === 'number') ? v !== 0 :
+              !['false','0','no','off','disabled'].includes(String(v).trim().toLowerCase());
+
+            const hasEnt = !!entity?.entity_id;
+            const stRaw  = String(entity?.state ?? '').trim();
+            const st     = stRaw.toLowerCase();
+            const hide   = !enabled || !hasEnt || !stRaw || ['unknown','unavailable','none'].includes(st);
+
+            return hide ? 'none' : 'inline-grid';
+          ]]]
+      - --badge-title-color: >
+          [[[
+            return entity?.state === 'on'
+              ? 'var(--primary-text-color)'
+              : 'var(--badge-title-inactive)';
+          ]]]
+      - --badge-sub-color: >
+          [[[
+            return entity?.state === 'on'
+              ? 'var(--secondary-text-color)'
+              : 'color-mix(in oklab, var(--secondary-text-color) 70%, transparent)';
+          ]]]
+      - --hemma-icon-color: >
+          [[[
+            if (entity?.state !== 'on') return 'var(--badge-title-inactive)';
+            return '#ffd700';
+          ]]]
+    icon:
+      - color: transparent
+
+  name: >
+    [[[
+      const friendly = entity?.attributes?.friendly_name || 'Light';
+      const isOn     = entity?.state === 'on';
+      let sub;
+      if (isOn) {
+        const brightness = entity?.attributes?.brightness;
+        sub = brightness != null ? `${Math.round((brightness / 255) * 100)}%` : 'On';
+      } else {
+        sub = 'Off';
+      }
+
+      const esc = (t) => String(t || '').replaceAll('"', '&quot;');
+      return `
+        <div class="badge-wrap">
+          <div class="badge-title">${esc(friendly)}</div>
+          <div class="badge-sub">${esc(sub)}</div>
+        </div>
+      `;
+    ]]]

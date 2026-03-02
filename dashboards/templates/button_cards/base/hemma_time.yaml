@@ -62,6 +62,7 @@ hemma_time:
     card:
       - background: transparent
       - box-shadow: none
+      - backdrop-filter: none
       - border-radius: 0
       - padding: 0
       - margin: 0
