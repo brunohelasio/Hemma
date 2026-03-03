@@ -9,7 +9,7 @@ Hemma is fully YAML-based and designed for:
 - Badges for climate, sensors, presence, and active media
 - Clean navigation with a mobile navbar + desktop/tablet top navigation
 
-![hemma_devices](https://github.com/user-attachments/assets/f66ee922-6e95-45bc-afee-ba12c8869886)
+![hemma_devices](https://github.com/user-attachments/assets/d026e4b3-222d-418b-92ab-7beb3b4a7812)
 
 ---
 ### Highlights and Features
@@ -46,20 +46,20 @@ Install via HACS (recommended) unless noted:
 ---
 
 ### Desktop View
-![home-desktop-light](https://github.com/user-attachments/assets/b5af78be-a028-4bda-bdc5-94298e329d0e)
-![livingroom-desktop-light](https://github.com/user-attachments/assets/21378996-2ddc-4d7a-872f-5565a00422ef)
+![home-desktop-light](https://github.com/user-attachments/assets/903b740d-05b9-4f6e-b56c-56f39b6071c4)
+![livingroom-desktop-light](https://github.com/user-attachments/assets/51aaef79-d163-4739-9f7d-056b1a433cf3)
 
 ### Light/Dark Mode
-![bedroom-desktop-light](https://github.com/user-attachments/assets/370123ff-8dfb-4722-9926-522692392ef1)
-![bedroom-desktop-dark](https://github.com/user-attachments/assets/63349d15-d41b-4881-b960-7e7c57b841c8)
+![bedroom-desktop-light](https://github.com/user-attachments/assets/5e9d6d51-3cc2-4e44-9ffa-628c7b910afd)
+![bedroom-desktop-dark](https://github.com/user-attachments/assets/fa2bbd8b-e9b0-4b16-87ac-af8ede195a1b)
 
 ### Mobile View (Light/Dark)
-<img src="https://github.com/user-attachments/assets/5566503b-c6b0-4ede-9acc-a7da136db883" width="404">
-<img src="https://github.com/user-attachments/assets/1710ad0f-e4f2-4596-961b-3203cacd5a4a" width="404">
+<img src="https://github.com/user-attachments/assets/5f49dca8-c097-4e38-864a-22db7ea291ab" width="404">
+<img src="https://github.com/user-attachments/assets/2e562b7b-811e-4070-afbc-a958be7efa25" width="404">
 
 ### Tablet View (Light/Dark)
-![tablet-livingroom-light](https://github.com/user-attachments/assets/019693ef-3969-4104-ac5e-ded769ab3ccb)
-![tablet-livingroom-dark](https://github.com/user-attachments/assets/ac0d1d67-0e6e-4cdb-8627-c1db13cfce13)
+![livingroom-tablet-light](https://github.com/user-attachments/assets/be178690-0347-4746-bd40-4fffc6af44de)
+![livingroom-tablet-dark](https://github.com/user-attachments/assets/5051fb90-e178-4af0-a6fd-e43fbc8b8f98)
 
 ---
 
@@ -329,9 +329,9 @@ Hemma is designed for edge-to-edge screens. If you are using the HA iOS Companio
 
 To add additional button card icons, you can download them from the links below and place the icons in the `www/hemma/icons/` folder:
 
-https://developer.apple.com/sf-symbols/
-[Apple Icons](https://developer.apple.com/sf-symbols/) (Set Background to **Dark** and Color to **Primary**)
-[Google Material Icons](https://fonts.google.com/icons?icon.query=light) (Weight 300 is recommended, file type: svg)
+[Apple Icons](https://developer.apple.com/sf-symbols/) - Set Background to **Dark** and Color to **Primary**
+
+[Google Material Icons](https://fonts.google.com/icons?icon.query=light) - Weight 300 is recommended, file type: svg
 
 ### Time
 
