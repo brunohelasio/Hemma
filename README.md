@@ -329,9 +329,9 @@ Hemma is designed for edge-to-edge screens. If you are using the HA iOS Companio
 
 To add additional button card icons, you can download them from the links below and place the icons in the `www/hemma/icons/` folder:
 
-https://developer.apple.com/sf-symbols/
-[Apple Icons](https://developer.apple.com/sf-symbols/) (Set Background to **Dark** and Color to **Primary**)
-[Google Material Icons](https://fonts.google.com/icons?icon.query=light) (Weight 300 is recommended, file type: svg)
+[Apple Icons](https://developer.apple.com/sf-symbols/) - Set Background to **Dark** and Color to **Primary**
+
+[Google Material Icons](https://fonts.google.com/icons?icon.query=light) - Weight 300 is recommended, file type: svg
 
 ### Time
 
