@@ -163,6 +163,13 @@ hemma_shared:
       }
     }
 
+    /* Tablet Portrait */
+    @media (min-width:768px) and (max-width:1249px) and (orientation:portrait){
+      :host{
+        --hero-top: var(--header-top-tablet-portrait, clamp(320px, 30vh, 420px));
+      }
+    }
+
     /* Mobile */
     @media (max-width: 767px), (max-height: 500px){
       :host{

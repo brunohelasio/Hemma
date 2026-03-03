@@ -185,8 +185,8 @@ Hemma:
   hemma-entity-overflow-y-desktop: hidden
 
   # Entity Layout - Tablet
-  hemma-entity-col-width-tablet: 210px
-  hemma-entity-height-tablet: 150px
+  hemma-entity-col-width-tablet: 220px
+  hemma-entity-height-tablet: 160px
   hemma-entity-inner-pad-tablet: 18px
   hemma-entity-name-font-tablet: 16px
   hemma-entity-state-font-tablet: 15px
@@ -304,8 +304,9 @@ Hemma:
   page-gutter-mobile: 11px
 
   # Header Top
-  header-top-desktop: clamp(400px, 24vh, 420px)
+  header-top-desktop: clamp(400px, 24vh, 460px)
   header-top-tablet: clamp(250px, 24vh, 340px)
+  header-top-tablet-portrait: clamp(400px, 30vh, 460px)
   header-top-mobile: clamp(30px, 16vh, 70px)
   header-top-mobile-nudge: -10px
 
@@ -679,6 +680,15 @@ Hemma:
           --hemma-entity-name-font-current: var(--hemma-entity-name-font-tablet, 15px);
           --hemma-entity-state-font-current: var(--hemma-entity-state-font-tablet, 13px);
           --hemma-entity-icon-size-current: var(--hemma-entity-icon-size-tablet, 28px);
+        }
+      }
+
+      /* Tablet Portrait */
+      @media (min-width: 768px) and (max-width: 1249px) and (orientation: portrait) and (min-height: 501px) and (hover: none) and (pointer: coarse) {
+        html,
+        :host,
+        ha-app-layout {
+          --hero-top: var(--header-top-tablet-portrait);
         }
       }
 
