@@ -96,11 +96,11 @@ hemma_badge_light:
       const friendly = entity?.attributes?.friendly_name || 'Light';
       const isOn     = entity?.state === 'on';
       let sub;
-      if (isOn) {
+      if (!isOn) {
+        sub = 'Off';
+      } else {
         const brightness = entity?.attributes?.brightness;
         sub = brightness != null ? `${Math.round((brightness / 255) * 100)}%` : 'On';
-      } else {
-        sub = 'Off';
       }
 
       const esc = (t) => String(t || '').replaceAll('"', '&quot;');

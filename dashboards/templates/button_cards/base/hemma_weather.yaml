@@ -57,7 +57,7 @@ hemma_weather:
           [[[
             const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
             const isTablet = !isMobile && window.matchMedia('(max-width: 1024px)').matches;
-            if (isMobile) return 'var(--weather-icon-size-mobile, 34px)';
+            if (isMobile) return 'var(--weather-icon-size-mobile, 26px)';
             if (isTablet) return 'var(--weather-icon-size-tablet, 34px)';
             return 'var(--weather-icon-size-desktop, 34px)';
           ]]]
@@ -75,8 +75,12 @@ hemma_weather:
           [[[
             return variables.hero_mode ? 'min-content' : 'min-content min-content';
           ]]]
-      - column-gap: 5px
-      - row-gap: 2px
+      - column-gap: |
+          [[[
+            const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
+            return isMobile ? '10px' : '5px';
+          ]]]
+      - row-gap: 3px
       - justify-content: >
           [[[
             return variables.hero_mode ? 'start' : 'end';
@@ -180,13 +184,13 @@ hemma_weather:
             'sunny':           'clear-day',
             'clear-night':     'clear-night',
             'partlycloudy':    'partly-cloudy-day',
-            'cloudy':          'weather-mixed',
-            'overcast':        'weather-mixed',
+            'cloudy':          'cloudy',
+            'overcast':        'cloudy',
             'rainy':           'rain',
             'pouring':         'rain-heavy',
             'snowy':           'snow',
             'snow':            'snow',
-            'snowy-rainy':     'snow',
+            'snowy-rainy':     'eather-mixed',
             'hail':            'rain-heavy',
             'lightning':       'thunder',
             'lightning-rainy': 'lightning-rainy',
@@ -248,13 +252,13 @@ hemma_weather:
         'sunny':           'clear-day',
         'clear-night':     'clear-night',
         'partlycloudy':    'partly-cloudy-day',
-        'cloudy':          'weather-mixed',
-        'overcast':        'weather-mixed',
+        'cloudy':          'cloudy',
+        'overcast':        'cloudy',
         'rainy':           'rain',
         'pouring':         'rain-heavy',
         'snowy':           'snow',
         'snow':            'snow',
-        'snowy-rainy':     'snow',
+        'snowy-rainy':     'weather-mixed',
         'hail':            'rain-heavy',
         'lightning':       'thunder',
         'lightning-rainy': 'lightning-rainy',

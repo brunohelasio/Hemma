@@ -22,10 +22,6 @@ hemma_room:
     - '[[[ return variables.media_player_2 ]]]'
     - '[[[ return variables.media_player_3 ]]]'
     - '[[[ return variables.media_player_4 ]]]'
-    - '[[[ return variables.psn_1 ]]]'
-    - '[[[ return variables.psn_2 ]]]'
-    - '[[[ return variables.media_plex_binary ]]]'
-    - '[[[ return variables.media_plex_session ]]]'
     - '[[[ return variables.light_entity_1 ]]]'
     - '[[[ return variables.light_entity_2 ]]]'
     - '[[[ return variables.light_entity_3 ]]]'
@@ -90,16 +86,6 @@ hemma_room:
 
     show_media_player_4: false
     media_player_4:
-
-    show_media_plex: false
-    media_plex_binary:
-    media_plex_session:
-
-    show_psn_1: false
-    psn_1:
-
-    show_psn_2: false
-    psn_2:
 
     show_lights: false
     light_entity_1:
@@ -201,9 +187,6 @@ hemma_room:
                 variables.show_media_player_2 && variables.media_player_2,
                 variables.show_media_player_3 && variables.media_player_3,
                 variables.show_media_player_4 && variables.media_player_4,
-                variables.show_media_plex && variables.media_plex_binary,
-                variables.show_psn_1 && variables.psn_1,
-                variables.show_psn_2 && variables.psn_2,
               ].filter(Boolean);
               const opt = mediaEids.some(isActive) ? 'media' : 'none';
               hass.callService('input_select', 'select_option', {
@@ -345,7 +328,7 @@ hemma_room:
               - 1px
               + var(--hemma-weather-bottom-nudge, 0px))
         - left: var(--hero-gutter, var(--page-gutter-mobile, 11px))
-        - right: var(--hero-gutter, var(--page-gutter-mobile, 11px))
+        - right: calc(var(--hero-gutter, var(--page-gutter-mobile, 11px)) + 6px)
         - z-index: 10
         - text-align: right
         - justify-self: end
@@ -764,9 +747,6 @@ hemma_room:
               entity_2: '[[[ return variables.show_media_player_2 ? variables.media_player_2 : null ]]]'
               entity_3: '[[[ return variables.show_media_player_3 ? variables.media_player_3 : null ]]]'
               entity_4: '[[[ return variables.show_media_player_4 ? variables.media_player_4 : null ]]]'
-              entity_5: '[[[ return variables.show_media_plex ? variables.media_plex_binary : null ]]]'
-              entity_6: '[[[ return variables.show_psn_1 ? variables.psn_1 : null ]]]'
-              entity_7: '[[[ return variables.show_psn_2 ? variables.psn_2 : null ]]]'
 
     badges_climate:
       card:
@@ -966,41 +946,6 @@ hemma_room:
                     }
                     return 'block';
                   ]]]
-            plex:
-              - display: >
-                  [[[
-                    if (!variables.show_media_plex || !variables.media_plex_binary) return 'none';
-                    const s = states[variables.media_plex_binary];
-                    return (s && s.state === 'on') ? 'block' : 'none';
-                  ]]]
-            activity1:
-              - display: >
-                  [[[
-                    if (!variables.show_psn_1 || !variables.psn_1) return 'none';
-                    const s = states[variables.psn_1];
-                    if (!s) return 'none';
-                    const st = String(s.state || '').toLowerCase();
-                    const a  = s.attributes || {};
-                    if (['playing','buffering','paused'].includes(st)) return 'block';
-                    const title  = String(a.media_title || a.title || '').trim();
-                    const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
-                    const app    = String(a.app_name || a.source || '').trim();
-                    return (title || artist || app) ? 'block' : 'none';
-                  ]]]
-            activity2:
-              - display: >
-                  [[[
-                    if (!variables.show_psn_2 || !variables.psn_2) return 'none';
-                    const s = states[variables.psn_2];
-                    if (!s) return 'none';
-                    const st = String(s.state || '').toLowerCase();
-                    const a  = s.attributes || {};
-                    if (['playing','buffering','paused'].includes(st)) return 'block';
-                    const title  = String(a.media_title || a.title || '').trim();
-                    const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
-                    const app    = String(a.app_name || a.source || '').trim();
-                    return (title || artist || app) ? 'block' : 'none';
-                  ]]]
 
         custom_fields:
           mp1:
@@ -1035,28 +980,6 @@ hemma_room:
                 enabled: '[[[ return variables.show_media_player_4 ]]]'
                 entity: '[[[ return variables.media_player_4 ]]]'
                 pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
-          plex:
-            card:
-              type: custom:button-card
-              template: hemma_badge_plex
-              entity: '[[[ return variables.media_plex_binary ]]]'
-              variables:
-                enabled: '[[[ return variables.show_media_plex ]]]'
-                session_entity: '[[[ return variables.media_plex_session ]]]'
-          activity1:
-            card:
-              type: custom:button-card
-              template: hemma_badge_activity
-              entity: '[[[ return variables.psn_1 ]]]'
-              variables:
-                enabled: '[[[ return variables.show_psn_1 ]]]'
-          activity2:
-            card:
-              type: custom:button-card
-              template: hemma_badge_activity
-              entity: '[[[ return variables.psn_2 ]]]'
-              variables:
-                enabled: '[[[ return variables.show_psn_2 ]]]'
 
     badges_lights:
       card:

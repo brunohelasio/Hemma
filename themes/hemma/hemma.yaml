@@ -4,16 +4,20 @@ Hemma:
       primary-background-color: rgb(50, 50, 50)
       secondary-background-color: rgb(40, 40, 40)
       app-header-background-color: rgba(76, 80, 84, 0.3)
-      ha-card-background: rgba(20,20,20,0.18)
-      ha-card-background-active: rgba(255,255,255,0.3)
+      ha-card-background: rgba(20,20,20,0.1)
+      ha-card-background-active: rgba(255,255,255,0.25)
+      hemma-entity-background: "rgba(20,20,20,0.1)"
+      hemma-entity-background-active: "rgba(255,255,255,0.2)"
+      ha-card-box-shadow: var(--ha-shadow-light)
+      ha-color-border-neutral-normal: transparent
       ha-color-fill-primary-normal-resting: var(--hemma-nav-bg)
+      ha-color-fill-primary-quiet-resting: rgba(100, 100, 100, .25)
+      wa-color-neutral-fill-normal: rgba(150, 150, 150, .3)
       wa-color-text-quiet: var(--secondary-text-color)
-      wa-color-neutral-fill-normal: var(--ha-card-background-active)
       mdc-text-field-fill-color: rgba(50,50,50,0.4)
       mdc-select-fill-color: rgba(50,50,50,0.4)
       mdc-theme-surface: var(--ha-card-background)
       md-list-container-color: var(--ha-card-background)
-      ha-color-border-neutral-normal: transparent
       ha-dialog-background: rgba(255,255,255,0.1)
       ha-dialog-surface-background: rgba(255,255,255,0.1)
       hemma-control-off: rgba(0,0,0,.08)
@@ -21,7 +25,7 @@ Hemma:
       thermostat-card-off: var(--hemma-control-off)
       thermostat-card-on: var(--hemma-control-on)
       button-card-box-shadow: var(--ha-shadow-light)
-      button-card-box-shadow-active: var(--ha-shadow-light-active)
+      button-card-box-shadow-active: var(--ha-shadow-light)
       navbar-primary-color: var(--hemma-nav-icon-active)
       hemma-entity-inactive: rgba(240,240,240,0.8)
       hemma-nav-bg: rgba(255,255,255,0.08)
@@ -60,22 +64,27 @@ Hemma:
       app-header-background-color: rgba(76, 80, 84, 0.3)
       ha-card-background-active: rgba(240,240,240,0.07)
       ha-card-background: rgba(0,0,0,0.4)
+      hemma-entity-background: "rgba(0,0,0,0.4)"
+      hemma-entity-background-active: "rgba(240,240,240,0.07)"
+      ha-card-box-shadow: var(--ha-shadow-light)
       ha-dialog-background: rgba(0,0,0,0.35)
       ha-dialog-surface-background: rgba(0,0,0,0.35)
-      ha-color-fill-primary-normal-resting: var(--hemma-nav-bg)
       ha-color-border-neutral-normal: transparent
+      ha-color-fill-primary-normal-resting: var(--hemma-nav-bg)
       mdc-text-field-fill-color: var(--primary-background-color)
       mdc-select-fill-color: var(--primary-background-color)
       mdc-theme-surface: var(--ha-card-background)
       md-list-container-color: var(--ha-card-background)
+      ha-color-fill-primary-normal-resting: var(--hemma-nav-bg)
+      ha-color-fill-primary-quiet-resting: rgba(100, 100, 100, .25)
+      wa-color-neutral-fill-normal: rgba(150, 150, 150, .25)
       wa-color-text-quiet: var(--secondary-text-color)
-      wa-color-neutral-fill-normal: var(--ha-card-background-active)
-      hemma-control-off: rgba(0,0,0,0.13)
-      hemma-control-on: rgba(255,255,255,0.03)
+      hemma-control-off: rgba(0,0,0,0.1)
+      hemma-control-on: rgba(255,255,255,0.08)
       thermostat-card-off: var(--hemma-control-off)
       thermostat-card-on: var(--hemma-control-on)
       button-card-box-shadow: var(--ha-shadow-dark)
-      button-card-box-shadow-active: var(--ha-shadow-dark-active)
+      button-card-box-shadow-active: var(--ha-shadow-dark)
       navbar-primary-color: var(--hemma-nav-icon-active)
       hemma-entity-inactive: rgba(240,240,240,0.7)
       hemma-nav-bg: rgba(0,0,0,.3)
@@ -116,38 +125,25 @@ Hemma:
 
   hemma-nav-height: 122px
   hemma-popup-blur: blur(20px) saturate(1.1)
-  hemma-popup-br: 22px
+  hemma-popup-br: 25px
 
   # ============================================================================
   # BUTTON CARD SHADOWS
   # ============================================================================
 
   ha-shadow-light: >
-    inset 0 0 0 1px rgba(250,250,250,0.07),
-    inset 6px 6px 10px -10px rgba(255,255,255,0.13),
-    inset -6px -6px 10px -10px rgba(255,255,255,0.16),
-    inset 0 0 3px -1px rgba(255,255,255,0.24),
-    0 14px 22px rgba(0,0,0,0.04)
-
-  ha-shadow-light-active: >
-    inset 0 0 0 1px rgba(255,255,255,0.22),
-    inset 0 0 44px -24px rgba(0,0,0,0.24),
-    0 14px 22px rgba(0,0,0,0.04)
+    inset 0 0 0 0.5px rgba(255,255,255,0.16),
+    inset 3px 3px 0.5px -3.5px rgba(255,255,255,0.14),
+    inset -2px -2px 0.5px -2px rgba(255,255,255,0.14),
+    inset 0 0 8px 1px rgba(255,255,255,0.08),
+    0 8px 20px rgba(0,0,0,0.06)
 
   ha-shadow-dark: >
-    inset 0 0 0 1px rgba(120,120,120,0.16),
+    inset 0 0 0 1px rgba(120,120,120,0.2),
     inset 0 10px 18px -16px rgba(255,255,255,0.15),
     inset 0 -10px 18px -16px rgba(255,255,255,0.15),
-    inset 1.5px 1.5px 1px -1.5px rgba(255,255,255,0.16),
-    inset -1.5px -2.1px 1px -2px rgba(255,255,255,0.16),
-    0 18px 20px rgba(0,0,0,0.04)
-
-  ha-shadow-dark-active: >
-    inset 0 0 0 1px rgba(220,220,220,0.08),
-    inset 0 10px 16px -16px rgba(255,255,255,0.16),
-    inset 0 -10px 18px -16px rgba(255,255,255,0.13),
-    inset 1.5px 1.5px 1px -1.5px rgba(255,255,255,0.16),
-    inset -1.5px -1.5px 1px -1.5px rgba(255,255,255,0.13),
+    inset 3px 3px 0.5px -3.5px rgba(255,255,255,0.15),
+    inset -2px -2px 0.5px -2px rgba(255,255,255,0.15),
     0 18px 20px rgba(0,0,0,0.04)
 
   # ============================================================================
@@ -304,7 +300,7 @@ Hemma:
   page-gutter-mobile: 11px
 
   # Header Top
-  header-top-desktop: clamp(400px, 24vh, 460px)
+  header-top-desktop: clamp(380px, 24vh, 440px)
   header-top-tablet: clamp(250px, 24vh, 340px)
   header-top-tablet-portrait: clamp(400px, 30vh, 460px)
   header-top-mobile: clamp(30px, 16vh, 70px)
@@ -356,9 +352,9 @@ Hemma:
   hero-img-brightness-from: 0.97
 
   # Weather
-  weather-icon-size-mobile: 26px
-  weather-icon-size-tablet: 26px
-  weather-icon-size-desktop: 26px
+  weather-icon-size-mobile: 24px
+  weather-icon-size-tablet: 24px
+  weather-icon-size-desktop: 24px
   hemma-weather-bottom-nudge: -5px
 
   # ============================================================================
@@ -386,8 +382,6 @@ Hemma:
   ha-card-border-color: transparent
   ha-card-border-radius: 28px
   ha-card-border-width: 0
-  ha-card-box-shadow: >
-    3px 3px 0.5px -3.5px rgba(255, 255, 255, 0.15) inset, -2px -2px 0.5px -2px rgba(255, 255, 255, 0.15) inset, 0 0 8px 1px rgba(255, 255, 255, 0.06) inset, 0 0 2px 0 rgba(0, 0, 0, 0.10)
   stack-card-gap: 0px
   horizontal-stack-card-gap: 10px
   rgb-card-background-color: rgb(10, 10, 10)
@@ -490,6 +484,14 @@ Hemma:
           height: 100svh !important;
           max-height: 100svh !important;
           overscroll-behavior: none !important;
+        }
+
+        ha-panel-lovelace,
+        hui-root,
+        ha-app-layout,
+        #view,
+        hui-view,
+        hui-view-container {
           touch-action: none !important;
         }
       }
@@ -589,8 +591,8 @@ Hemma:
       }
 
       ha-dropdown::part(menu) {
-        backdrop-filter: blur(20px) saturate(1.2) !important;
-        -webkit-backdrop-filter: blur(20px) saturate(1.2) !important;
+        backdrop-filter: blur(20px) saturate(1.02) !important;
+        -webkit-backdrop-filter: blur(20px) saturate(1.02) !important;
       }
 
       .mdc-data-table {
@@ -821,8 +823,8 @@ Hemma:
           .mdc-drawer__surface {
             background: var(--sidebar-background-color) !important;
             background-color: var(--sidebar-background-color) !important;
-            -webkit-backdrop-filter: blur(20px) saturate(1.25) !important;
-            backdrop-filter: blur(20px) saturate(1.25) !important;
+            -webkit-backdrop-filter: blur(20px) saturate(1.02) !important;
+            backdrop-filter: blur(20px) saturate(1.02) !important;
             box-shadow: none !important;
             border: 0 !important;
             border-right: 0 !important;
@@ -849,8 +851,8 @@ Hemma:
     .: |
       :host {
         background-color: transparent !important;
-        -webkit-backdrop-filter: blur(20px) saturate(1.25) !important;
-        backdrop-filter: blur(20px) saturate(1.25) !important;
+        -webkit-backdrop-filter: blur(20px) saturate(1.02) !important;
+        backdrop-filter: blur(20px) saturate(1.02) !important;
         box-shadow: none !important;
         border: 0 !important;
         outline: none !important;

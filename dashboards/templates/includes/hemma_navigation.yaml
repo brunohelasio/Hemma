@@ -262,7 +262,7 @@ card:
           justify-items: start !important;
           column-gap: 11px !important;
           padding: 10px 12px 10px 10px !important;
-          border-radius: 16px !important;
+          border-radius: 9999px !important;
           width: 100% !important;
           box-sizing: border-box !important;
           text-align: left !important;
@@ -298,6 +298,23 @@ card:
           opacity: var(--hemma-popup-label-inactive-opacity) !important;
           padding: 0 !important;
           margin: 0 !important;
+        }
+
+        .navbar-popup .popup-item .image,
+        .navbar-popup .popup-item .image img,
+        .navbar-popup .popup-item img.image{
+          width: 18px !important;
+          height: 18px !important;
+          max-width: none !important;
+          max-height: none !important;
+          object-fit: contain !important;
+          display: inline-flex !important;
+          flex: 0 0 auto !important;
+          -webkit-touch-callout: none !important;
+          -webkit-user-select: none !important;
+          user-select: none !important;
+          -webkit-user-drag: none !important;
+          pointer-events: none !important;
         }
 
         .navbar-popup .label{

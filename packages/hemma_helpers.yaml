@@ -87,6 +87,8 @@ script:
                     {% set m = state_attr(light_entity, 'entity_id') %}
                     {% if m %}{{ m }}{% else %}{{ [light_entity] }}{% endif %}
               - service: light.turn_off
+                data:
+                  transition: 2
                 target:
                   entity_id: "{{ light_entity }}"
         # Light is OFF → restore snapshot if it exists, otherwise turn on normally
@@ -100,8 +102,11 @@ script:
                   - service: scene.turn_on
                     data:
                       entity_id: "{{ scene_entity }}"
+                      transition: 2
             default:
               - service: light.turn_on
+                data:
+                  transition: 2
                 target:
                   entity_id: "{{ light_entity }}"
 

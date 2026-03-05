@@ -8,4 +8,4 @@ hemma_default:
       - border-radius: 0
       - padding: 0
       - margin: 0
-      - box-shadow: var(--button-card-box-shadow, var(--ha-card-box-shadow))
+      - box-shadow: var(--ha-card-box-shadow)

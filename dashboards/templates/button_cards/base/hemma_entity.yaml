@@ -78,11 +78,11 @@ hemma_entity:
       value: |
         [[[
           const s = (entity?.state || "").toLowerCase();
-          return ["on","playing","unlocked","cleaning","cool","heat"].includes(s);
+          return ["on","open","opening","playing","unlocked","cleaning","returning","cool","heat"].includes(s);
         ]]]
       styles:
         card:
-          - background: var(--ha-card-background-active)
+          - background: var(--hemma-entity-background-active)
           - box-shadow: var(--button-card-box-shadow-active, var(--button-card-box-shadow)) !important
         name:
           - color: var(--hemma-entity-active, var(--primary-text-color))
@@ -99,9 +99,10 @@ hemma_entity:
 
   styles:
     card:
-      - background: var(--ha-card-background)
-      - backdrop-filter: blur(20px)
+      - background: var(--hemma-entity-background)
+      - backdrop-filter: blur(20px) saturate(1.01) brightness(1.04)
       - border-radius: var(--ha-card-border-radius, 30px)
+      - box-shadow: var(--button-card-box-shadow)
       - position: relative
       - height: var(--hemma-entity-height-current, var(--hemma-entity-height-desktop, 180px))
       - padding: var(--hemma-entity-inner-pad-current, var(--hemma-entity-inner-pad-desktop, 22px))

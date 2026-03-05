@@ -13,6 +13,7 @@ hemma_badge_light_group:
 
   variables:
     enabled: true
+    hold_entity: null
     entity_1: null
     entity_2: null
     entity_3: null
@@ -38,7 +39,13 @@ hemma_badge_light_group:
         ]]]
 
   hold_action:
-    action: more-info
+    action: >
+      [[[ return variables?.hold_entity ? 'call-service' : 'none'; ]]]
+    service: script.turn_on
+    service_data:
+      entity_id: script.hemma_light_smart_toggle
+      variables:
+        light_entity: '[[[ return variables?.hold_entity; ]]]'
 
   double_tap_action:
     action: none

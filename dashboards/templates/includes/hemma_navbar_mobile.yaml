@@ -206,8 +206,7 @@ cards:
           background: var(--hemma-popup-bg, rgba(0,0,0,0.25)) !important;
           -webkit-backdrop-filter: var(--hemma-popup-blur, blur(20px) saturate(1.1)) !important;
           backdrop-filter: var(--hemma-popup-blur, blur(20px) saturate(1.1)) !important;
-          border: 1px solid var(--wa-color-surface-border, rgba(255,255,255,.08)) !important;
-          box-shadow: none !important;
+          box-shadow: var(--button-card-box-shadow) !important;
           border-radius: var(--hemma-popup-br, 22px) !important;
           padding: 7px !important;
           width: max-content !important;
@@ -266,7 +265,7 @@ cards:
           justify-items: start !important;
           column-gap: 9px !important;
           padding: 9px 12px !important;
-          border-radius: var(--hemma-popup-br, 22px) !important;
+          border-radius: 9999px !important;
           width: 100% !important;
           color: rgba(255,255,255,0.92) !important;
           box-sizing: border-box !important;
@@ -277,9 +276,9 @@ cards:
         .navbar-popup .popup-item:active{ background: rgba(255,255,255,0.10) !important; }
 
         .navbar-popup .popup-item ha-icon{
-          width: var(--hemma-popup-icon-size) !important;   /* FIX */
-          height: var(--hemma-popup-icon-size) !important;  /* FIX */
-          --mdc-icon-size: var(--hemma-popup-icon-size) !important; /* FIX */
+          width: var(--hemma-popup-icon-size) !important;
+          height: var(--hemma-popup-icon-size) !important;
+          --mdc-icon-size: var(--hemma-popup-icon-size) !important;
           display: inline-flex !important;
           align-items: center !important;
           justify-content: center !important;
@@ -288,7 +287,6 @@ cards:
           opacity: var(--hemma-popup-label-inactive-opacity) !important;
         }
 
-        /* FIX: clamp popup SVG <img> icons */
         .navbar-popup .popup-item .image,
         .navbar-popup .popup-item .image img,
         .navbar-popup .popup-item img.image{
@@ -301,6 +299,11 @@ cards:
           align-items: center !important;
           justify-content: center !important;
           flex: 0 0 auto !important;
+          -webkit-touch-callout: none !important;
+          -webkit-user-select: none !important;
+          user-select: none !important;
+          -webkit-user-drag: none !important;
+          pointer-events: none !important;
         }
 
         .navbar-popup .popup-item .label{
@@ -670,7 +673,7 @@ cards:
           justify-items: start !important;
           column-gap: 11px !important;
           padding: 8px 12px 8px 10px !important;
-          border-radius: 16px !important;
+          border-radius: 9999px !important;
           width: 100% !important;
           box-sizing: border-box !important;
           text-align: left !important;
@@ -1038,7 +1041,7 @@ cards:
           justify-items: start !important;
           column-gap: 11px !important;
           padding: 8px 12px 8px 10px !important;
-          border-radius: 16px !important;
+          border-radius: 9999px !important;
           width: 100% !important;
           box-sizing: border-box !important;
           text-align: left !important;
@@ -1469,7 +1472,7 @@ cards:
           justify-items: start !important;
           column-gap: 11px !important;
           padding: 8px 12px 8px 10px !important;
-          border-radius: 16px !important;
+          border-radius: 9999px !important;
           width: 100% !important;
           box-sizing: border-box !important;
           text-align: left !important;

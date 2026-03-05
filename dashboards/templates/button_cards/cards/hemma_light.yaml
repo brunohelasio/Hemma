@@ -40,9 +40,14 @@ hemma_light:
     action: more-info
     entity: '[[[ return entity.entity_id ]]]'
 
-  # Tap ONLY the icon/picture area = toggle
+  # Tap ONLY the icon/picture area = smart toggle (fade out/in, scene restore on turn-on)
   icon_tap_action:
-    action: toggle
+    action: call-service
+    service: script.turn_on
+    service_data:
+      entity_id: script.hemma_light_smart_toggle
+      variables:
+        light_entity: '[[[ return entity.entity_id ]]]'
 
   # Optional: keep icon hold as more-info (or set to none)
   icon_hold_action:
