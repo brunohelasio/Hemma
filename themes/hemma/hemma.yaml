@@ -12,7 +12,6 @@ Hemma:
       ha-color-border-neutral-normal: transparent
       ha-color-fill-primary-normal-resting: var(--hemma-nav-bg)
       ha-color-fill-primary-quiet-resting: rgba(100, 100, 100, .25)
-      wa-color-neutral-fill-normal: rgba(150, 150, 150, .3)
       wa-color-text-quiet: var(--secondary-text-color)
       mdc-text-field-fill-color: rgba(50,50,50,0.4)
       mdc-select-fill-color: rgba(50,50,50,0.4)
@@ -77,7 +76,6 @@ Hemma:
       md-list-container-color: var(--ha-card-background)
       ha-color-fill-primary-normal-resting: var(--hemma-nav-bg)
       ha-color-fill-primary-quiet-resting: rgba(100, 100, 100, .25)
-      wa-color-neutral-fill-normal: rgba(150, 150, 150, .25)
       wa-color-text-quiet: var(--secondary-text-color)
       hemma-control-off: rgba(0,0,0,0.1)
       hemma-control-on: rgba(255,255,255,0.08)
@@ -112,7 +110,7 @@ Hemma:
       secondary-text-color: rgba(240,240,240,0.9)
       disabled-text-color: rgba(208,208,208,0.5)
       sidebar-background-color: var(--ha-card-background)
-      sidebar-icon-color: '#67676b'
+      sidebar-icon-color: '#9f9fa1'
       sidebar-text-color: '#a8a8a8'
       vignette-alpha: 0.78
       vignette-edge: 0.68
@@ -430,7 +428,7 @@ Hemma:
   # HA & WEB AWESOME SYSTEM TOKENS
   # ============================================================================
 
-  ha-color-on-neutral-normal: var(--secondary-text-color)
+  ha-color-on-neutral-normal: var(--primary-text-color)
   ha-border-radius-lg: 12px
   ha-border-radius-sm: 30px
   ha-card-features-border-radius: 30px
@@ -439,6 +437,9 @@ Hemma:
   wa-color-on-normal: rgba(255,255,255,.95)
   wa-border-radius-m: 24px
   wa-border-radius-s: 30px
+  wa-border-style: none
+  wa-shadow-m: var(--ha-card-box-shadow)
+  wa-color-neutral-fill-normal: "#FFFFFF14"
   wa-color-surface-border: rgba(255,255,255,.1)
   wa-color-neutral-fill-loud: var(--primary-color)
   wa-color-neutral-fill-quiet: var(--primary-color)
@@ -454,6 +455,15 @@ Hemma:
   # ============================================================================
 
   card-mod-theme: "Hemma"
+
+  card-mod-drawer: |
+    .mdc-drawer {
+      background-color: var(--sidebar-background-color) !important;
+      backdrop-filter: blur(20px) saturate(1.02);
+      -webkit-backdrop-filter: blur(20px) saturate(1.02);
+      border-right: none !important;
+      box-shadow: none !important;
+    }
 
   card-mod-root-yaml: |
     .: |
@@ -814,45 +824,10 @@ Hemma:
         }
       }
 
-    home-assistant$:
-
-      ha-drawer$:
-        .: |
-          aside.mdc-drawer,
-          .mdc-drawer,
-          .mdc-drawer__surface {
-            background: var(--sidebar-background-color) !important;
-            background-color: var(--sidebar-background-color) !important;
-            -webkit-backdrop-filter: blur(20px) saturate(1.02) !important;
-            backdrop-filter: blur(20px) saturate(1.02) !important;
-            box-shadow: none !important;
-            border: 0 !important;
-            border-right: 0 !important;
-            border-inline-end: 0 !important;
-            border-right-style: none !important;
-            outline: none !important;
-          }
-
-          .mdc-drawer__content,
-          .drawer-content,
-          .content,
-          .panels-list,
-          .menu,
-          .toolbar {
-            background: transparent !important;
-            background-color: transparent !important;
-            border-color: transparent !important;
-            box-shadow: none !important;
-            border-right-style: none !important;
-            border: 0 !important;
-          }
-
   card-mod-sidebar-yaml: |
     .: |
       :host {
-        background-color: transparent !important;
-        -webkit-backdrop-filter: blur(20px) saturate(1.02) !important;
-        backdrop-filter: blur(20px) saturate(1.02) !important;
+        background: none !important;
         box-shadow: none !important;
         border: 0 !important;
         outline: none !important;
@@ -862,6 +837,17 @@ Hemma:
         border-bottom: 0 !important;
         box-shadow: none !important;
       }
+
+      ha-md-list-item,
+      ha-md-list-item.selected::before {
+        border-radius: var(--ha-card-border-radius) !important;
+      }
+
+  card-mod-drawer: |
+    .mdc-drawer {
+      background-color: var(--app-header-background-color) !important;
+      backdrop-filter: var(--ha-card-backdrop-filter);
+    }
 
   card-mod-view-yaml: |
     .: |
@@ -1044,5 +1030,13 @@ Hemma:
     :host(.hemma-hero) .button-card-content{
       direction: ltr !important;
       text-align: left !important;
+    }
+
+    /* Energy dashboard */
+    .mdc-data-table,
+    .mdc-data-table__row,
+    .mdc-data-table__header-cell,
+    ha-sankey-chart {
+      background: none !important;
     }
 
