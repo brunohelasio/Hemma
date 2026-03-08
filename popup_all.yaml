@@ -1,0 +1,19 @@
+# Popup Configurations
+
+## Aspirador Popup
+layout:
+  fullscreen: true
+settings:
+  frequency: daily
+
+## Seguranca Popup
+layout:
+  fullscreen: true
+settings:
+  alertLevel: high
+
+## Other Popups
+layout:
+  fullscreen: true
+settings:
+  default: true
