@@ -56,7 +56,7 @@ card:
 
   cards:
 
-    # Left spacer — column is fixed calc(8vw + 100px), matches right column for centering
+    # Left spacer
     - type: custom:button-card
       show_name: false
       show_icon: false
@@ -375,6 +375,10 @@ card:
           position: fixed !important;
           inset: 0 !important;
           z-index: 999998 !important;
+        }
+
+        .navbar.desktop.top{
+          left: calc(50% + var(--hemma-sidebar-w, 0px) / 2) !important;
         }
 
       routes:

@@ -23,6 +23,8 @@ lovelace:
       url: "/local/layout-card-modified/layout-card-modified.js?v=12"
     - type: "module"
       url: "/local/navbar-popup-caret/navbar-popup-caret.js"
+    - type: "module"
+      url: "/local/navbar-sidebar-offset/navbar-sidebar-offset.js"
     - type: "css"
       url: "https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&display=swap"
   dashboards:
