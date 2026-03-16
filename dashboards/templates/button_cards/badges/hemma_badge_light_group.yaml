@@ -73,7 +73,7 @@ hemma_badge_light_group:
         variables?.entity_5, variables?.entity_6, variables?.entity_7, variables?.entity_8
       ].filter(Boolean);
 
-      const SVG_URL  = "/local/hemma/icons/light-fill.svg";
+      const SVG_URL  = "/local/hemma/icons/light.svg";
       const ICON_PCT = 78;
       const INSET_PX = 0;
 
