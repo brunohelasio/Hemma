@@ -77,8 +77,8 @@ hemma_thermostat:
             - background: |
                 [[[
                   const s = String(entity?.state || '').toLowerCase();
-                  if (s === 'cool') return 'var(--ha-card-background-active)';
-                  if (s === 'heat') return 'var(--ha-card-background-active)';
+                  if (s === 'cool') return 'var(--ha-card-background)';
+                  if (s === 'heat') return 'var(--ha-card-background)';
                   return 'transparent';
                 ]]]
             - border: 1.5px solid

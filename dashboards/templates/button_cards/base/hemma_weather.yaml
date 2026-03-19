@@ -78,7 +78,7 @@ hemma_weather:
       - column-gap: |
           [[[
             const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
-            return isMobile ? '10px' : '5px';
+            return isMobile ? '5px' : '5px';
           ]]]
       - row-gap: 3px
       - justify-content: >

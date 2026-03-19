@@ -38,6 +38,17 @@ hemma_network:
           : entity.entity_id;
       ]]]
 
+  icon_tap_action:
+    action: more-info
+    entity: >
+      [[[
+        const dl = parseFloat(entity?.state);
+        const ul = parseFloat(states[variables.upload_sensor]?.state);
+        return (Number.isFinite(ul) && ul > dl && variables.upload_sensor)
+          ? variables.upload_sensor
+          : entity.entity_id;
+      ]]]
+
   hold_action:
     action: more-info
     entity: >
@@ -65,9 +76,30 @@ hemma_network:
       if (max < idle) return 'Idle';
 
       const tier = max < light ? 'Light' : max < heavy ? 'Active' : 'Heavy';
-      const dir  = (!dlOk || (ulOk && ul > dl)) ? 'Uploads' : 'Downloads';
+      const dir  = (!dlOk || (ulOk && ul > dl)) ? 'Upload' : 'Download';
       return `${tier} ${dir}`;
     ]]]
+
+  extra_styles: |
+    @media (hover: hover) {
+      #img-cell:hover {
+        transform: scale(1.05);
+        transition: transform 0.15s ease;
+      }
+      #img-cell:hover img {
+        opacity: 1 !important;
+        filter: brightness(1.2) !important;
+      }
+    }
+    @media (hover: none) {
+      #img-cell:active {
+        transform: scale(1.05);
+      }
+      #img-cell:active img {
+        opacity: 1 !important;
+        filter: brightness(1.2) !important;
+      }
+    }
 
   # Glowing active style when max speed >= light_threshold
   state:

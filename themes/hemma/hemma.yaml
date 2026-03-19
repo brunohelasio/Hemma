@@ -42,12 +42,13 @@ Hemma:
       hemma-nav-fade: |
         linear-gradient(
           to top,
-          rgba(100,100,100,0.98) 0%,
-          rgba(100,100,100,0.76) 22%,
-          rgba(100,100,100,0.40) 42%,
-          rgba(100,100,100,0.16) 68%,
+          rgba(100,100,100,0.88) 0%,
+          rgba(100,100,100,0.65) 22%,
+          rgba(100,100,100,0.32) 42%,
+          rgba(100,100,100,0.12) 68%,
           rgba(100,100,100,0.00) 95%
         )
+      hemma-nav-fade-top: 88svh
       primary-text-color: "#ffffff"
       text-primary-color: rgba(255,255,255,.95)
       secondary-text-color: rgba(245,245,245,0.8)
@@ -99,12 +100,13 @@ Hemma:
       hemma-nav-fade: |
         linear-gradient(
           to top,
-          rgba(40,40,40,0.90) 0%,
-          rgba(40,40,40,0.75) 22%,
-          rgba(40,40,40,0.45) 42%,
-          rgba(40,40,40,0.22) 72%,
-          rgba(40,40,40,0.00) 98%
+          rgba(30,30,30,0.90) 0%,
+          rgba(30,30,30,0.75) 13%,
+          rgba(30,30,30,0.45) 30%,
+          rgba(30,30,30,0.22) 48%,
+          rgba(30,30,30,0.00) 65%
         )
+      hemma-nav-fade-top: 88svh
       primary-text-color: "#ffffff"
       text-primary-color: rgba(255,255,255,.98)
       secondary-text-color: rgba(240,240,240,0.9)
@@ -121,7 +123,7 @@ Hemma:
   # NAVIGATION & POPUPS
   # ============================================================================
 
-  hemma-nav-height: 122px
+  hemma-nav-height: 118px
   hemma-popup-blur: blur(20px) saturate(1.1)
   hemma-popup-br: 25px
 
@@ -140,8 +142,8 @@ Hemma:
     inset 0 0 0 1px rgba(120,120,120,0.2),
     inset 0 10px 18px -16px rgba(255,255,255,0.15),
     inset 0 -10px 18px -16px rgba(255,255,255,0.15),
-    inset 3px 3px 0.5px -3.5px rgba(255,255,255,0.15),
-    inset -2px -2px 0.5px -2px rgba(255,255,255,0.15),
+    inset 3px 3px 0.5px -3.5px rgba(255,255,255,0.12),
+    inset -2px -2px 0.5px -2px rgba(255,255,255,0.12),
     0 18px 20px rgba(0,0,0,0.04)
 
   # ============================================================================
@@ -350,7 +352,7 @@ Hemma:
   hero-img-brightness-from: 0.97
 
   # Weather
-  weather-icon-size-mobile: 24px
+  weather-icon-size-mobile: 26px
   weather-icon-size-tablet: 24px
   weather-icon-size-desktop: 24px
   hemma-weather-bottom-nudge: -5px
@@ -459,8 +461,8 @@ Hemma:
   card-mod-drawer: |
     .mdc-drawer {
       background-color: var(--sidebar-background-color) !important;
-      backdrop-filter: blur(20px) saturate(1.02);
-      -webkit-backdrop-filter: blur(20px) saturate(1.02);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
       border-right: none !important;
       box-shadow: none !important;
     }
@@ -579,6 +581,19 @@ Hemma:
         --layout-padding: 0px !important;
         --layout-height: auto !important;
         --layout-overflow: visible !important;
+        --ha-card-backdrop-filter: none;
+        --ha-card-background: transparent;
+        --ha-card-box-shadow: none;
+        --ha-card-border-color: transparent;
+        --ha-card-border-width: 0px;
+      }
+
+      navbar-card{
+        --ha-card-backdrop-filter: none;
+        --ha-card-background: transparent;
+        --ha-card-box-shadow: none;
+        --ha-card-border-color: transparent;
+        --ha-card-border-width: 0px;
       }
 
       grid-layout {
@@ -940,7 +955,7 @@ Hemma:
           position: fixed;
           left: 0;
           right: 0;
-          top: 85svh;
+          top: 80svh;
           bottom: 0;
           height: auto;
           pointer-events: none;

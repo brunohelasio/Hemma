@@ -97,7 +97,7 @@ hemma_badge_presence_group:
             const homeCount = entities.filter(isHome).length;
             if (homeCount === entities.length) return '#83fcb4'; // all home
             if (homeCount === 0)               return 'var(--badge-title-inactive)'; // all away
-            return '#f9c80e'; // some away
+            return '#ffd900'; // some away
           ]]]
 
   name: >

@@ -6,7 +6,6 @@ hemma_room:
     - hemma_shared
 
   triggers_update:
-    - '[[[ return variables.motion_sensor ]]]'
     - '[[[ return variables.temp_sensor_1 ]]]'
     - '[[[ return variables.temp_sensor_2 ]]]'
     - '[[[ return variables.temp_sensor_3 ]]]'
@@ -63,9 +62,6 @@ hemma_room:
     humidity_sensor:
 
     quality_sensor:
-
-    show_motion: false
-    motion_sensor:
 
     show_presence: false
     presence_entity_1:
@@ -218,32 +214,6 @@ hemma_room:
     grid: []  # Inherits from hemma_shared
 
     custom_fields:
-      motion_detection:
-        - display: >
-            [[[
-              return variables.show_motion && variables.motion_sensor ? 'block' : 'none';
-            ]]]
-        - position: fixed
-        - right: 0
-        - left: 0
-        - bottom: 0
-        - transform: >
-            [[[
-              return states[variables.motion_sensor]?.state === 'on'
-                ? 'translateY(0)'
-                : 'translateY(100%)';
-            ]]]
-        - transition: transform 0.5s
-        - padding: 14px
-        - color: white
-        - font-size: 13px
-        - text-transform: uppercase
-        - letter-spacing: 2px
-        - font-weight: 700
-        - background: rgba(255,255,255,0.08)
-        - backdrop-filter: blur(8px)
-        - z-index: 999
-
       temperature:
         - grid-area: temperature
         - display: >
@@ -1055,80 +1025,6 @@ hemma_room:
                     if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 5); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return 'max-width 0.001s ease 0.3s, margin-right 0.001s ease 0.3s'; }
                     return 'max-width 0.001s ease, margin-right 0.001s ease';
                   ]]]
-            activity1:
-              - max-width: >
-                  [[[
-                    if (!variables.show_psn_1 || !variables.psn_1) return '0px';
-                    const s = states[variables.psn_1]; if (!s) return '0px';
-                    const st = String(s.state || '').toLowerCase();
-                    const a = s.attributes || {};
-                    if (['playing','buffering','paused'].includes(st)) return '350px';
-                    const title = String(a.media_title || a.title || '').trim();
-                    const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
-                    const app = String(a.app_name || a.source || '').trim();
-                    return (title || artist || app) ? '350px' : '0px';
-                  ]]]
-              - margin-right: >
-                  [[[
-                    if (!variables.show_psn_1 || !variables.psn_1) return '0px';
-                    const s = states[variables.psn_1]; if (!s) return '0px';
-                    const st = String(s.state || '').toLowerCase();
-                    const a = s.attributes || {};
-                    if (['playing','buffering','paused'].includes(st)) return 'var(--badge-gap-current, var(--badge-gap, 10px))';
-                    const title = String(a.media_title || a.title || '').trim();
-                    const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
-                    const app = String(a.app_name || a.source || '').trim();
-                    return (title || artist || app) ? 'var(--badge-gap-current, var(--badge-gap, 10px))' : '0px';
-                  ]]]
-              - transition: >
-                  [[[
-                    if (!variables.show_psn_1 || !variables.psn_1) return 'max-width 0.001s ease 0.3s, margin-right 0.001s ease 0.3s';
-                    const s = states[variables.psn_1]; if (!s) return 'max-width 0.001s ease 0.3s, margin-right 0.001s ease 0.3s';
-                    const st = String(s.state || '').toLowerCase();
-                    const a = s.attributes || {};
-                    if (['playing','buffering','paused'].includes(st)) return 'max-width 0.001s ease, margin-right 0.001s ease';
-                    const title = String(a.media_title || a.title || '').trim();
-                    const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
-                    const app = String(a.app_name || a.source || '').trim();
-                    return (title || artist || app) ? 'max-width 0.001s ease, margin-right 0.001s ease' : 'max-width 0.001s ease 0.3s, margin-right 0.001s ease 0.3s';
-                  ]]]
-            activity2:
-              - max-width: >
-                  [[[
-                    if (!variables.show_psn_2 || !variables.psn_2) return '0px';
-                    const s = states[variables.psn_2]; if (!s) return '0px';
-                    const st = String(s.state || '').toLowerCase();
-                    const a = s.attributes || {};
-                    if (['playing','buffering','paused'].includes(st)) return '350px';
-                    const title = String(a.media_title || a.title || '').trim();
-                    const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
-                    const app = String(a.app_name || a.source || '').trim();
-                    return (title || artist || app) ? '350px' : '0px';
-                  ]]]
-              - margin-right: >
-                  [[[
-                    if (!variables.show_psn_2 || !variables.psn_2) return '0px';
-                    const s = states[variables.psn_2]; if (!s) return '0px';
-                    const st = String(s.state || '').toLowerCase();
-                    const a = s.attributes || {};
-                    if (['playing','buffering','paused'].includes(st)) return 'var(--badge-gap-current, var(--badge-gap, 10px))';
-                    const title = String(a.media_title || a.title || '').trim();
-                    const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
-                    const app = String(a.app_name || a.source || '').trim();
-                    return (title || artist || app) ? 'var(--badge-gap-current, var(--badge-gap, 10px))' : '0px';
-                  ]]]
-              - transition: >
-                  [[[
-                    if (!variables.show_psn_2 || !variables.psn_2) return 'max-width 0.001s ease 0.3s, margin-right 0.001s ease 0.3s';
-                    const s = states[variables.psn_2]; if (!s) return 'max-width 0.001s ease 0.3s, margin-right 0.001s ease 0.3s';
-                    const st = String(s.state || '').toLowerCase();
-                    const a = s.attributes || {};
-                    if (['playing','buffering','paused'].includes(st)) return 'max-width 0.001s ease, margin-right 0.001s ease';
-                    const title = String(a.media_title || a.title || '').trim();
-                    const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
-                    const app = String(a.app_name || a.source || '').trim();
-                    return (title || artist || app) ? 'max-width 0.001s ease, margin-right 0.001s ease' : 'max-width 0.001s ease 0.3s, margin-right 0.001s ease 0.3s';
-                  ]]]
 
         custom_fields:
           mp1:
@@ -1163,46 +1059,6 @@ hemma_room:
                 enabled: '[[[ return variables.show_media_player_4 ]]]'
                 entity: '[[[ return variables.media_player_4 ]]]'
                 pause_timeout_minutes: '[[[ return variables.pause_timeout_minutes ]]]'
-          activity1:
-            card:
-              type: custom:button-card
-              template: hemma_badge_activity
-              entity: '[[[ return variables.psn_1 ]]]'
-              variables:
-                enabled: '[[[ return variables.show_psn_1 ]]]'
-          activity2:
-            card:
-              type: custom:button-card
-              template: hemma_badge_activity
-              entity: '[[[ return variables.psn_2 ]]]'
-              variables:
-                enabled: '[[[ return variables.show_psn_2 ]]]'
-              styles:
-                card:
-                  - --hemma-badge-opacity: >
-                      [[[
-                        if (!variables.show_discord_steam) return '0';
-                        const online = states[variables.discord_steam_online];
-                        if (!online || String(online.state || '').toLowerCase() !== 'online') return '0';
-                        const g = String(states[variables.discord_steam_game]?.state || '').toLowerCase();
-                        return (g && g !== 'unknown' && g !== 'unavailable') ? '1' : '0';
-                      ]]]
-                  - --hemma-badge-ptr: >
-                      [[[
-                        if (!variables.show_discord_steam) return 'none';
-                        const online = states[variables.discord_steam_online];
-                        if (!online || String(online.state || '').toLowerCase() !== 'online') return 'none';
-                        const g = String(states[variables.discord_steam_game]?.state || '').toLowerCase();
-                        return (g && g !== 'unknown' && g !== 'unavailable') ? 'auto' : 'none';
-                      ]]]
-              name: >
-                [[[
-                  const gameState = String(states[variables.discord_steam_game]?.state || '').trim();
-                  const isPlaying = gameState && gameState.toLowerCase() !== 'unknown' && gameState.toLowerCase() !== 'unavailable';
-                  const sub = isPlaying ? `Playing - ${gameState}` : 'Online';
-                  const esc = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-                  return `<div class="badge-wrap"><div class="badge-title">Steam</div><div class="badge-sub">${esc(sub)}</div></div>`;
-                ]]]
 
     badges_lights:
       card:
@@ -1375,15 +1231,8 @@ hemma_room:
                   return variables.show_lights && !!variables.light_entity_8;
                 ]]]
 
-    motion_detection: |
-      [[[
-        return "Motion detected"
-      ]]]
-
   extra_styles: |
-    #mp1, #mp2, #mp3, #mp4,
-    #plex, #plex_2,
-    #activity1, #activity2 {
+    #mp1, #mp2, #mp3, #mp4 {
       overflow: hidden;
     }
 
@@ -1434,22 +1283,4 @@ hemma_room:
         box-sizing: border-box !important;
       }
 
-      #badges,
-      #badges_climate,
-      #badges_presence,
-      #badges_lights {
-        -webkit-mask-image: linear-gradient(to right,
-          black calc(100vw - (2 * var(--hemma-entity-col-width-landscape, 200px)) - 8px - var(--hemma-tiles-right-pad-landscape, 0px) - var(--hero-gutter, 18px) - var(--hemma-landscape-badge-stop-pad, 60px) - 16px),
-          transparent calc(100vw - (2 * var(--hemma-entity-col-width-landscape, 200px)) - 8px - var(--hemma-tiles-right-pad-landscape, 0px) - var(--hero-gutter, 18px) - var(--hemma-landscape-badge-stop-pad, 60px))
-        ) !important;
-        mask-image: linear-gradient(to right,
-          black calc(100vw - (2 * var(--hemma-entity-col-width-landscape, 200px)) - 8px - var(--hemma-tiles-right-pad-landscape, 0px) - var(--hero-gutter, 18px) - var(--hemma-landscape-badge-stop-pad, 60px) - 16px),
-          transparent calc(100vw - (2 * var(--hemma-entity-col-width-landscape, 200px)) - 8px - var(--hemma-tiles-right-pad-landscape, 0px) - var(--hero-gutter, 18px) - var(--hemma-landscape-badge-stop-pad, 60px))
-        ) !important;
-      }
-
-      #badges_media {
-        -webkit-mask-image: none !important;
-        mask-image: none !important;
-      }
     }

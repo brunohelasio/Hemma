@@ -145,6 +145,29 @@ views:
               icon: doorbell
               battery_entity: sensor.YOUR_DOORBELL_BATTERY  # Optional
 
+          # Network Speed (optional - shows WAN download / upload from router integration)
+          - type: custom:button-card
+            template: hemma_network
+            entity: sensor.YOUR_WAN_DOWNLOAD_SPEED  # e.g., sensor.rt_ax86u_wan_download_speed
+            name: Network
+            variables:
+              upload_sensor: sensor.YOUR_WAN_UPLOAD_SPEED  # e.g., sensor.rt_ax86u_wan_upload_speed
+
+          # Motion Overview Card (optional)
+          # Shows active room name when motion is detected, "Clear" when none.
+          # Sensor entity IDs for navbar badge are configured separately
+          # in packages/hemma_helpers.yaml (input_text section).
+          # - type: custom:button-card
+          #   template: hemma_motion
+          #   variables:
+          #     default_name: Home          # shown when no motion detected
+          #     sensor_1: binary_sensor.YOUR_LIVING_ROOM_MOTION
+          #     label_1: Living Room
+          #     sensor_2: binary_sensor.YOUR_BEDROOM_MOTION
+          #     label_2: Bedroom
+          #     sensor_3: binary_sensor.YOUR_KITCHEN_MOTION
+          #     label_3: Kitchen
+
   # ------------------------------------------------------
   # LIVING ROOM
   # ------------------------------------------------------
@@ -185,10 +208,6 @@ views:
           # weather_entity: weather.YOUR_WEATHER
           # weather_temp_sensor: sensor.YOUR_OUTDOOR_TEMP
           temp_unit: 'F'                                  # 'F' for Fahrenheit, 'C' for Celsius
-
-          # Motion Sensor (optional)
-          show_motion: false
-          # motion_sensor: binary_sensor.YOUR_LIVING_ROOM_MOTION
 
       # MOBILE NAVBAR
       - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
@@ -287,10 +306,6 @@ views:
           # weather_temp_sensor: sensor.YOUR_OUTDOOR_TEMP
           temp_unit: 'F'
 
-          # Motion Sensor (optional)
-          show_motion: false
-          # motion_sensor: binary_sensor.YOUR_KITCHEN_MOTION
-
       # MOBILE NAVBAR
       - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
@@ -359,10 +374,6 @@ views:
           # weather_entity: weather.YOUR_WEATHER
           # weather_temp_sensor: sensor.YOUR_OUTDOOR_TEMP
           temp_unit: 'F'
-
-          # Motion Sensor (optional)
-          show_motion: false
-          # motion_sensor: binary_sensor.YOUR_BEDROOM_MOTION
 
       # MOBILE NAVBAR
       - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml

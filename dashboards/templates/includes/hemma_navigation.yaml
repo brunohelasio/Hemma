@@ -1,5 +1,11 @@
 # Desktop Navbar
 # ============================================================================
+# MOTION SENSOR BADGES
+# ----------------------------------------------------------------------------
+# Badge sensors are configured in packages/hemma_helpers.yaml (input_text
+# section) — this file does not need to be edited for sensor changes.
+# To disable all badges at runtime: toggle input_boolean.hemma_motion_badges.
+# ============================================================================
 
 type: conditional
 conditions:
@@ -181,6 +187,7 @@ card:
           margin: 0 !important;
           flex: 0 0 auto !important;
           background: transparent !important;
+          --navbar-route-icon-size: 0px !important;
         }
 
         .navbar.desktop .route{
@@ -193,6 +200,7 @@ card:
         }
 
         .navbar.desktop .button{
+          position: static !important;
           border: 0 !important;
           background: transparent !important;
           box-shadow: none !important;
@@ -381,6 +389,26 @@ card:
           left: calc(50% + var(--hemma-sidebar-w, 0px) / 2) !important;
         }
 
+        .navbar.desktop .route{
+          position: relative !important;
+          overflow: visible !important;
+        }
+
+        @keyframes hemma-badge-pulse {
+          0%, 100% { opacity: .9; transform: scale(1); }
+          50%       { opacity: 0; transform: scale(0.85); }
+        }
+
+        .navbar.desktop .badge{
+          top: 35px !important;
+          bottom: auto !important;
+          right: 10px !important;
+          width: 6px !important;
+          height: 6px !important;
+          border-radius: 999px !important;
+          animation: hemma-badge-pulse 3s ease-in-out infinite !important;
+        }
+
       routes:
         - url: /dashboard-hemma/home
           label: Home
@@ -389,6 +417,14 @@ card:
         - url: /dashboard-hemma/living-room
           label: Living Room
           icon: mdi:sofa
+          badge:
+            show: >
+              [[[
+                const _s = hass.states['input_text.hemma_motion_living_room']?.state?.trim();
+                return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                  && !!_s && hass.states[_s]?.state === 'on';
+              ]]]
+            color: '#ffd700'
 
         - url: /dashboard-hemma/kitchen
           label: Kitchen
@@ -397,6 +433,14 @@ card:
         - url: /dashboard-hemma/bedroom
           label: Bedroom
           icon: mdi:bed-king
+          badge:
+            show: >
+              [[[
+                const _s = hass.states['input_text.hemma_motion_bedroom']?.state?.trim();
+                return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                  && !!_s && hass.states[_s]?.state === 'on';
+              ]]]
+            color: '#ffd700'
 
         - label: Scenes
           icon: mdi:layers

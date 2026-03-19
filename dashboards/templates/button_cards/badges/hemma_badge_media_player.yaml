@@ -39,7 +39,47 @@ hemma_badge_media_player:
       - place-self: start !important
       - --badge-icon-size-current: var(--badge-media-icon-size-current, var(--badge-media-icon-size, 44px))
 
-      - display: >
+      - display: inline-grid
+
+      - --hemma-badge-opacity: >
+          [[[
+            const enabled = (v) => {
+              if (v === undefined || v === null) return true;
+              if (typeof v === 'boolean') return v;
+              if (typeof v === 'number') return v !== 0;
+              const s = String(v).trim().toLowerCase();
+              return !['false','0','no','off','disabled'].includes(s);
+            };
+
+            if (!enabled(variables.enabled)) return '0';
+
+            const eid = variables.entity || entity?.entity_id;
+            const s = eid ? states[eid] : null;
+            if (!s) return '0';
+
+            const st = String(s.state || '');
+            if (['unavailable','unknown','off','standby'].includes(st)) return '0';
+
+            const a = s.attributes || {};
+            const title  = String(a.media_title || '').trim();
+            const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
+            const hasContent = !!(title || artist);
+
+            if (['playing','buffering'].includes(st)) return hasContent ? '1' : '0';
+
+            if (st === 'paused') {
+              if (!hasContent) return '0';
+              const timeout = Number(variables.pause_timeout_minutes ?? 5);
+              if (timeout <= 0) return '1';
+              return ((new Date() - new Date(s.last_changed)) / 60000) > timeout ? '0' : '1';
+            }
+
+            if (['idle','on'].includes(st)) return hasContent ? '1' : '0';
+
+            return '0';
+          ]]]
+
+      - --hemma-badge-ptr: >
           [[[
             const enabled = (v) => {
               if (v === undefined || v === null) return true;
@@ -63,16 +103,16 @@ hemma_badge_media_player:
             const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
             const hasContent = !!(title || artist);
 
-            if (['playing','buffering'].includes(st)) return hasContent ? 'inline-grid' : 'none';
+            if (['playing','buffering'].includes(st)) return hasContent ? 'auto' : 'none';
 
             if (st === 'paused') {
               if (!hasContent) return 'none';
               const timeout = Number(variables.pause_timeout_minutes ?? 5);
-              if (timeout <= 0) return 'inline-grid';
-              return ((new Date() - new Date(s.last_changed)) / 60000) > timeout ? 'none' : 'inline-grid';
+              if (timeout <= 0) return 'auto';
+              return ((new Date() - new Date(s.last_changed)) / 60000) > timeout ? 'none' : 'auto';
             }
 
-            if (['idle','on'].includes(st)) return hasContent ? 'inline-grid' : 'none';
+            if (['idle','on'].includes(st)) return hasContent ? 'auto' : 'none';
 
             return 'none';
           ]]]
@@ -318,8 +358,10 @@ hemma_badge_media_player:
     }
 
     :host ha-card{
-      pointer-events: auto !important;
-      cursor: pointer !important;
+      cursor: pointer;
+      opacity: var(--hemma-badge-opacity, 0);
+      pointer-events: var(--hemma-badge-ptr, none);
+      transition: opacity 0.3s ease;
     }
 
     :host ha-card::after{

@@ -18,6 +18,24 @@
 #   - Kitchen: /dashboard-hemma/kitchen
 #   - Bedroom: /dashboard-hemma/bedroom
 #
+# ----------------------------------------------------------------------------
+# MOTION SENSOR BADGES
+# ----------------------------------------------------------------------------
+# Motion dots appear on room routes and in the Rooms popup when a sensor is
+# triggered. Sensor entity IDs are configured in ONE place only:
+#
+#   packages/hemma_helpers.yaml  →  input_text section
+#
+#   input_text.hemma_motion_living_room   ← your living room binary_sensor
+#   input_text.hemma_motion_bedroom       ← your bedroom binary_sensor
+#   input_text.hemma_motion_kitchen       ← your kitchen binary_sensor
+#
+# Set the 'initial:' value for each helper to your sensor's entity ID.
+# Leave blank ("") to disable the badge for that room.
+# This file does not need to be edited for sensor changes.
+#
+# To disable all motion badges at runtime (no file edit needed):
+#   Toggle input_boolean.hemma_motion_badges off in Home Assistant.
 # ============================================================================
 
 type: vertical-stack
@@ -264,16 +282,30 @@ cards:
           align-items: center !important;
           justify-items: start !important;
           column-gap: 9px !important;
-          padding: 9px 12px !important;
+          padding: 9px 15px 9px 12px !important;
           border-radius: 9999px !important;
           width: 100% !important;
           color: rgba(255,255,255,0.92) !important;
           box-sizing: border-box !important;
           text-align: left !important;
+          position: relative !important;
+          overflow: visible !important;
         }
 
         .navbar-popup .popup-item:hover{ background: rgba(255,255,255,0.06) !important; }
         .navbar-popup .popup-item:active{ background: rgba(255,255,255,0.10) !important; }
+
+        .navbar-popup .popup-item .button{ position: static !important; }
+
+        .navbar-popup .badge{
+          right: 8px !important;
+          top: 8px !important;
+          transform: none !important;
+          left: auto !important;
+          width: 5px !important;
+          height: 5px !important;
+          animation: hemma-badge-pulse 3s ease-in-out infinite !important;
+        }
 
         .navbar-popup .popup-item ha-icon{
           width: var(--hemma-popup-icon-size) !important;
@@ -381,6 +413,19 @@ cards:
           content: none !important;
         }
 
+        @keyframes hemma-badge-pulse {
+          0%, 100% { opacity: .9; transform: scale(1); }
+          50%       { opacity: 0; transform: scale(0.85); }
+        }
+
+        .badge{
+          width: 6px !important;
+          height: 6px !important;
+          border-radius: 999px !important;
+          right: 7px !important;
+          animation: hemma-badge-pulse 3s ease-in-out infinite !important;
+        }
+
       # Buttons (Edit these)
       routes:
         # Home
@@ -417,16 +462,41 @@ cards:
               return p.startsWith('/dashboard-hemma/')
                 && !['/dashboard-hemma/home','/dashboard-hemma/scenes'].includes(p);
             ]]]
+          badge:
+            show: >
+              [[[
+                const _sensors = ['input_text.hemma_motion_living_room','input_text.hemma_motion_bedroom','input_text.hemma_motion_kitchen']
+                  .map(h => hass.states[h]?.state?.trim()).filter(Boolean);
+                return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                  && _sensors.some(id => hass.states[id]?.state === 'on');
+              ]]]
+            color: '#ffd700'
           popup:
             - label: Bedroom
               url: /dashboard-hemma/bedroom
               image: /local/hemma/icons/bedroom.svg
+              badge:
+                show: >
+                  [[[
+                    const _s = hass.states['input_text.hemma_motion_bedroom']?.state?.trim();
+                    return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                      && !!_s && hass.states[_s]?.state === 'on';
+                  ]]]
+                color: '#ffd700'
             - label: Kitchen
               url: /dashboard-hemma/kitchen
               image: /local/hemma/icons/kitchen.svg
             - label: Living Room
               url: /dashboard-hemma/living-room
               image: /local/hemma/icons/living-room.svg
+              badge:
+                show: >
+                  [[[
+                    const _s = hass.states['input_text.hemma_motion_living_room']?.state?.trim();
+                    return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                      && !!_s && hass.states[_s]?.state === 'on';
+                  ]]]
+                color: '#ffd700'
 
         # Scenes (Dropdown Menu)
         - label: Scenes
@@ -539,6 +609,20 @@ cards:
           --navbar-active-color: var(--hemma-nav-icon-active, rgba(255,255,255,1)) !important;
           --navbar-route-active-background: transparent !important;
           --navbar-route-active-color: inherit !important;
+        }
+
+        @keyframes hemma-badge-pulse {
+          0%, 100% { opacity: .9; transform: scale(1); }
+          50%       { opacity: 0; transform: scale(0.85); }
+        }
+
+        .badge{
+          width: 5px !important;
+          height: 5px !important;
+          border-radius: 999px !important;
+          top: 7px !important;
+          left: 15px !important;
+          animation: hemma-badge-pulse 3s ease-in-out infinite !important;
         }
 
         .navbar.desktop{
@@ -672,16 +756,30 @@ cards:
           align-items: center !important;
           justify-items: start !important;
           column-gap: 11px !important;
-          padding: 8px 12px 8px 10px !important;
+          padding: 8px 15px 8px 10px !important;
           border-radius: 9999px !important;
           width: 100% !important;
           box-sizing: border-box !important;
           text-align: left !important;
           background: transparent !important;
+          position: relative !important;
+          overflow: visible !important;
         }
 
         .navbar-popup .popup-item:hover{ background: rgba(255,255,255,0.06) !important; }
         .navbar-popup .popup-item:active{ background: rgba(255,255,255,0.10) !important; }
+
+        .navbar-popup .popup-item .button{ position: static !important; }
+
+        .navbar-popup .badge{
+          right: 8px !important;
+          top: 8px !important;
+          transform: none !important;
+          left: auto !important;
+          width: 5px !important;
+          height: 5px !important;
+          animation: hemma-badge-pulse 3s ease-in-out infinite !important;
+        }
 
         .navbar-popup ha-icon{
           width: 18px !important;
@@ -796,16 +894,41 @@ cards:
               return p.startsWith('/dashboard-hemma/')
                 && !['/dashboard-hemma/home','/dashboard-hemma/scenes'].includes(p);
             ]]]
+          badge:
+            show: >
+              [[[
+                const _sensors = ['input_text.hemma_motion_living_room','input_text.hemma_motion_bedroom','input_text.hemma_motion_kitchen']
+                  .map(h => hass.states[h]?.state?.trim()).filter(Boolean);
+                return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                  && _sensors.some(id => hass.states[id]?.state === 'on');
+              ]]]
+            color: '#ffd700'
           popup:
             - label: Bedroom
               url: /dashboard-hemma/bedroom
               icon: mdi:bed-king
+              badge:
+                show: >
+                  [[[
+                    const _s = hass.states['input_text.hemma_motion_bedroom']?.state?.trim();
+                    return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                      && !!_s && hass.states[_s]?.state === 'on';
+                  ]]]
+                color: '#ffd700'
             - label: Kitchen
               url: /dashboard-hemma/kitchen
               icon: mdi:fridge
             - label: Living Room
               url: /dashboard-hemma/living-room
               icon: mdi:sofa
+              badge:
+                show: >
+                  [[[
+                    const _s = hass.states['input_text.hemma_motion_living_room']?.state?.trim();
+                    return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                      && !!_s && hass.states[_s]?.state === 'on';
+                  ]]]
+                color: '#ffd700'
 
         # Scenes (Dropdown Menu)
         - label: Scenes
@@ -914,6 +1037,20 @@ cards:
           --navbar-active-color: var(--hemma-nav-icon-active, rgba(255,255,255,1)) !important;
           --navbar-route-active-background: transparent !important;
           --navbar-route-active-color: inherit !important;
+        }
+
+        @keyframes hemma-badge-pulse {
+          0%, 100% { opacity: .9; transform: scale(1); }
+          50%       { opacity: 0; transform: scale(0.85); }
+        }
+
+        .badge{
+          width: 6px !important;
+          height: 6px !important;
+          border-radius: 999px !important;
+          top: 6px !important;
+          left: 14px !important;
+          animation: hemma-badge-pulse 3s ease-in-out infinite !important;
         }
 
         .navbar.desktop{
@@ -1040,16 +1177,30 @@ cards:
           align-items: center !important;
           justify-items: start !important;
           column-gap: 11px !important;
-          padding: 8px 12px 8px 10px !important;
+          padding: 8px 15px 8px 10px !important;
           border-radius: 9999px !important;
           width: 100% !important;
           box-sizing: border-box !important;
           text-align: left !important;
           background: transparent !important;
+          position: relative !important;
+          overflow: visible !important;
         }
 
         .navbar-popup .popup-item:hover{ background: rgba(255,255,255,0.06) !important; }
         .navbar-popup .popup-item:active{ background: rgba(255,255,255,0.10) !important; }
+
+        .navbar-popup .popup-item .button{ position: static !important; }
+
+        .navbar-popup .badge{
+          right: 8px !important;
+          top: 8px !important;
+          transform: none !important;
+          left: auto !important;
+          width: 5px !important;
+          height: 5px !important;
+          animation: hemma-badge-pulse 3s ease-in-out infinite !important;
+        }
 
         .navbar-popup ha-icon{
           width: 18px !important;
@@ -1171,16 +1322,41 @@ cards:
               return p.startsWith('/dashboard-hemma/')
                 && !['/dashboard-hemma/home','/dashboard-hemma/scenes'].includes(p);
             ]]]
+          badge:
+            show: >
+              [[[
+                const _sensors = ['input_text.hemma_motion_living_room','input_text.hemma_motion_bedroom','input_text.hemma_motion_kitchen']
+                  .map(h => hass.states[h]?.state?.trim()).filter(Boolean);
+                return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                  && _sensors.some(id => hass.states[id]?.state === 'on');
+              ]]]
+            color: '#ffd700'
           popup:
             - label: Bedroom
               url: /dashboard-hemma/bedroom
               icon: mdi:bed-king
+              badge:
+                show: >
+                  [[[
+                    const _s = hass.states['input_text.hemma_motion_bedroom']?.state?.trim();
+                    return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                      && !!_s && hass.states[_s]?.state === 'on';
+                  ]]]
+                color: '#ffd700'
             - label: Kitchen
               url: /dashboard-hemma/kitchen
               icon: mdi:fridge
             - label: Living Room
               url: /dashboard-hemma/living-room
               icon: mdi:sofa
+              badge:
+                show: >
+                  [[[
+                    const _s = hass.states['input_text.hemma_motion_living_room']?.state?.trim();
+                    return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                      && !!_s && hass.states[_s]?.state === 'on';
+                  ]]]
+                color: '#ffd700'
 
         # Scenes (Dropdown Menu)
         - label: Scenes
@@ -1291,6 +1467,20 @@ cards:
           --navbar-active-color: var(--hemma-nav-icon-active, rgba(255,255,255,1)) !important;
           --navbar-route-active-background: transparent !important;
           --navbar-route-active-color: inherit !important;
+        }
+
+        @keyframes hemma-badge-pulse {
+          0%, 100% { opacity: .9; transform: scale(1); }
+          50%       { opacity: 0; transform: scale(0.85); }
+        }
+
+        .badge{
+          width: 6px !important;
+          height: 6px !important;
+          border-radius: 999px !important;
+          top: 9px !important;
+          left: 44px !important;
+          animation: hemma-badge-pulse 3s ease-in-out infinite !important;
         }
 
         ha-card.navbar-card.desktop::-webkit-scrollbar{
@@ -1477,6 +1667,8 @@ cards:
           box-sizing: border-box !important;
           text-align: left !important;
           background: transparent !important;
+          position: relative !important;
+          overflow: visible !important;
         }
 
         .navbar-popup .popup-item:hover{ background: rgba(255,255,255,0.06) !important; }
@@ -1494,6 +1686,7 @@ cards:
           display: inline-flex !important;
           align-items: center !important;
           justify-content: flex-start !important;
+          position: static !important;
         }
 
         .navbar-popup .popup-item .button:hover,
@@ -1599,6 +1792,14 @@ cards:
         - url: /dashboard-hemma/living-room
           label: Living Room
           icon: mdi:sofa
+          badge:
+            show: >
+              [[[
+                const _s = hass.states['input_text.hemma_motion_living_room']?.state?.trim();
+                return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                  && !!_s && hass.states[_s]?.state === 'on';
+              ]]]
+            color: '#ffd700'
 
         # Kitchen
         - url: /dashboard-hemma/kitchen
@@ -1609,6 +1810,14 @@ cards:
         - url: /dashboard-hemma/bedroom
           label: Bedroom
           icon: mdi:bed-king
+          badge:
+            show: >
+              [[[
+                const _s = hass.states['input_text.hemma_motion_bedroom']?.state?.trim();
+                return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                  && !!_s && hass.states[_s]?.state === 'on';
+              ]]]
+            color: '#ffd700'
 
         - label: Scenes
           icon: mdi:layers

@@ -13,6 +13,7 @@
 #   - input_boolean.hemma_thermostat_overlay: Thermostat card temperature adjustment overlay
 #   - input_boolean.hemma_mobile_navigation: Mobile nav menu state
 #   - input_boolean.hemma_lock_overlay: Lock card controls overlay
+#   - input_boolean.hemma_motion_badges: Show/hide motion sensor badges on navbar
 #   - input_select.hemma_expanded_row: Which sub-badge row is expanded (none/climate/presence/media)
 #   - input_number.hemma_thermostat_target_temperature: Thermostat target temp
 #   - input_select.hemma_thermostat_mode: Heat/Cool mode selector
@@ -32,6 +33,23 @@ input_boolean:
   hemma_lock_overlay:
     name: Lock Overlay
     initial: off
+
+  hemma_motion_badges:
+    name: Motion Badges
+    initial: on
+
+input_text:
+  # Motion sensor entity IDs for navbar badges (desktop + mobile).
+  # Leave initial as "" to disable the badge for that room.
+  hemma_motion_living_room:
+    name: "Hemma Motion - Living Room"
+    initial: "binary_sensor.living_room_hub_motion"
+  hemma_motion_bedroom:
+    name: "Hemma Motion - Bedroom"
+    initial: "binary_sensor.hue_motion_sensor_motion"
+  hemma_motion_kitchen:
+    name: "Hemma Motion - Kitchen"
+    initial: ""   # set to your kitchen motion sensor entity ID to enable
 
 input_number:
   hemma_thermostat_target_temperature:

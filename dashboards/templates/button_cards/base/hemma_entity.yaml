@@ -82,7 +82,7 @@ hemma_entity:
         ]]]
       styles:
         card:
-          - background: var(--hemma-entity-background-active)
+          - background-color: var(--hemma-entity-background-active)
           - box-shadow: var(--button-card-box-shadow-active, var(--button-card-box-shadow)) !important
         name:
           - color: var(--hemma-entity-active, var(--primary-text-color))
@@ -99,7 +99,7 @@ hemma_entity:
 
   styles:
     card:
-      - background: var(--hemma-entity-background)
+      - background-color: var(--hemma-entity-background)
       - backdrop-filter: blur(20px) saturate(1.01) brightness(1.04)
       - border-radius: var(--ha-card-border-radius, 30px)
       - box-shadow: var(--button-card-box-shadow)
