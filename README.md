@@ -313,19 +313,6 @@ Note: Media badges only appear when a player is active (playing, buffering, or r
 
 ---
 
-### Lock card (split actions)
-
-Hemma's lock card supports:
-
-- Tap the card → **more-info**
-- Tap the icon/image → **lock/unlock toggle**
-
-Note: `show_icon: true` is required so `icon_tap_action` has a target.
-
-Template: `hemma_lock`
-
----
-
 ### :pencil2: Additional Customization
 
 This repo is intended as a starting point:
