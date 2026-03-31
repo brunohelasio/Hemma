@@ -1,6 +1,6 @@
-## Important Note (3/31/26)
+## Important Update (3/31/26)
 
-The latest update (version 1.1) includes many changes and new features, requiring updated code for most all files in the repo. When updating, please ensure you replace/overwrite all files to ensure compatibility. 
+The latest update (version 1.2.1) includes many changes and new features, requiring updated code for most all files in the repo. When updating, please ensure you replace/overwrite all files to ensure compatibility. 
 
 # :house_with_garden: Hemma
 
