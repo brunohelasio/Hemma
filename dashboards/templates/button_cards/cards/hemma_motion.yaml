@@ -6,6 +6,19 @@ hemma_motion:
   show_state: true
   show_entity_picture: true
 
+  entity: |
+    [[[
+      return (
+        variables.sensor_1 ||
+        variables.sensor_2 ||
+        variables.sensor_3 ||
+        variables.sensor_4 ||
+        variables.sensor_5 ||
+        variables.sensor_6 ||
+        null
+      );
+    ]]]
+
   variables:
     default_name: Motion
     sensor_1: null
@@ -43,7 +56,7 @@ hemma_motion:
         ].filter(s => s.id);
         const active = sensors.find(s => states[s.id]?.state === 'on');
         if (active) return active.id;
-        // Clear: open the most recently triggered sensor
+
         if (sensors.length > 0) {
           return sensors.slice().sort((a, b) =>
             new Date(states[b.id]?.last_changed || 0) - new Date(states[a.id]?.last_changed || 0)
