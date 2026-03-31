@@ -479,13 +479,13 @@ Hemma:
   # ============================================================================
 
   # Desktop
-  hemma-entity-height-desktop: 190px
+  hemma-entity-height-desktop: 200px
   hemma-entity-inner-pad-desktop: 20px
   hemma-entity-name-font-desktop: 18px
   hemma-entity-state-font-desktop: 15px
   hemma-entity-icon-size-desktop: 34px
   hemma-entity-rows-desktop: repeat(1, auto)
-  hemma-entity-col-width-desktop: 280px
+  hemma-entity-col-width-desktop: 290px
   hemma-entity-justify-desktop: start
   hemma-entity-right-inset-desktop: 0px
   hemma-entity-bottom-desktop: 20px
