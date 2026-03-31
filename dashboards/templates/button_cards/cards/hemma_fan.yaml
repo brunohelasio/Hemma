@@ -17,7 +17,8 @@ hemma_fan:
     entity: '[[[ return entity.entity_id ]]]'
 
   icon_tap_action:
-    action: toggle
+    action: more-info
+    entity: '[[[ return entity.entity_id ]]]'
 
   icon_hold_action:
     action: more-info

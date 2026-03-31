@@ -3,9 +3,12 @@ hemma_badge_base:
   styles:
     card:
       - background: var(--badge-background, rgba(0,0,0,0.18))
-      - backdrop-filter: blur(var(--badge-blur, 8px))
+      - backdrop-filter: blur(var(--badge-blur, 14px))
+      - -webkit-backdrop-filter: blur(var(--badge-blur, 14px))
       - box-shadow: none
-      - -webkit-backdrop-filter: blur(var(--badge-blur, 8px))
+      - --ha-card-box-shadow: none
+      - --ha-shadow-light-hover: none
+      - border: none !important
       - border-radius: var(--badge-br, 9999px)
       - padding: var(--badge-padding-current, var(--badge-padding, 6px 14px))
       - min-height: var(--badge-min-height-current, var(--badge-min-height, 44px))
@@ -34,7 +37,7 @@ hemma_badge_base:
       - overflow: hidden
       - transition: background-color .22s ease,
                     box-shadow .24s ease,
-                    transform .14s ease,
+                    transform .24s ease,
                     filter .18s ease,
                     opacity .35s ease !important
 
@@ -121,7 +124,13 @@ hemma_badge_base:
 
     ha-card {
       opacity: var(--hemma-row-fade, 1);
-      transform: translateY(calc((1 - var(--hemma-row-fade, 1)) * -8px));
+      transform: translateY(calc((1 - var(--hemma-row-fade, 1)) * -10px))
+                 translateX(calc((1 - var(--hemma-row-fade, 1)) * -2px));
+      box-shadow: none !important;
+    }
+
+    ha-card:hover {
+      box-shadow: none !important;
     }
 
     ha-card::after{  z-index: var(--badge-after-z, 2) !important; }

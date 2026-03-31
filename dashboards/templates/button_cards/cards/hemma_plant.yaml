@@ -1,0 +1,131 @@
+hemma_plant:
+  template:
+    - hemma_entity
+
+  variables:
+    icon: plant
+    low_threshold: 30
+    sensors: []  # list of sensor entity IDs to show in the popup
+
+  tap_action:
+    haptic: light
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        title: "[[[ return entity?.attributes?.friendly_name ?? entity.entity_id; ]]]"
+        adaptive: true
+        size: "[[[ return window.innerWidth >= 1250 ? 'auto' : 'fullscreen'; ]]]"
+        content: |
+          [[[
+            const sensors = variables.sensors && variables.sensors.length
+              ? variables.sensors : [entity.entity_id];
+            return {
+              type: 'custom:auto-entities',
+              show_empty: false,
+              card: {
+                type: 'entities',
+                card_mod: {
+                  style: 'ha-card { --ha-card-background: transparent; --ha-card-backdrop-filter: none; --ha-card-box-shadow: none; --ha-card-border-width: 0px; --ha-card-border-color: transparent; --ha-shadow-light-hover: none; --ha-shadow-dark-hover: none; }'
+                }
+              },
+              filter: { include: sensors.map(s => ({ entity_id: s })) }
+            };
+          ]]]
+
+  icon_tap_action:
+    haptic: light
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        title: "[[[ return entity?.attributes?.friendly_name ?? entity.entity_id; ]]]"
+        adaptive: true
+        size: "[[[ return window.innerWidth >= 1250 ? 'auto' : 'fullscreen'; ]]]"
+        content: |
+          [[[
+            const sensors = variables.sensors && variables.sensors.length
+              ? variables.sensors : [entity.entity_id];
+            return {
+              type: 'custom:auto-entities',
+              show_empty: false,
+              card: {
+                type: 'entities',
+                card_mod: {
+                  style: 'ha-card { --ha-card-background: transparent; --ha-card-backdrop-filter: none; --ha-card-box-shadow: none; --ha-card-border-width: 0px; --ha-card-border-color: transparent; --ha-shadow-light-hover: none; --ha-shadow-dark-hover: none; }'
+                }
+              },
+              filter: { include: sensors.map(s => ({ entity_id: s })) }
+            };
+          ]]]
+
+  hold_action:
+    action: more-info
+
+  state_display: |
+    [[[
+      if (!entity?.state || entity.state === 'unavailable') return '— %';
+
+      if (entity.state === 'ok') return 'Healthy';
+      if (entity.state === 'problem') return 'Needs Attention';
+
+      const val = parseFloat(entity.state);
+      if (!Number.isNaN(val)) return `${Math.round(val)} %`;
+
+      const attr = parseFloat(entity.attributes?.moisture);
+      if (!Number.isNaN(attr)) return `${Math.round(attr)} %`;
+      return '— %';
+    ]]]
+
+  # Active (glowing) when state is 'problem' or moisture is at/below low_threshold.
+  state:
+    - operator: template
+      value: |
+        [[[
+          if (entity?.state === 'problem') return true;
+          const threshold = Number(variables.low_threshold ?? 30);
+          const val = parseFloat(entity?.state);
+          if (Number.isFinite(val)) return val <= threshold;
+          const attr = parseFloat(entity?.attributes?.moisture);
+          return Number.isFinite(attr) && attr <= threshold;
+        ]]]
+      styles:
+        card:
+          - background: var(--hemma-entity-background-active)
+          - box-shadow: var(--button-card-box-shadow-active, var(--button-card-box-shadow)) !important
+        name:
+          - color: var(--hemma-entity-active, var(--primary-text-color))
+        state:
+          - color: >-
+              [[[
+                return entity?.state === 'problem'
+                  ? 'var(--hemma-state-active-color)'
+                  : 'var(--secondary-text-color)';
+              ]]]
+        img_cell:
+          - opacity: var(--hemma-entity-picture-active-opacity, 1) !important
+          - filter: var(--hemma-entity-picture-active-filter, none) !important
+        entity_picture:
+          - opacity: var(--hemma-entity-picture-active-opacity, 1) !important
+          - filter: var(--hemma-entity-picture-active-filter, none) !important
+
+  extra_styles: |
+    @media (hover: hover) {
+      #img-cell:hover {
+        transform: scale(1.05);
+        transition: transform 0.15s ease;
+      }
+      #img-cell:hover img {
+        opacity: 1 !important;
+        filter: brightness(1.2) !important;
+      }
+    }
+    @media (hover: none) {
+      #img-cell:active {
+        transform: scale(1.05);
+      }
+      #img-cell:active img {
+        opacity: 1 !important;
+        filter: brightness(1.2) !important;
+      }
+    }

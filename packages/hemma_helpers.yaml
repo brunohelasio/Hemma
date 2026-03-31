@@ -12,7 +12,6 @@
 # ENTITIES CREATED:
 #   - input_boolean.hemma_thermostat_overlay: Thermostat card temperature adjustment overlay
 #   - input_boolean.hemma_mobile_navigation: Mobile nav menu state
-#   - input_boolean.hemma_lock_overlay: Lock card controls overlay
 #   - input_boolean.hemma_motion_badges: Show/hide motion sensor badges on navbar
 #   - input_select.hemma_expanded_row: Which sub-badge row is expanded (none/climate/presence/media)
 #   - input_number.hemma_thermostat_target_temperature: Thermostat target temp

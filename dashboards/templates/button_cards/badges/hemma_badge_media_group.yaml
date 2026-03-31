@@ -95,6 +95,10 @@ hemma_badge_media_group:
         #img-cell #icon, .img-cell #icon{
           color: transparent !important;
           opacity: 0 !important;
+          --icon-primary-color: var(--hemma-icon-color) !important;
+          --paper-item-icon-color: var(--hemma-icon-color) !important;
+          --state-icon-color: var(--hemma-icon-color) !important;
+          --card-mod-icon-color: var(--hemma-icon-color) !important;
         }
 
         #img-cell::before,
@@ -200,8 +204,12 @@ hemma_badge_media_group:
               variables?.entity_5, variables?.entity_6, variables?.entity_7, variables?.entity_8
             ];
             const anyActive = eids.some(e => isActive(e));
-            return anyActive ? '#fc6874' : 'var(--badge-title-inactive)';
+            return anyActive ? 'var(--hemma-badge-media-color)' : 'var(--badge-title-inactive)';
           ]]]
+      - --icon-primary-color: var(--hemma-icon-color)
+      - --paper-item-icon-color: var(--hemma-icon-color)
+      - --state-icon-color: var(--hemma-icon-color)
+      - --card-mod-icon-color: var(--hemma-icon-color)
 
   name: >
     [[[

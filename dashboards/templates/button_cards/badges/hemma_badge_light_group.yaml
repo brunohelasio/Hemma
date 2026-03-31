@@ -145,7 +145,7 @@ hemma_badge_light_group:
               return (Array.isArray(m) && m.length > 0) ? m : [eid];
             });
             const onCount = eids.filter(eid => hass.states[eid]?.state === 'on').length;
-            return onCount > 0 ? '#ffd700' : 'var(--badge-title-inactive)';
+            return onCount > 0 ? 'var(--hemma-badge-light-color)' : 'var(--badge-title-inactive)';
           ]]]
 
   name: >

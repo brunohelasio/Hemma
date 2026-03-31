@@ -30,33 +30,34 @@ mediaquery:
   "(max-width: 767px) and (orientation: portrait), (max-height: 500px) and (orientation: portrait)":
     position: absolute
     z-index: 4
-    inset: >
-      calc(100svh - (var(--hemma-nav-height, 122px) + 22px + 34px) - 234px)
-      var(--hemma-rail-left, var(--page-gutter-mobile, 14px))
-      auto
-      var(--hemma-rail-left, var(--page-gutter-mobile, 14px))
+    inset: >-
+      auto 0 calc(var(--hemma-nav-height, 112px) + env(safe-area-inset-bottom, 0px) + var(--hemma-entity-bottom-gap, 8px)) 0
+    max-height: >-
+      calc(100dvh - var(--hero-top) - var(--hemma-entity-header-buffer, 220px) - var(--hemma-nav-height, 112px) - env(safe-area-inset-bottom, 0px) - var(--hemma-entity-bottom-gap, 8px))
     margin: 0
-    padding: 0 0 calc(var(--hemma-nav-height, 62px) + 22px + 16px) 0
-    width: auto
+    padding: 0 var(--hemma-rail-left, var(--page-gutter-mobile, 11px)) 0 var(--hemma-rail-left, var(--page-gutter-mobile, 11px))
     max-width: none
+    min-height: 0
     box-sizing: border-box
     display: grid
     grid-auto-flow: row
-    grid-auto-columns: none
     grid-template-columns: repeat(2, minmax(0, 1fr))
-    grid-template-rows: auto
+    grid-auto-rows: var(--hemma-entity-height-current, 115px)
     grid-column-gap: 8px
     grid-row-gap: 8px
     justify-content: stretch
     justify-items: stretch
+    align-items: stretch
     align-content: start
-    align-items: start
-    overflow-x: visible
-    overflow-y: visible
+    overflow-x: hidden
+    overflow-y: auto
     -webkit-overflow-scrolling: touch
+    overscroll-behavior-y: contain
+    touch-action: pan-y
+    overflow-anchor: none
     scrollbar-width: none
     -ms-overflow-style: none
-    scroll-snap-type: none
+    scroll-snap-type: y mandatory
 
   # -------- Mobile Landscape --------
   "(max-height: 600px) and (orientation: landscape)":

@@ -86,7 +86,7 @@ hemma_badge_light:
       - --hemma-icon-color: >
           [[[
             if (entity?.state !== 'on') return 'var(--badge-title-inactive)';
-            return '#ffd700';
+            return 'var(--hemma-badge-light-color)';
           ]]]
     icon:
       - color: transparent

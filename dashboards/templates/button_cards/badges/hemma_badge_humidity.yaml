@@ -65,9 +65,9 @@ hemma_badge_humidity:
           [[[
             const v = parseFloat(entity?.state);
             if (isNaN(v)) return 'var(--disabled-text-color)';
-            if (v <= 29.99) return '#ffb254';
-            if (v >= 61)    return '#4bd1fa';
-            return '#45dced';
+            if (v <= 29.99) return 'var(--hemma-badge-humidity-dry-color)';
+            if (v >= 61)    return 'var(--hemma-badge-humidity-high-color)';
+            return 'var(--hemma-badge-climate-color)';
           ]]]
     icon:
       - color: transparent

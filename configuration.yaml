@@ -20,7 +20,7 @@ lovelace:
     - type: "module"
       url: "/hacsfiles/kiosk-mode/kiosk-mode.js"
     - type: "module"
-      url: "/local/layout-card-modified/layout-card-modified.js?v=12"
+      url: "/local/layout-card-modified/layout-card-modified.js"
     - type: "module"
       url: "/local/navbar-popup-caret/navbar-popup-caret.js"
     - type: "module"

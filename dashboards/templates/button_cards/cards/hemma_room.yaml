@@ -29,6 +29,8 @@ hemma_room:
     - '[[[ return variables.light_entity_6 ]]]'
     - '[[[ return variables.light_entity_7 ]]]'
     - '[[[ return variables.light_entity_8 ]]]'
+    - '[[[ return variables.light_entity_9 ]]]'
+    - '[[[ return variables.light_entity_10 ]]]'
     - '[[[ return variables.image ]]]'
     - '[[[ return variables.image_night ]]]'
     - '[[[ return variables.image_position ]]]'
@@ -93,6 +95,8 @@ hemma_room:
     light_entity_6:
     light_entity_7:
     light_entity_8:
+    light_entity_9:
+    light_entity_10:
 
     show_weather: false
     weather_entity:
@@ -118,7 +122,18 @@ hemma_room:
           ]]]
       - padding-left: var(--hero-gutter)
       - padding-right: var(--hero-gutter)
-      - padding-bottom: calc(130px + env(safe-area-inset-bottom))
+      - padding-bottom: >
+          [[[
+            const mm = (q) => (window.matchMedia ? window.matchMedia(q).matches : false);
+            const isPhonePortrait =
+              (mm('(pointer: coarse)') || mm('(hover: none)')) &&
+              mm('(max-width: 767px)') &&
+              mm('(orientation: portrait)');
+
+            return isPhonePortrait
+              ? `calc(var(--hemma-nav-height, 112px) + env(safe-area-inset-bottom, 0px) + var(--hemma-entity-mobile-gap-above-nav, 20px))`
+              : `calc(130px + env(safe-area-inset-bottom))`;
+          ]]]
       - box-shadow: none !important
       - transform: translateZ(0)
       - will-change: transform
@@ -140,19 +155,15 @@ hemma_room:
           [[[
             const w = window?.innerWidth || 1024;
             const h = window?.innerHeight || 800;
-            const isTablet = (w >= 768 && w <= 1249 && h > 500);
+            const isTablet = (w >= 768 && w <= 1366 && h > 500);
             return isTablet ? 'calc(var(--hero-gutter) - 20px)' : 'var(--hemma-nav-margin-current, 4vw)';
           ]]]
       - --hemma-time-reserve: >
           [[[
             const w = window?.innerWidth || 1024;
             const h = window?.innerHeight || 800;
-            const isTablet = (w >= 768 && w <= 1249 && h > 500);
+            const isTablet = (w >= 768 && w <= 1366 && h > 500);
             return isTablet ? '140px' : '160px';
-          ]]]
-      - --hemma-nav-safe-max: >
-          [[[
-            return `calc(100vw - (2 * var(--hemma-nav-margin-current, 8vw)) - (2 * var(--hemma-time-reserve, 160px)))`;
           ]]]
       - --hemma-room-nav: >
           [[[
@@ -184,6 +195,10 @@ hemma_room:
                 variables.show_media_player_2 && variables.media_player_2,
                 variables.show_media_player_3 && variables.media_player_3,
                 variables.show_media_player_4 && variables.media_player_4,
+                variables.show_plex_1 && variables.plex_binary_1,
+                variables.show_plex_2 && variables.plex_binary_2,
+                variables.show_psn_1 && variables.psn_1,
+                variables.show_psn_2 && variables.psn_2,
               ].filter(Boolean);
               const _steamOnline = variables.show_discord_steam && variables.discord_steam_online && variables.discord_steam_game &&
                 (hass.states[variables.discord_steam_online]?.state || '').toLowerCase() === 'online';
@@ -252,7 +267,7 @@ hemma_room:
               const h = window?.innerHeight || 800;
 
               const isMobile = (w <= 767 || h <= 500);
-              const isTablet = (w >= 768 && w <= 1249 && h > 500);
+              const isTablet = (w >= 768 && w <= 1366 && h > 500);
 
               const nudge =
                 isMobile ? 'var(--hemma-time-nudge-mobile, 8px)' :
@@ -276,7 +291,7 @@ hemma_room:
               const isTouch = mm('(pointer: coarse)') || mm('(hover: none)');
               const w = window?.innerWidth || 1024;
               const h = window?.innerHeight || 800;
-              const isTablet = (w >= 768 && w <= 1249 && h > 500);
+              const isTablet = (w >= 768 && w <= 1366 && h > 500);
               return (!navOpen && isTouch && isTablet) ? 'block' : 'none';
             ]]]
 
@@ -641,6 +656,17 @@ hemma_room:
     navigation:
       card: !include /config/dashboards/templates/includes/hemma_navigation.yaml
 
+    entities_overlay:
+      card:
+        type: custom:button-card
+        tap_action:
+          action: none
+        hold_action:
+          action: none
+        show_icon: false
+        show_name: false
+        show_state: false
+
     preload: |
       [[[
         const base = variables.image || 'default';
@@ -742,6 +768,8 @@ hemma_room:
               entity_6: '[[[ return variables.show_lights ? variables.light_entity_6 : null ]]]'
               entity_7: '[[[ return variables.show_lights ? variables.light_entity_7 : null ]]]'
               entity_8: '[[[ return variables.show_lights ? variables.light_entity_8 : null ]]]'
+              entity_9: '[[[ return variables.show_lights ? variables.light_entity_9 : null ]]]'
+              entity_10: '[[[ return variables.show_lights ? variables.light_entity_10 : null ]]]'
 
           - type: custom:button-card
             template: hemma_badge_presence_group
@@ -899,7 +927,7 @@ hemma_room:
                     const a = s.attributes || {};
                     if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
                     if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 5); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
-                    return '350px';
+                    return '450px';
                   ]]]
               - margin-right: >
                   [[[
@@ -933,7 +961,7 @@ hemma_room:
                     const a = s.attributes || {};
                     if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
                     if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 5); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
-                    return '350px';
+                    return '450px';
                   ]]]
               - margin-right: >
                   [[[
@@ -967,7 +995,7 @@ hemma_room:
                     const a = s.attributes || {};
                     if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
                     if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 5); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
-                    return '350px';
+                    return '450px';
                   ]]]
               - margin-right: >
                   [[[
@@ -1001,7 +1029,7 @@ hemma_room:
                     const a = s.attributes || {};
                     if (!String(a.media_title||'').trim() && !String(a.media_artist||a.artist||a.media_album_artist||'').trim()) return '0px';
                     if (st === 'paused') { const t = Number(variables.pause_timeout_minutes ?? 5); if (t > 0 && (new Date() - new Date(s.last_changed)) / 60000 > t) return '0px'; }
-                    return '350px';
+                    return '450px';
                   ]]]
               - margin-right: >
                   [[[
@@ -1219,7 +1247,7 @@ hemma_room:
                 const g = variables.light_entity_1;
                 const m = g ? hass.states[g]?.attributes?.entity_id : null;
                 const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
-                return expand ? (m[7] || null) : (variables.light_entity_8 || null);
+                return expand ? (m[8] || null) : (variables.light_entity_8 || null);
               ]]]
             variables:
               enabled: >
@@ -1227,12 +1255,52 @@ hemma_room:
                   const g = variables.light_entity_1;
                   const m = g ? hass.states[g]?.attributes?.entity_id : null;
                   const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
-                  if (expand) return variables.show_lights && !!m[7];
+                  if (expand) return variables.show_lights && !!m[8];
                   return variables.show_lights && !!variables.light_entity_8;
                 ]]]
 
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[9] || null) : (variables.light_entity_9 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return variables.show_lights && !!m[9];
+                  return variables.show_lights && !!variables.light_entity_9;
+                ]]]
+
+          - type: custom:button-card
+            template: hemma_badge_light
+            entity: >
+              [[[
+                const g = variables.light_entity_1;
+                const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                return expand ? (m[10] || null) : (variables.light_entity_10 || null);
+              ]]]
+            variables:
+              enabled: >
+                [[[
+                  const g = variables.light_entity_1;
+                  const m = g ? hass.states[g]?.attributes?.entity_id : null;
+                  const expand = Array.isArray(m) && m.length > 0 && !variables.light_entity_2;
+                  if (expand) return variables.show_lights && !!m[10];
+                  return variables.show_lights && !!variables.light_entity_10;
+                ]]]
+
   extra_styles: |
-    #mp1, #mp2, #mp3, #mp4 {
+    #mp1, #mp2, #mp3, #mp4,
+    #plex, #plex_2,
+    #activity1, #activity2 {
       overflow: hidden;
     }
 
@@ -1241,9 +1309,8 @@ hemma_room:
     #badges_presence,
     #badges_media,
     #badges_lights {
-      overflow-x: auto !important;
+      overflow-x: hidden !important;
       overflow-y: hidden !important;
-      -webkit-overflow-scrolling: touch !important;
       overscroll-behavior-x: contain !important;
       scrollbar-width: none !important;
       -ms-overflow-style: none !important;
@@ -1263,6 +1330,8 @@ hemma_room:
       #badges_presence,
       #badges_media,
       #badges_lights {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
         width: calc(100% + 2 * var(--hero-gutter) - var(--hemma-header-badge-nudge, 0px)) !important;
         max-width: none !important;
         margin-left: calc(-1 * var(--hero-gutter) + var(--hemma-header-badge-nudge, 0px)) !important;

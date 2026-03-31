@@ -250,12 +250,11 @@ card:
         }
 
         .navbar-popup{
-          background: var(--hemma-popup-bg, rgba(0,0,0,0.25)) !important;
+          background: var(--hemma-popup-bg) !important;
           -webkit-backdrop-filter: var(--hemma-popup-blur, blur(20px) saturate(1.1)) !important;
           backdrop-filter: var(--hemma-popup-blur, blur(20px) saturate(1.1)) !important;
-          border: 1px solid var(--wa-color-surface-border, rgba(255,255,255,.08)) !important;
-          box-shadow: none !important;
           border-radius: var(--hemma-popup-br, 22px) !important;
+          box-shadow: var(--hemma-popup-shadow, 0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)) !important;
           padding: 8px !important;
           width: max-content !important;
           max-width: calc(100vw - 24px) !important;
@@ -271,6 +270,31 @@ card:
           --hemma-popup-label-weight: 400;
           --hemma-popup-label-active-weight: 550;
           --hemma-popup-label-inactive-opacity: .82;
+        }
+
+        .navbar-popup::before{
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          border-radius: inherit;
+          padding: 1.2px;
+          box-sizing: border-box;
+          background: linear-gradient(
+            to bottom right,
+            var(--hemma-popup-specular-start, rgba(255,255,255,0.32)) 0%,
+            var(--hemma-popup-specular-mid, rgba(255,255,255,0.26)) 45%,
+            var(--hemma-popup-specular-mid, rgba(255,255,255,0.26)) 55%,
+            var(--hemma-popup-specular-end, rgba(255,255,255,0.22)) 100%
+          );
+          -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+          mask-composite: exclude;
         }
 
         .navbar-popup-backdrop.visible{
@@ -293,6 +317,18 @@ card:
 
         .navbar-popup .popup-item:hover{ background: rgba(255,255,255,0.06) !important; }
         .navbar-popup .popup-item:active{ background: rgba(255,255,255,0.10) !important; }
+
+        .navbar-popup .button:hover,
+        .navbar-popup .button:focus,
+        .navbar-popup .button:active,
+        .navbar-popup .button:hover::before,
+        .navbar-popup .button:hover::after,
+        .navbar-popup ha-icon:hover{
+          background: transparent !important;
+          box-shadow: none !important;
+          --state-layer-opacity: 0 !important;
+          --md-ripple-hover-opacity: 0 !important;
+        }
 
         .navbar-popup .popup-item .button{
           width: auto !important;
@@ -342,7 +378,7 @@ card:
         .navbar-popup .label{
           font-size: var(--hemma-popup-label-size) !important;
           font-weight: var(--hemma-popup-label-weight) !important;
-          line-height: 1.1 !important;
+          line-height: 1.4 !important;
           margin: 0 !important;
           padding: 0 !important;
           color: rgba(255,255,255,0.92) !important;

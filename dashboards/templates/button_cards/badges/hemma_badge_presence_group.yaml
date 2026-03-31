@@ -54,7 +54,16 @@ hemma_badge_presence_group:
         !['false','0','no','off','disabled'].includes(String(v).trim().toLowerCase());
 
       const hasAny = !!(variables?.entity_1 || variables?.entity_2 || variables?.entity_3 || variables?.entity_4);
-      return `:host{display:${(enabled && hasAny) ? 'inline-block' : 'none'} !important;}`;
+      return `
+        :host{display:${(enabled && hasAny) ? 'inline-block' : 'none'} !important;}
+        #icon {
+          color: var(--hemma-badge-icon-color) !important;
+          --icon-primary-color: var(--hemma-badge-icon-color) !important;
+          --paper-item-icon-color: var(--hemma-badge-icon-color) !important;
+          --state-icon-color: var(--hemma-badge-icon-color) !important;
+          --card-mod-icon-color: var(--hemma-badge-icon-color) !important;
+        }
+      `;
     ]]]
 
   styles:
@@ -84,8 +93,7 @@ hemma_badge_presence_group:
           [[[
             return entity?.state === 'presence' ? 'rgba(0,0,0,0.6)' : 'var(--secondary-text-color)';
           ]]]
-    icon:
-      - color: >
+      - --hemma-badge-icon-color: >
           [[[
             if (entity?.state === 'presence') return 'rgba(0,0,0,0.75)';
             const isHome = (eid) => {
@@ -95,10 +103,17 @@ hemma_badge_presence_group:
             };
             const entities = [variables?.entity_1, variables?.entity_2, variables?.entity_3, variables?.entity_4].filter(Boolean);
             const homeCount = entities.filter(isHome).length;
-            if (homeCount === entities.length) return '#83fcb4'; // all home
-            if (homeCount === 0)               return 'var(--badge-title-inactive)'; // all away
-            return '#ffd900'; // some away
+            if (homeCount === entities.length) return 'var(--hemma-badge-presence-home-color)';
+            if (homeCount === 0)               return 'var(--badge-title-inactive)';
+            return 'var(--hemma-badge-presence-away-color)';
           ]]]
+      - --icon-primary-color: var(--hemma-badge-icon-color)
+      - --paper-item-icon-color: var(--hemma-badge-icon-color)
+      - --state-icon-color: var(--hemma-badge-icon-color)
+      - --card-mod-icon-color: var(--hemma-badge-icon-color)
+
+    icon:
+      - color: var(--hemma-badge-icon-color)
 
   name: >
     [[[
