@@ -29,9 +29,6 @@ Hemma is fully YAML-based and designed for:
   - Active media player badge
 - **Button-cards**
   - Thermostat, media, fan, curtain, lock, and more
-- **Weather + Comfort**
-  - Mobile **weather widget**
-  - Comfort labels based on `temp_unit: 'F' | 'C'`
 ---
 
 ### Requirements
