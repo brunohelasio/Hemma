@@ -13,7 +13,7 @@ Hemma:
       secondary-text-color: rgba(245,245,245,0.8)
       disabled-text-color: rgba(208,208,208,0.5)
       sidebar-background-color: var(--ha-card-background)
-      sidebar-icon-color: var(--primary-text-color)
+      sidebar-icon-color: var(--text-primary-color)
       sidebar-text-color: "#c9c9c9"
       dark-vignette: 0
 
@@ -110,7 +110,7 @@ Hemma:
       secondary-text-color: rgba(240,240,240,0.9)
       disabled-text-color: rgba(208,208,208,0.5)
       sidebar-background-color: var(--ha-card-background)
-      sidebar-icon-color: "#9f9fa1"
+      sidebar-icon-color: var(--text-primary-color)
       sidebar-text-color: "#a8a8a8"
 
       vignette-alpha: 0.78
