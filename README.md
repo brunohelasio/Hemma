@@ -1,7 +1,7 @@
 ## Important Update (3/31/26)
 
 The latest update (version 1.2.1) includes many changes and new features, requiring updated code for most all files in the repo. When updating, please ensure you replace/overwrite all files to ensure compatibility. 
-
+![hemma_devices](https://github.com/user-attachments/assets/74b780bc-fc58-4323-9c58-59961014d551)
 # :house_with_garden: Hemma
 
 A modern, minimal, mobile-friendly dashboard for Home Assistant.  Inspired by the [Homio](https://github.com/iamtherufus/Homio) dashboard by @iamtherufus, Hemma is rebuilt and extended with new layouts, cards, and a streamlined setup process.
@@ -12,8 +12,6 @@ Hemma is fully YAML-based and designed for:
 - Frosted-glass entity cards
 - Badges for climate, sensors, presence, and active media
 - Clean navigation with a mobile navbar + desktop/tablet top navigation
-
-![hemma_devices](https://github.com/user-attachments/assets/74b780bc-fc58-4323-9c58-59961014d551)
 
 ---
 ### Highlights and Features
