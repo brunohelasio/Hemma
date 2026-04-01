@@ -24,7 +24,7 @@ Hemma:
       hemma-entity-background: rgba(20,20,20,0.1)
       hemma-entity-background-active: rgba(255,255,255,0.24)
       hemma-entity-active: rgba(255,255,255,1)
-      hemma-entity-inactive: rgba(240,240,240,0.8)
+      hemma-entity-inactive: rgba(255,255,255,0.7)
 
       # ============================================================================
       # MODE: LIGHT — NAV / POPUP / CONTROL TOKENS
@@ -44,10 +44,10 @@ Hemma:
       hemma-nav-fade: |
         linear-gradient(
           to top,
-          rgba(100,100,100,0.85) 0%,
-          rgba(100,100,100,0.47) 20%,
-          rgba(100,100,100,0.28) 40%,
-          rgba(100,100,100,0.15) 60%,
+          rgba(100,100,100,0.80) 0%,
+          rgba(100,100,100,0.40) 20%,
+          rgba(100,100,100,0.20) 40%,
+          rgba(100,100,100,0.10) 60%,
           rgba(100,100,100,0.00) 90%
         )
       hemma-nav-fade-top: 80svh
@@ -125,7 +125,7 @@ Hemma:
       hemma-entity-background: rgba(0,0,0,.08)
       hemma-entity-background-active: rgba(255,255,255,0.2)
       hemma-entity-active: rgba(255,255,255,1)
-      hemma-entity-inactive: rgba(240,240,240,0.7)
+      hemma-entity-inactive: rgba(255,255,255,0.65)
 
       # ============================================================================
       # MODE: DARK — NAV / POPUP / CONTROL TOKENS
@@ -394,7 +394,7 @@ Hemma:
   # Navigation popup styling
   hemma-popup-br: 25px
   hemma-popup-blur: blur(20px) saturate(1.1)
-  hemma-popup-shadow: "0 8px 32px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.12)"
+  hemma-popup-shadow: 0 3px 14px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.03)
 
   # ============================================================================
   # HERO / HEADER LAYOUT
@@ -527,11 +527,11 @@ Hemma:
   # ENTITY VISUAL TOKENS
   # ============================================================================
 
-  hemma-entity-picture-inactive-opacity: 0.75
+  hemma-entity-picture-inactive-opacity: 0.9
   hemma-entity-picture-active-opacity: 1
   hemma-entity-picture-inactive-filter: brightness(0.75) saturate(0.9)
   hemma-entity-picture-active-filter: none
-  hemma-entity-text-shadow: 0 0 3px rgba(0,0,0,0.15)
+  hemma-entity-text-shadow: 0 0 3px rgba(0,0,0,0.06)
   hemma-entity-header-buffer: 220px
 
   # ============================================================================
