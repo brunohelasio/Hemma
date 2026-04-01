@@ -105,8 +105,8 @@ cards:
           padding: 4px !important;
           border-radius: 9999px !important;
           background: var(--hemma-nav-bg, rgba(255,255,255,0.10)) !important;
-          -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
-          backdrop-filter: blur(16px) saturate(110%) !important;
+          -webkit-backdrop-filter: var(--hemma-nav-backdrop-filter, blur(10px) saturate(1.2)) !important;
+          backdrop-filter: var(--hemma-nav-backdrop-filter, blur(10px) saturate(1.2)) !important;
           border: none !important;
           box-shadow: var(--hemma-nav-shadow, 0 22px 50px rgba(0,0,0,0.32)) !important;
           overflow: hidden !important;
@@ -612,7 +612,7 @@ cards:
         entity: input_boolean.hemma_mobile_navigation
         state: "off"
       - condition: screen
-        media_query: "(orientation: landscape) and (max-width: 932px) and (pointer: coarse)"
+        media_query: "(orientation: landscape) and (max-height: 600px) and (pointer: coarse) and (hover: none)"
 
     card:
       type: custom:navbar-card
@@ -1590,7 +1590,7 @@ cards:
         entity: input_boolean.hemma_mobile_navigation
         state: "off"
       - condition: screen
-        media_query: "(orientation: landscape) and (min-width: 933px) and (max-width: 1400px) and (pointer: coarse)"
+        media_query: "(orientation: landscape) and (min-width: 863px) and (max-width: 1400px) and (min-height: 601px) and (pointer: coarse) and (hover: none)"
 
     card:
       type: custom:navbar-card
