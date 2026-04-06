@@ -45,6 +45,7 @@ Install via HACS (recommended) unless noted:
 - **[lovelace-navbar-card](https://github.com/joseluis9595/lovelace-navbar-card)** (Jose Luis Álvarez) - required for navigation + media badge
 - **[browser_mod](https://github.com/joseluis9595/lovelace-navbar-card)** (Thomas Lovén) - required for custom popups
 - **[more-info-card](https://github.com/thomasloven/lovelace-more-info-card)** (Thomas Lovén) - required for custom popups
+- **[lovelace-mushroom](https://github.com/piitaya/lovelace-mushroom)** (Paul Bottein) - required for custom popups
 - **[uix](https://github.com/Lint-Free-Technology/uix)** (Lint Free Technology) - required for custom popup windows
 - **navbar-popup-caret** - custom js required for navbar dropdown menus (included in this repo)
 - **navbar-sidebar-offset** - custom js required for adjusting navigation menu when sidebar is present (included in this repo)
