@@ -31,9 +31,9 @@ Hemma:
       # ============================================================================
 
       navbar-primary-color: var(--hemma-nav-icon-active)
-      hemma-nav-bg: rgba(20,20,20,0.1)
+      hemma-nav-bg: rgba(20,20,20,0..08)
       hemma-nav-border: transparent
-      hemma-nav-shadow: 0 3px 9px rgba(0,0,0,0.05)
+      hemma-nav-shadow: 0 3px 9px rgba(0,0,0,0.09)
       hemma-nav-specular-start: rgba(255,255,255,0.48)
       hemma-nav-specular-mid: rgba(255,255,255,0.26)
       hemma-nav-specular-end: rgba(255,255,255,0.44)
@@ -59,6 +59,8 @@ Hemma:
       hemma-popup-specular-start: rgba(255,255,255,0.26)
       hemma-popup-specular-mid: rgba(255,255,255,0.24)
       hemma-popup-specular-end: rgba(255,255,255,0.22)
+      hemma-popup-entity-background: rgba(0, 0, 0, 0.4)
+      hemma-popup-entity-hover: rgba(0, 0, 0, 0.5)
 
       hemma-card-specular-start: rgba(255,255,255,0.25)
       hemma-card-specular-mid: rgba(255,255,255,0.12)
@@ -90,6 +92,11 @@ Hemma:
       ha-color-border-neutral-normal: transparent
       ha-color-fill-primary-normal-resting: var(--hemma-nav-bg)
       ha-color-fill-primary-quiet-resting: rgba(100,100,100,0.25)
+      ha-color-fill-primary-quiet-hover: rgba(100,100,100,0.3)
+      ha-color-form-background: var(--ha-card-background)
+      ha-color-form-background-disabled: var(--ha-card-background)
+      ha-color-form-background-hover: var(--ha-card-background)
+      ha-color-text-secondary: var(--secondary-text-color)
       wa-color-text-quiet: var(--secondary-text-color)
 
       mdc-text-field-fill-color: rgba(50,50,50,0.4)
@@ -167,6 +174,8 @@ Hemma:
       hemma-card-specular-start: rgba(255,255,255,0.20)
       hemma-card-specular-mid: rgba(255,255,255,0.09)
       hemma-card-specular-end: rgba(255,255,255,0.15)
+      hemma-popup-entity-background: rgba(40, 40, 40, 0.4)
+      hemma-popup-entity-hover: rgba(65, 65, 65, 0.6)
 
       hemma-control-off: rgba(0,0,0,0.2)
       hemma-control-on: rgba(255,255,255,0.2)
@@ -197,6 +206,11 @@ Hemma:
       ha-color-border-neutral-normal: transparent
       ha-color-fill-primary-normal-resting: var(--hemma-nav-bg)
       ha-color-fill-primary-quiet-resting: rgba(100,100,100,0.25)
+      ha-color-fill-primary-quiet-hover: rgba(100,100,100,0.3)
+      ha-color-form-background: var(--ha-card-background)
+      ha-color-form-background-disabled: var(--ha-card-background)
+      ha-color-form-background-hover: var(--ha-card-background)
+      ha-color-text-secondary: var(--secondary-text-color)
       wa-color-text-quiet: var(--secondary-text-color)
 
       mdc-text-field-fill-color: var(--primary-background-color)
@@ -269,11 +283,11 @@ Hemma:
   app-theme-color: rgb(0,0,0)
   state-inactive-color: "#bdbdbd"
   primary-text-color: "#ffffff"
-  icon-primary-color: var(--sidebar-icon-color)
+  icon-primary-color: currentColor
   scrollbar-thumb-color: rgba(255,255,255,0.15)
   lumo-body-text-color: var(--primary-text-color)
   clear-background-color: var(--ha-card-background)
-  paper-item-icon-color: white
+  paper-item-icon-color: currentColor
   rgb-card-background-color: rgb(10,10,10)
 
   ha-color-on-primary-normal: var(--primary-color)
@@ -313,7 +327,6 @@ Hemma:
   # HA / MDC system
   ha-border-radius-lg: 12px
   ha-border-radius-sm: 30px
-  ha-color-form-background: var(--ha-card-background)
   ha-card-features-border-radius: 30px
   border-end-end-radius: 30px
   wa-border-radius-m: 24px
@@ -426,7 +439,9 @@ Hemma:
 
   # Header adjustments
   hemma-header-temp-nudge: 3px
-  hemma-header-badge-nudge: -4px
+  hemma-header-badge-nudge: -7px
+  hemma-header-media-badge-nudge-desktop: 3px
+  hemma-header-media-badge-nudge-mobile: 2px
 
   # ============================================================================
   # HERO TYPOGRAPHY / TEMPERATURE
@@ -615,22 +630,22 @@ Hemma:
   # ============================================================================
 
   hemma-state-active-color: rgba(255,221,55,0.98)
-  hemma-badge-light-color: '#ffd700'
-  hemma-badge-climate-color: '#45dced'
-  hemma-badge-climate-very-cold-color: '#11c2f7'
-  hemma-badge-temp-very-cold-color: '#67d4f5'
-  hemma-badge-temp-cool-color: '#a3daff'
-  hemma-badge-temp-comfortable-color: '#67f5a0'
-  hemma-badge-temp-warm-color: '#f5c842'
-  hemma-badge-temp-hot-color: '#f5962a'
-  hemma-badge-temp-very-hot-color: '#e53552'
-  hemma-badge-air-quality-good-color: '#44e371'
-  hemma-badge-air-quality-moderate-color: '#f0c741'
-  hemma-badge-humidity-dry-color: '#ffb254'
-  hemma-badge-humidity-high-color: '#4bd1fa'
-  hemma-badge-presence-home-color: '#83fcb4'
-  hemma-badge-presence-away-color: '#ffd900'
-  hemma-badge-media-color: '#fc6874'
+  hemma-badge-light-color: "#ffd700"
+  hemma-badge-climate-color: "#45dced"
+  hemma-badge-climate-very-cold-color: "#11c2f7"
+  hemma-badge-temp-very-cold-color: "#67d4f5"
+  hemma-badge-temp-cool-color: "#a3daff"
+  hemma-badge-temp-comfortable-color: "#67f5a0"
+  hemma-badge-temp-warm-color: "#f5c842"
+  hemma-badge-temp-hot-color: "#f5962a"
+  hemma-badge-temp-very-hot-color: "#e53552"
+  hemma-badge-air-quality-good-color: "#44e371"
+  hemma-badge-air-quality-moderate-color: "#f0c741"
+  hemma-badge-humidity-dry-color: "#ffb254"
+  hemma-badge-humidity-high-color: "#4bd1fa"
+  hemma-badge-presence-home-color: "#83fcb4"
+  hemma-badge-presence-away-color: "#ffd900"
+  hemma-badge-media-color: "#fc6874"
 
   # ============================================================================
   # ENTITY STATE COLORS
@@ -674,6 +689,7 @@ Hemma:
   paper-slider-container-color: rgba(255,255,255,0.12)
   paper-slider-font-color: "#000000"
   ha-slider-background: none
+  mush-control-border-radius: 9999px
 
   # Labels / badges
   label-badge-background-color: "#23232e"
@@ -883,6 +899,7 @@ Hemma:
         --hero-header-gap-current: var(--hero-header-gap-desktop, 6px);
         --hero-temp-font-size: var(--hero-temp-font-size-desktop, 18px);
         --hemma-header-stack-h-current: var(--hemma-header-cap-desktop, clamp(260px, 30vh, 380px));
+        --hemma-header-media-badge-nudge-current: var(--hemma-header-media-badge-nudge-desktop, 3px);
         --hemma-nav-margin-current: var(--hemma-nav-margin-desktop, 8vw);
         --hemma-nav-gap-current: var(--hemma-nav-gap-desktop, 50px);
         --hemma-nav-top-current: var(--hemma-nav-top-desktop, 60px);
@@ -983,6 +1000,7 @@ Hemma:
           --hero-room-name-line-height-current: var(--hero-title-line-height-mobile, 1.20);
           --hero-room-name-letter-spacing-current: var(--hero-title-letter-spacing-mobile, -1.2px);
           --hero-room-name-margin-left-current: var(--hero-title-margin-left-mobile, 2px);
+          --hemma-header-media-badge-nudge-current: var(--hemma-header-media-badge-nudge-mobile, 0px);
           --badge-media-max-width-current: var(--badge-media-max-width-mobile, 100%);
           --badge-gap-current: var(--badge-gap-mobile, var(--badge-gap, 10px));
           --badge-col-gap-current: var(--badge-col-gap-mobile, var(--badge-col-gap, 10px));
@@ -1088,7 +1106,6 @@ Hemma:
 
     ha-more-info-dialog: |
       ha-adaptive-dialog {
-        --icon-primary-color: var(--primary-text-color, white);
         --wa-color-fill-loud: var(--primary-text-color, white);
         --wa-color-neutral-fill-loud: var(--primary-text-color, white);
         --wa-color-on-normal: var(--primary-text-color, white);
@@ -1106,7 +1123,6 @@ Hemma:
       wa-drawer,
       wa-popup,
       wa-dialog {
-        --icon-primary-color: var(--primary-text-color, white);
         --wa-color-fill-loud: var(--primary-text-color, white);
         --wa-color-neutral-fill-loud: var(--primary-text-color, white);
         --wa-color-on-normal: var(--primary-text-color, white);

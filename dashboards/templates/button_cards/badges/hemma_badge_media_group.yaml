@@ -15,6 +15,11 @@ hemma_badge_media_group:
     entity_6: null
     entity_7: null
     entity_8: null
+    entity_9: null
+    entity_10: null
+    entity_11: null
+    entity_12: null
+    entity_13: null
 
   show_state: false
   show_label: false
@@ -45,6 +50,11 @@ hemma_badge_media_group:
     - '[[[ return variables?.entity_6 ]]]'
     - '[[[ return variables?.entity_7 ]]]'
     - '[[[ return variables?.entity_8 ]]]'
+    - '[[[ return variables?.entity_9 ]]]'
+    - '[[[ return variables?.entity_10 ]]]'
+    - '[[[ return variables?.entity_11 ]]]'
+    - '[[[ return variables?.entity_12 ]]]'
+    - '[[[ return variables?.entity_13 ]]]'
 
   extra_styles: >
     [[[
@@ -81,7 +91,9 @@ hemma_badge_media_group:
 
       const eids = [
         variables?.entity_1, variables?.entity_2, variables?.entity_3, variables?.entity_4,
-        variables?.entity_5, variables?.entity_6, variables?.entity_7, variables?.entity_8
+        variables?.entity_5, variables?.entity_6, variables?.entity_7, variables?.entity_8,
+        variables?.entity_9, variables?.entity_10, variables?.entity_11, variables?.entity_12,
+        variables?.entity_13
       ].filter(Boolean);
 
       const activeCount = enabled ? eids.filter(e => isActive(e)).length : 0;
@@ -236,7 +248,9 @@ hemma_badge_media_group:
 
       const eids = [
         variables?.entity_1, variables?.entity_2, variables?.entity_3, variables?.entity_4,
-        variables?.entity_5, variables?.entity_6, variables?.entity_7, variables?.entity_8
+        variables?.entity_5, variables?.entity_6, variables?.entity_7, variables?.entity_8,
+        variables?.entity_9, variables?.entity_10, variables?.entity_11, variables?.entity_12,
+        variables?.entity_13
       ].filter(Boolean);
 
       const activeCount = eids.filter(e => isActive(e)).length;

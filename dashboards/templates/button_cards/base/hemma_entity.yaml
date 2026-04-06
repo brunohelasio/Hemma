@@ -76,16 +76,16 @@ hemma_entity:
       #battery{ opacity: 0; }
     }
 
-    #progress{
-      border-radius: 50%;
-      background: conic-gradient(
-        from -90deg,
-        rgba(255,255,255,0.78) calc(var(--hemma-progress-pct, 0) * 1%),
-        rgba(255,255,255,0.15) calc(var(--hemma-progress-pct, 0) * 1%)
-      );
-      -webkit-mask: radial-gradient(circle closest-side at center, transparent 72%, black 73%);
-      mask: radial-gradient(circle closest-side at center, transparent 72%, black 73%);
-      transition: --hemma-progress-pct 0.8s linear;
+    #progress {
+      background: none !important;
+      mask: none !important;
+      -webkit-mask: none !important;
+      border-radius: 0;
+    }
+
+    #progress svg .hemma-progress-arc {
+      stroke-dashoffset: calc(87.965px - var(--hemma-progress-pct, 0) * 0.87965px);
+      transition: stroke-dashoffset 0.8s linear;
     }
 
   custom_fields:
@@ -228,14 +228,21 @@ hemma_entity:
 
     progress: |
       [[[
-        const PROP_ID = 'hemma-progress-property-v1';
+        const PROP_ID = 'hemma-progress-property-v2';
         if (!document.getElementById(PROP_ID)) {
           const s = document.createElement('style');
           s.id = PROP_ID;
           s.textContent = '@property --hemma-progress-pct { syntax: "<number>"; inherits: true; initial-value: 0; }';
           document.head.appendChild(s);
         }
-        return '';
+
+        const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
+        const size = isMobile ? 28 : 36;
+
+        return `<svg width="${size}" height="${size}" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" style="transform:rotate(-90deg);display:block;">
+          <circle cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="7" stroke-linecap="round"/>
+          <circle class="hemma-progress-arc" cx="18" cy="18" r="14" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="7" stroke-linecap="round" stroke-dasharray="87.965"/>
+        </svg>`;
       ]]]
 
   entity_picture: |
@@ -314,29 +321,43 @@ hemma_entity:
               const rawState = st.state;
               const attrs = st.attributes || {};
 
-              // 1) direct numeric state/sensor
               const stateNum = parseFloat(rawState);
               if (Number.isFinite(stateNum)) {
                 v = stateNum;
               }
 
-              // 2) explicit percentage-style attributes
               else if (Number.isFinite(Number(attrs.percentage))) {
                 v = Number(attrs.percentage);
               } else if (Number.isFinite(Number(attrs.progress))) {
                 v = Number(attrs.progress);
               }
 
-              // 3) media player progress from position / duration
               else if (
                 Number.isFinite(Number(attrs.media_position)) &&
                 Number.isFinite(Number(attrs.media_duration)) &&
                 Number(attrs.media_duration) > 0
               ) {
-                v = (Number(attrs.media_position) / Number(attrs.media_duration)) * 100;
+                const position = Number(attrs.media_position);
+                const duration = Number(attrs.media_duration);
+                const stateNow = (st.state || '').toLowerCase();
+
+                let effectivePosition = position;
+
+                if (
+                  stateNow === 'playing' &&
+                  attrs.media_position_updated_at
+                ) {
+                  const updatedAt = new Date(attrs.media_position_updated_at).getTime();
+                  if (Number.isFinite(updatedAt)) {
+                    const elapsed = Math.max(0, (Date.now() - updatedAt) / 1000);
+                    effectivePosition += elapsed;
+                  }
+                }
+
+                effectivePosition = Math.max(0, Math.min(duration, effectivePosition));
+                v = (effectivePosition / duration) * 100;
               }
 
-              // 4) fallback
               else {
                 v = 0;
               }
@@ -345,6 +366,7 @@ hemma_entity:
             const n = Number(v);
             return Number.isFinite(n) ? Math.max(0, Math.min(100, n)) : 0;
           ]]]
+
       - --hemma-progress-display: |
           [[[
             if (!variables.show_progress) return 'none';
@@ -362,7 +384,13 @@ hemma_entity:
         - line-height: 0
         - display: |
             [[[
-              return variables.show_toggle ? 'block' : 'none';
+              if (!variables.show_toggle) return 'none';
+              if (variables.show_progress) {
+                const activeStates = variables.progress_active_states || [];
+                const s = (entity?.state || '').toLowerCase();
+                if (activeStates.includes(s)) return 'none';
+              }
+              return 'block';
             ]]]
 
       battery:
@@ -376,10 +404,18 @@ hemma_entity:
 
       progress:
         - position: absolute
-        - bottom: var(--hemma-entity-inner-pad-current, var(--hemma-entity-inner-pad-desktop, 22px))
+        - top: var(--hemma-entity-inner-pad-current, var(--hemma-entity-inner-pad-desktop, 22px))
         - right: var(--hemma-entity-inner-pad-current, var(--hemma-entity-inner-pad-desktop, 22px))
-        - width: 28px
-        - height: 28px
+        - width: |
+            [[[
+              const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
+              return isMobile ? '28px' : '36px';
+            ]]]
+        - height: |
+            [[[
+              const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
+              return isMobile ? '28px' : '36px';
+            ]]]
         - display: var(--hemma-progress-display, none)
         - z-index: 2
         - pointer-events: none
@@ -432,7 +468,7 @@ hemma_entity:
 
     entity_picture:
       - opacity: var(--hemma-entity-picture-inactive-opacity, .9)
-      - filter: var(--hemma-entity-picture-inactive-filter, brightness(.9))
+      - filter: var(--hemma-entity-picture-inactive-filter, brightness(0.9) saturate(0.9))
       - transition: opacity .18s ease, filter .18s ease
 
     icon:

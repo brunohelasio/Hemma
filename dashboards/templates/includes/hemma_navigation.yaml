@@ -131,7 +131,7 @@ card:
           position: relative !important;
           inset: auto !important;
           width: 100% !important;
-          max-width: var(--hemma-nav-safe-max, calc(100vw - 16vw - 320px)) !important;
+          max-width: calc(100vw - (2 * var(--hemma-nav-margin-current, 8vw)) - var(--hemma-time-reserve, 160px)) !important;
           background: transparent !important;
           border: 0 !important;
           box-shadow: none !important;
@@ -140,7 +140,7 @@ card:
           padding: 0 !important;
           border-radius: 0 !important;
           display: flex !important;
-          justify-content: safe center !important;
+          justify-content: center !important;
           overflow-x: auto !important;
           overflow-y: hidden !important;
           -webkit-overflow-scrolling: touch !important;
@@ -422,7 +422,9 @@ card:
         }
 
         .navbar.desktop.top{
-          left: calc(50% + var(--hemma-sidebar-w, 0px) / 2) !important;
+          left: 50% !important;
+          right: auto !important;
+          transform: translateX(-50%) !important;
         }
 
         .navbar.desktop .route{
