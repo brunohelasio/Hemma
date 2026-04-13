@@ -7,7 +7,7 @@
 #                  Default: ['home', 'livingroom', 'kitchen', 'bedroom']
 #
 #   preload_night_suffix: Suffix for dark mode images (default: '-night')
-#   preload_path: Base path for room images (default: '/local/hemma/rooms')
+#   preload_path: Base path for room images (default: '/local/Hemma-main/www/hemma/rooms')
 #   preload_extension: Image file extension (default: '.jpg')
 # ============================================================================
 hemma_shared:
@@ -20,7 +20,7 @@ hemma_shared:
       - kitchen
       - bedroom
     preload_night_suffix: "-night"
-    preload_path: "/local/hemma/rooms"
+    preload_path: "/local/Hemma-main/www/hemma/rooms"
     preload_extension: ".jpg"
 
   styles:
@@ -35,7 +35,7 @@ hemma_shared:
     [[[
       const rooms = variables.preload_rooms || [];
       const suffix = variables.preload_night_suffix || '-night';
-      const basePath = variables.preload_path || '/local/hemma/rooms';
+      const basePath = variables.preload_path || '/local/Hemma-main/www/hemma/rooms';
       const ext = variables.preload_extension || '.jpg';
 
       if (rooms.length > 0 && !window.hemmaPreloadedImages) {

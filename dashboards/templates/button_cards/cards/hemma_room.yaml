@@ -169,7 +169,7 @@ hemma_room:
             const base = variables.image || 'default';
             const isDark = !!(hass?.themes?.darkMode);
             const picked = isDark ? (variables.image_night || `${base}-night`) : base;
-            const url = `/local/hemma/rooms/${picked}.jpg`;
+            const url = `/local/Hemma-main/www/hemma/rooms/${picked}.jpg`;
             return `url("${url}")`;
           ]]]
       - --hero-img-pos: >
@@ -696,7 +696,7 @@ hemma_room:
         template: hemma_menu_icon
 
     navigation:
-      card: !include /config/dashboards/templates/includes/hemma_navigation.yaml
+      card: !include /config/Hemma-main/dashboards/templates/includes/hemma_navigation.yaml
 
     entities_overlay:
       card:
@@ -713,8 +713,8 @@ hemma_room:
       [[[
         const base = variables.image || 'default';
         const night = variables.image_night || `${base}-night`;
-        const dayUrl = `/local/hemma/rooms/${base}.jpg`;
-        const nightUrl = `/local/hemma/rooms/${night}.jpg`;
+        const dayUrl = `/local/Hemma-main/www/hemma/rooms/${base}.jpg`;
+        const nightUrl = `/local/Hemma-main/www/hemma/rooms/${night}.jpg`;
 
         return `
           <img src="${dayUrl}" alt="" />

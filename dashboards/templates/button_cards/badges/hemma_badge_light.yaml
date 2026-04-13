@@ -202,7 +202,7 @@ hemma_badge_light:
 
   extra_styles: >
     [[[
-      const SVG_URL  = "/local/hemma/icons/light.svg";
+      const SVG_URL  = "/local/Hemma-main/www/hemma/icons/light.svg";
       const ICON_PCT = 85;
 
       return `

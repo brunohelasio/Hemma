@@ -1,4 +1,4 @@
-# /config/dashboards/hemma/hemma.yaml.example
+# /config/Hemma-main/dashboards/hemma/hemma.yaml.example
 # Hemma Dashboard - Example Configuration
 # ============================================================================
 # Copy or rename this file to hemma.yaml and customize the entity IDs to match
@@ -8,7 +8,7 @@
 # OPTIONAL: Adjust room names, add/remove rooms, customize features
 # ============================================================================
 
-button_card_templates: !include_dir_merge_named /config/dashboards/templates/button_cards
+button_card_templates: !include_dir_merge_named /config/Hemma-main/dashboards/templates/button_cards
 
 # Kiosk Mode (optional - requires kiosk-mode HACS integration)
 # Uncomment and customize if you want to hide certain UI elements
@@ -41,7 +41,7 @@ views:
   - type: custom:grid-layout
     title: home
     path: home
-    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
       # ROOM HERO CARD
       - type: custom:button-card
@@ -49,8 +49,8 @@ views:
         name: Home
         variables:
           # Image Configuration
-          # Place your images at: /config/www/hemma/rooms/home.jpg (light mode)
-          #                       /config/www/hemma/rooms/home-night.jpg (dark mode)
+          # Place your images at: /config/Hemma-main/www/hemma/rooms/home.jpg (light mode)
+          #                       /config/Hemma-main/www/hemma/rooms/home-night.jpg (dark mode)
           image: home
           image_position: center center
 
@@ -103,13 +103,13 @@ views:
           media_player_4: media_player.YOUR_ENTITY        # e.g., media_player.kitchen
 
       # MOBILE NAVBAR
-      - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
+      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
       # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/dashboards/templates/includes/hemma_entity_layout.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
           # Thermostat
           - type: custom:button-card
@@ -179,7 +179,7 @@ views:
   - type: custom:grid-layout
     title: living-room
     path: living-room
-    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
       # ROOM HERO CARD
       - type: custom:button-card
@@ -215,13 +215,13 @@ views:
           # media_player_1: media_player.YOUR_LIVING_ROOM_PLAYER
 
       # MOBILE NAVBAR
-      - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
+      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
       # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/dashboards/templates/includes/hemma_entity_layout.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
           - type: custom:button-card
             template: hemma_thermostat
@@ -286,7 +286,7 @@ views:
   - type: custom:grid-layout
     title: kitchen
     path: kitchen
-    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
       # ROOM HERO CARD
       - type: custom:button-card
@@ -320,13 +320,13 @@ views:
           # media_player_1: media_player.YOUR_KITCHEN_PLAYER
 
       # MOBILE NAVBAR
-      - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
+      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
       # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/dashboards/templates/includes/hemma_entity_layout.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
           - type: custom:button-card
             template: hemma_vacuum
@@ -355,7 +355,7 @@ views:
   - type: custom:grid-layout
     title: bedroom
     path: bedroom
-    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
       # ROOM HERO CARD
       - type: custom:button-card
@@ -389,13 +389,13 @@ views:
           # media_player_1: media_player.YOUR_BEDROOM_PLAYER
 
       # MOBILE NAVBAR
-      - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
+      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
       # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/dashboards/templates/includes/hemma_entity_layout.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
           - type: custom:button-card
             template: hemma_thermostat
