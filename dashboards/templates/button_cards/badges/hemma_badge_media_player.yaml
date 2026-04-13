@@ -11,6 +11,7 @@ hemma_badge_media_player:
     enabled: true
     entity: null
     pause_timeout_minutes: 5
+    group_entities: null
 
   entity: '[[[ return variables.entity || entity?.entity_id ]]]'
 
@@ -25,20 +26,61 @@ hemma_badge_media_player:
       - backdrop-filter: blur(14px) saturate(1.2) !important
       - border-radius: 9999px !important
       - overflow: hidden !important
+      - border: none !important
       - width: fit-content !important
-      - max-width: min(var(--badge-media-max-width-current, 640px), calc(100vw - 30px)) !important
+      - max-width: var(--badge-media-max-width-current, none) !important
       - min-height: calc(var(--badge-min-height-current, var(--badge-min-height, 50px)) + 3px) !important
       - align-items: center !important
       - justify-content: flex-start !important
       - text-align: left !important
       - gap: 6px !important
       - isolation: isolate
-      - margin: 0 0 var(--badge-media-row-gap, 14px) 0 !important
+      - margin: 0 !important
+      - display: inline-grid
       - justify-self: start !important
       - align-self: start !important
       - place-self: start !important
+      - --badge-icon-size-current: var(--badge-media-icon-size-current, var(--badge-media-icon-size, 44px))
 
-      - display: >
+      - --hemma-badge-opacity: >
+          [[[
+            const enabled = (v) => {
+              if (v === undefined || v === null) return true;
+              if (typeof v === 'boolean') return v;
+              if (typeof v === 'number') return v !== 0;
+              const s = String(v).trim().toLowerCase();
+              return !['false','0','no','off','disabled'].includes(s);
+            };
+
+            if (!enabled(variables.enabled)) return '0';
+
+            const eid = variables.entity || entity?.entity_id;
+            const s = eid ? states[eid] : null;
+            if (!s) return '0';
+
+            const st = String(s.state || '');
+            if (['unavailable','unknown','off','standby'].includes(st)) return '0';
+
+            const a = s.attributes || {};
+            const title  = String(a.media_title || '').trim();
+            const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
+            const hasContent = !!(title || artist);
+
+            if (['playing','buffering'].includes(st)) return hasContent ? '1' : '0';
+
+            if (st === 'paused') {
+              if (!hasContent) return '0';
+              const timeout = Number(variables.pause_timeout_minutes ?? 5);
+              if (timeout <= 0) return '1';
+              return ((new Date() - new Date(s.last_changed)) / 60000) > timeout ? '0' : '1';
+            }
+
+            if (['idle','on'].includes(st)) return hasContent ? '1' : '0';
+
+            return '0';
+          ]]]
+
+      - --hemma-badge-ptr: >
           [[[
             const enabled = (v) => {
               if (v === undefined || v === null) return true;
@@ -62,16 +104,16 @@ hemma_badge_media_player:
             const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
             const hasContent = !!(title || artist);
 
-            if (['playing','buffering'].includes(st)) return hasContent ? 'inline-grid' : 'none';
+            if (['playing','buffering'].includes(st)) return hasContent ? 'auto' : 'none';
 
             if (st === 'paused') {
               if (!hasContent) return 'none';
               const timeout = Number(variables.pause_timeout_minutes ?? 5);
-              if (timeout <= 0) return 'inline-grid';
-              return ((new Date() - new Date(s.last_changed)) / 60000) > timeout ? 'none' : 'inline-grid';
+              if (timeout <= 0) return 'auto';
+              return ((new Date() - new Date(s.last_changed)) / 60000) > timeout ? 'none' : 'auto';
             }
 
-            if (['idle','on'].includes(st)) return hasContent ? 'inline-grid' : 'none';
+            if (['idle','on'].includes(st)) return hasContent ? 'auto' : 'none';
 
             return 'none';
           ]]]
@@ -105,10 +147,10 @@ hemma_badge_media_player:
 
     entity_picture:
       - grid-area: i
-      - width: var(--badge-icon-size-current, var(--badge-icon-size, 36px)) !important
-      - height: var(--badge-icon-size-current, var(--badge-icon-size, 36px)) !important
-      - min-width: var(--badge-icon-size-current, var(--badge-icon-size, 36px)) !important
-      - min-height: var(--badge-icon-size-current, var(--badge-icon-size, 36px)) !important
+      - width: var(--badge-media-icon-size-current, var(--badge-media-icon-size, 44px)) !important
+      - height: var(--badge-media-icon-size-current, var(--badge-media-icon-size, 44px)) !important
+      - min-width: var(--badge-media-icon-size-current, var(--badge-media-icon-size, 44px)) !important
+      - min-height: var(--badge-media-icon-size-current, var(--badge-media-icon-size, 44px)) !important
       - border-radius: 9999px !important
       - object-fit: cover !important
       - box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14) !important
@@ -128,7 +170,7 @@ hemma_badge_media_player:
     custom_fields:
       controls:
         - grid-area: controls
-        - z-index: 6
+        - z-index: 30
 
   entity_picture: >
     [[[
@@ -154,8 +196,25 @@ hemma_badge_media_player:
     [[[
       const eid = variables.entity || entity?.entity_id;
       const a = eid ? (states[eid]?.attributes || {}) : {};
-      const title  = String(a.media_title || '').trim();
-      const artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
+      const rawTitle = String(a.media_title || '').trim();
+      let artist = String(a.media_artist || a.artist || a.media_album_artist || '').trim();
+      let title = rawTitle;
+
+      if (!artist && a.media_content_type === 'tvshow') {
+        const series = String(a.media_series_title || '').trim();
+        const season  = a.media_season  ? `S${String(a.media_season).padStart(2,'0')}`  : '';
+        const episode = a.media_episode ? `E${String(a.media_episode).padStart(2,'0')}` : '';
+        const ep = [season, episode].filter(Boolean).join('');
+        artist = [series, ep].filter(Boolean).join(' · ');
+      }
+
+      if (!artist) {
+        const parts = rawTitle.split(/\s+[-–—]\s+/);
+        if (parts.length >= 3) {
+          title = parts[parts.length - 1];
+          artist = parts.slice(0, parts.length - 1).join(' – ');
+        }
+      }
 
       const esc = (s) => String(s ?? '')
         .replace(/&/g,'&amp;')
@@ -164,10 +223,13 @@ hemma_badge_media_player:
         .replace(/"/g,'&quot;')
         .replace(/'/g,'&#39;');
 
+      const groupCount = Array.isArray(variables.group_entities) ? variables.group_entities.length + 1 : 0;
+      const countPill = groupCount > 1 ? `<span class="group-count"><span class="gc-plus">+</span>${groupCount}</span>` : '';
+
       return `
-        <div class="mp-wrap">
-          <div class="mp-title">${esc(title || a.friendly_name || 'Media')}</div>
-          <div class="mp-sub">${esc(artist || '')}</div>
+        <div class="badge-wrap">
+          <div class="badge-title">${esc(title || a.friendly_name || 'Media')}${countPill}</div>
+          <div class="badge-sub">${esc(artist || '')}</div>
         </div>
       `;
     ]]]
@@ -193,10 +255,9 @@ hemma_badge_media_player:
             - padding: 0
             - margin: 0
             - border-radius: 9999px
-            - --ha-ripple-color: rgba(0,0,0,0) !important
-            - --ha-ripple-hover-color: rgba(0,0,0,0) !important
-            - --ha-ripple-pressed-color: rgba(0,0,0,0) !important
-            - --mdc-ripple-color: rgba(0,0,0,0) !important
+            - border: none !important
+            - box-shadow: none !important
+            - backdrop-filter: none !important
           grid:
             - grid-template-areas: '"play next"'
             - grid-template-columns: min-content min-content
@@ -218,27 +279,30 @@ hemma_badge_media_player:
               show_name: false
               styles:
                 card:
-                  - width: var(--badge-icon-size-current, 36px)
-                  - height: var(--badge-icon-size-current, 36px)
+                  - width: var(--badge-media-btn-size-current, var(--badge-media-btn-size, 44px))
+                  - height: var(--badge-media-btn-size-current, var(--badge-media-btn-size, 44px))
                   - border-radius: 9999px
                   - background: rgba(255,255,255,0.10)
-                  - box-shadow: none
+                  - box-shadow: none !important
+                  - border: none !important
                   - padding: 6px
                   - transform: none !important
-                  - --ha-ripple-color: rgba(0,0,0,0) !important
-                  - --ha-ripple-hover-color: rgba(0,0,0,0) !important
-                  - --ha-ripple-pressed-color: rgba(0,0,0,0) !important
-                  - --mdc-ripple-color: rgba(0,0,0,0) !important
+                grid:
+                  - place-items: center
                 icon:
                   - color: rgba(255,255,255,0.92)
-                  - width: var(--badge-btn-size-current, 22px)
-                  - height: var(--badge-btn-size-current, 22px)
+                  - width: var(--badge-media-btn-icon-size-current, var(--badge-media-btn-icon-size, 28px))
+                  - height: var(--badge-media-btn-icon-size-current, var(--badge-media-btn-icon-size, 28px))
               tap_action:
                 action: call-service
                 service: media_player.media_play_pause
                 service_data:
-                  entity_id: '[[[ return variables.entity ]]]'
+                  entity_id: '[[[ return [variables.entity, ...(variables.group_entities||[])].filter(Boolean) ]]]'
               extra_styles: |
+                ha-ripple,
+                mwc-ripple {
+                  display: none !important;
+                }
                 ha-card{
                   transition: background-color .22s ease,
                               box-shadow .24s ease,
@@ -261,26 +325,30 @@ hemma_badge_media_player:
               show_name: false
               styles:
                 card:
-                  - width: var(--badge-icon-size-current, 36px)
-                  - height: var(--badge-icon-size-current, 36px)
+                  - width: var(--badge-media-btn-size-current, var(--badge-media-btn-size, 44px))
+                  - height: var(--badge-media-btn-size-current, var(--badge-media-btn-size, 44px))
                   - border-radius: 9999px
                   - background: rgba(255,255,255,0.10)
                   - padding: 6px
                   - transform: none !important
-                  - --ha-ripple-color: rgba(0,0,0,0) !important
-                  - --ha-ripple-hover-color: rgba(0,0,0,0) !important
-                  - --ha-ripple-pressed-color: rgba(0,0,0,0) !important
-                  - --mdc-ripple-color: rgba(0,0,0,0) !important
+                  - box-shadow: none !important
+                  - border: none !important
+                grid:
+                  - place-items: center
                 icon:
                   - color: rgba(255,255,255,0.92)
-                  - width: var(--badge-btn-size-current, 22px)
-                  - height: var(--badge-btn-size-current, 22px)
+                  - width: var(--badge-media-btn-icon-size-current, var(--badge-media-btn-icon-size, 28px))
+                  - height: var(--badge-media-btn-icon-size-current, var(--badge-media-btn-icon-size, 28px))
               tap_action:
                 action: call-service
                 service: media_player.media_next_track
                 service_data:
-                  entity_id: '[[[ return variables.entity ]]]'
+                  entity_id: '[[[ return [variables.entity, ...(variables.group_entities||[])].filter(Boolean) ]]]'
               extra_styles: |
+                ha-ripple,
+                mwc-ripple {
+                  display: none !important;
+                }
                 ha-card{
                   transition: background-color .22s ease,
                               box-shadow .24s ease,
@@ -296,9 +364,14 @@ hemma_badge_media_player:
                 }
 
   extra_styles: |
+    ha-ripple,
+    mwc-ripple {
+      display: none !important;
+    }
+
     :host{
-      --hemma-mp-title: var(--badge-font-size-current, var(--badge-font-size, 15px));
-      --hemma-mp-sub: calc(var(--hemma-mp-title) - 2px);
+      --hemma-badge-title: var(--badge-font-size-current, var(--badge-font-size, 15px));
+      --hemma-badge-sub: calc(var(--hemma-badge-title) - 2px);
 
       display: inline-block !important;
       width: fit-content !important;
@@ -306,11 +379,23 @@ hemma_badge_media_player:
       justify-self: start !important;
       align-self: start !important;
       pointer-events: none !important;
+      padding-top: 2px !important;
+      margin-left: 1px !important;
     }
 
     :host ha-card{
-      pointer-events: auto !important;
-      cursor: pointer !important;
+      cursor: pointer;
+      opacity: var(--hemma-badge-opacity, 0);
+      pointer-events: var(--hemma-badge-ptr, none);
+      transition: opacity 0.3s ease, box-shadow 0.2s ease;
+    }
+
+    :host ha-card:hover{
+      box-shadow: inset 0 0 0 9999px rgba(255,255,255,0.06) !important;
+    }
+
+    :host ha-card:active{
+      box-shadow: inset 0 0 0 9999px rgba(255,255,255,0.10) !important;
     }
 
     :host ha-card::after{
@@ -323,10 +408,9 @@ hemma_badge_media_player:
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      filter: blur(26px) saturate(1.4);
-      opacity: .45;
+      filter: blur(26px) saturate(2.0);
+      opacity: .62;
       transform: scale(1.25);
-      z-index: 0;
       transition: opacity .22s ease, filter .18s ease !important;
     }
 
@@ -336,11 +420,27 @@ hemma_badge_media_player:
       inset:0;
       pointer-events:none;
       border-radius: inherit;
-      box-shadow:
-        inset 0 0 0 1px rgba(255,255,255,0.18),
-        0 0 0 1px rgba(255,255,255,0.14);
-      z-index: 1;
+      border: 1px solid rgba(255,255,255,0.4) !important;
+      background:
+        radial-gradient(
+          ellipse at 50% -20%,
+          rgba(255,255,255,0.42) 0%,
+          rgba(255,255,255,0.14) 45%,
+          transparent 68%
+        ),
+        radial-gradient(
+          ellipse at 50% 120%,
+          rgba(255,255,255,0.16) 0%,
+          transparent 50%
+        );
+      mix-blend-mode: overlay;
       opacity: 1 !important;
+    }
+
+    @media (max-width: 767px) and (orientation: portrait) {
+      :host {
+        --badge-media-max-width-current: calc(100vw - 2 * var(--hero-gutter, 16px));
+      }
     }
 
     #container{
@@ -350,7 +450,7 @@ hemma_badge_media_player:
       align-content: center !important;
     }
 
-    .mp-wrap{
+    .badge-wrap{
       display:flex;
       flex-direction:column;
       align-items:flex-start;
@@ -363,8 +463,8 @@ hemma_badge_media_player:
       line-height: normal !important;
     }
 
-    .mp-title{
-      font-size: var(--hemma-mp-title);
+    .badge-title{
+      font-size: var(--hemma-badge-title);
       font-weight: 700;
       line-height: 1.1;
       color: rgba(255,255,255,0.96);
@@ -376,8 +476,8 @@ hemma_badge_media_player:
       text-align:left;
     }
 
-    .mp-sub{
-      font-size: var(--hemma-mp-sub);
+    .badge-sub{
+      font-size: var(--hemma-badge-sub);
       font-weight: 500;
       line-height: 1.14;
       opacity: .82;
@@ -393,4 +493,28 @@ hemma_badge_media_player:
     #img-cell, #name, #custom_fields{
       position: relative;
       z-index: 6;
+    }
+
+    .group-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+      padding: 2px 5px;
+      border-radius: 9999px;
+      background: rgba(255,255,255,0.22);
+      color: rgba(255,255,255,0.95);
+      margin-left: 6px;
+      vertical-align: middle;
+      position: relative;
+      top: -2px;
+      letter-spacing: 0.02em;
+    }
+
+    .gc-plus {
+      position: relative;
+      top: -1px;
+      margin-right: 1px;
     }

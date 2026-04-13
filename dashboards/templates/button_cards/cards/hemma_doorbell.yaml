@@ -9,6 +9,10 @@ hemma_doorbell:
   name: Doorbell
   hold_action:
     action: more-info
+  icon_tap_action:
+    action: more-info
+    entity: '[[[ return entity.entity_id ]]]'
+
   styles:
     img_cell:
       - color: var(--hemma-entity-active, var(--primary-text-color)) !important
@@ -16,3 +20,20 @@ hemma_doorbell:
       - opacity: var(--hemma-entity-picture-active-opacity, 1) !important
     icon:
       - color: var(--hemma-entity-active, var(--primary-text-color)) !important
+
+  extra_styles: |
+    #img-cell { overflow: visible !important; }
+    @media (hover: hover) {
+      #img-cell:hover img {
+        opacity: 1 !important;
+        filter: brightness(1.2) !important;
+        transform: scale(1.05);
+      }
+    }
+    @media (hover: none) {
+      #img-cell:active img {
+        opacity: 1 !important;
+        filter: brightness(1.2) !important;
+        transform: scale(1.05);
+      }
+    }

@@ -1,5 +1,11 @@
 # Desktop Navbar
 # ============================================================================
+# MOTION SENSOR BADGES
+# ----------------------------------------------------------------------------
+# Badge sensors are configured in packages/hemma_helpers.yaml (input_text
+# section) — this file does not need to be edited for sensor changes.
+# To disable all badges at runtime: toggle input_boolean.hemma_motion_badges.
+# ============================================================================
 
 type: conditional
 conditions:
@@ -10,10 +16,10 @@ card:
   type: custom:layout-card
   layout_type: custom:grid-layout
   layout:
-    grid-template-columns: max-content 1fr max-content
+    grid-template-columns: calc(8vw + 100px) 1fr calc(8vw + 100px)
     align-items: center
-    column-gap: 50px
-    margin: 0 8vw
+    column-gap: 0px
+    margin: 0
     padding: 0
 
   card_mod:
@@ -36,6 +42,11 @@ card:
         height: 0 !important;
         overflow: visible !important;
         transition: none !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
       }
 
       #root{
@@ -51,7 +62,7 @@ card:
 
   cards:
 
-    # Left spacer / placeholder
+    # Left spacer
     - type: custom:button-card
       show_name: false
       show_icon: false
@@ -61,11 +72,9 @@ card:
           - background: none
           - box-shadow: none
           - border: 0
-          - width: 1px
           - height: 1px
           - opacity: 0
           - pointer-events: none
-          - margin-left: 2px
 
     # Navbar (center)
     - type: custom:navbar-card
@@ -97,10 +106,17 @@ card:
             --ha-card-background: transparent;
             --ha-card-border-color: transparent;
             --ha-card-box-shadow: none;
+            --ha-card-backdrop-filter: none;
           }
           ha-card{
             margin: 0 !important;
             overflow: visible !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            transition: none !important;
           }
 
       styles: |
@@ -115,15 +131,16 @@ card:
           position: relative !important;
           inset: auto !important;
           width: 100% !important;
-          max-width: var(--hemma-nav-safe-max, calc(100vw - 16vw - 320px)) !important;
+          max-width: calc(100vw - (2 * var(--hemma-nav-margin-current, 8vw)) - var(--hemma-time-reserve, 160px)) !important;
           background: transparent !important;
           border: 0 !important;
           box-shadow: none !important;
+          backdrop-filter: none !important;
           margin: 0 !important;
           padding: 0 !important;
           border-radius: 0 !important;
           display: flex !important;
-          justify-content: safe center !important;
+          justify-content: center !important;
           overflow-x: auto !important;
           overflow-y: hidden !important;
           -webkit-overflow-scrolling: touch !important;
@@ -144,9 +161,13 @@ card:
         }
 
         @keyframes hemma-fade-mask {
-          0%, 100% {
-            -webkit-mask-image: linear-gradient(to right, black, black calc(100% - 80px), transparent);
-            mask-image: linear-gradient(to right, black, black calc(100% - 80px), transparent);
+          0% {
+            -webkit-mask-image: linear-gradient(to right, transparent 0px, black 0px, black calc(100% - 80px), transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0px, black 0px, black calc(100% - 80px), transparent 100%);
+          }
+          100% {
+            -webkit-mask-image: linear-gradient(to right, transparent 0px, black 80px, black 100%, transparent calc(100% + 80px));
+            mask-image: linear-gradient(to right, transparent 0px, black 80px, black 100%, transparent calc(100% + 80px));
           }
         }
 
@@ -166,6 +187,7 @@ card:
           margin: 0 !important;
           flex: 0 0 auto !important;
           background: transparent !important;
+          --navbar-route-icon-size: 0px !important;
         }
 
         .navbar.desktop .route{
@@ -178,6 +200,7 @@ card:
         }
 
         .navbar.desktop .button{
+          position: static !important;
           border: 0 !important;
           background: transparent !important;
           box-shadow: none !important;
@@ -227,12 +250,11 @@ card:
         }
 
         .navbar-popup{
-          background: var(--hemma-popup-bg, rgba(0,0,0,0.25)) !important;
+          background: var(--hemma-popup-bg) !important;
           -webkit-backdrop-filter: var(--hemma-popup-blur, blur(20px) saturate(1.1)) !important;
           backdrop-filter: var(--hemma-popup-blur, blur(20px) saturate(1.1)) !important;
-          border: 1px solid var(--wa-color-surface-border, rgba(255,255,255,.08)) !important;
-          box-shadow: none !important;
           border-radius: var(--hemma-popup-br, 22px) !important;
+          box-shadow: var(--hemma-popup-shadow, 0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12)) !important;
           padding: 8px !important;
           width: max-content !important;
           max-width: calc(100vw - 24px) !important;
@@ -250,6 +272,31 @@ card:
           --hemma-popup-label-inactive-opacity: .82;
         }
 
+        .navbar-popup::before{
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          border-radius: inherit;
+          padding: 1.2px;
+          box-sizing: border-box;
+          background: linear-gradient(
+            to bottom right,
+            var(--hemma-popup-specular-start, rgba(255,255,255,0.32)) 0%,
+            var(--hemma-popup-specular-mid, rgba(255,255,255,0.26)) 45%,
+            var(--hemma-popup-specular-mid, rgba(255,255,255,0.26)) 55%,
+            var(--hemma-popup-specular-end, rgba(255,255,255,0.22)) 100%
+          );
+          -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+          mask-composite: exclude;
+        }
+
         .navbar-popup-backdrop.visible{
           opacity: 0 !important;
         }
@@ -261,7 +308,7 @@ card:
           justify-items: start !important;
           column-gap: 11px !important;
           padding: 10px 12px 10px 10px !important;
-          border-radius: 16px !important;
+          border-radius: 9999px !important;
           width: 100% !important;
           box-sizing: border-box !important;
           text-align: left !important;
@@ -270,6 +317,18 @@ card:
 
         .navbar-popup .popup-item:hover{ background: rgba(255,255,255,0.06) !important; }
         .navbar-popup .popup-item:active{ background: rgba(255,255,255,0.10) !important; }
+
+        .navbar-popup .button:hover,
+        .navbar-popup .button:focus,
+        .navbar-popup .button:active,
+        .navbar-popup .button:hover::before,
+        .navbar-popup .button:hover::after,
+        .navbar-popup ha-icon:hover{
+          background: transparent !important;
+          box-shadow: none !important;
+          --state-layer-opacity: 0 !important;
+          --md-ripple-hover-opacity: 0 !important;
+        }
 
         .navbar-popup .popup-item .button{
           width: auto !important;
@@ -299,10 +358,27 @@ card:
           margin: 0 !important;
         }
 
+        .navbar-popup .popup-item .image,
+        .navbar-popup .popup-item .image img,
+        .navbar-popup .popup-item img.image{
+          width: 18px !important;
+          height: 18px !important;
+          max-width: none !important;
+          max-height: none !important;
+          object-fit: contain !important;
+          display: inline-flex !important;
+          flex: 0 0 auto !important;
+          -webkit-touch-callout: none !important;
+          -webkit-user-select: none !important;
+          user-select: none !important;
+          -webkit-user-drag: none !important;
+          pointer-events: none !important;
+        }
+
         .navbar-popup .label{
           font-size: var(--hemma-popup-label-size) !important;
           font-weight: var(--hemma-popup-label-weight) !important;
-          line-height: 1.1 !important;
+          line-height: 1.4 !important;
           margin: 0 !important;
           padding: 0 !important;
           color: rgba(255,255,255,0.92) !important;
@@ -345,6 +421,32 @@ card:
           z-index: 999998 !important;
         }
 
+        .navbar.desktop.top{
+          left: 50% !important;
+          right: auto !important;
+          transform: translateX(-50%) !important;
+        }
+
+        .navbar.desktop .route{
+          position: relative !important;
+          overflow: visible !important;
+        }
+
+        @keyframes hemma-badge-pulse {
+          0%, 100% { opacity: .9; transform: scale(1); }
+          50%       { opacity: 0; transform: scale(0.85); }
+        }
+
+        .navbar.desktop .badge{
+          top: 35px !important;
+          bottom: auto !important;
+          right: 10px !important;
+          width: 6px !important;
+          height: 6px !important;
+          border-radius: 999px !important;
+          animation: hemma-badge-pulse 3s ease-in-out infinite !important;
+        }
+
       routes:
         - url: /dashboard-hemma/home
           label: Home
@@ -353,6 +455,14 @@ card:
         - url: /dashboard-hemma/living-room
           label: Living Room
           icon: mdi:sofa
+          badge:
+            show: >
+              [[[
+                const _s = hass.states['input_text.hemma_motion_living_room']?.state?.trim();
+                return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                  && !!_s && hass.states[_s]?.state === 'on';
+              ]]]
+            color: '#ffd700'
 
         - url: /dashboard-hemma/kitchen
           label: Kitchen
@@ -361,6 +471,14 @@ card:
         - url: /dashboard-hemma/bedroom
           label: Bedroom
           icon: mdi:bed-king
+          badge:
+            show: >
+              [[[
+                const _s = hass.states['input_text.hemma_motion_bedroom']?.state?.trim();
+                return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                  && !!_s && hass.states[_s]?.state === 'on';
+              ]]]
+            color: '#ffd700'
 
         - label: Scenes
           icon: mdi:layers
@@ -383,6 +501,7 @@ card:
 
               const scenes = Object.values(hass.states || {})
                 .filter(e => e?.entity_id?.startsWith('scene.'))
+                .filter(s => !s.entity_id.startsWith('scene.hemma_restore_'))
                 .filter(s => !isHidden(s.entity_id))
                 .slice()
                 .sort((a,b) => (a.attributes?.friendly_name || a.entity_id)
@@ -400,36 +519,11 @@ card:
             ]]]
 
     # Time (right)
-    - type: custom:layout-card
-      layout_type: custom:grid-layout
-      layout:
-        grid-template-columns: max-content
-        grid-template-rows: min-content
-        justify-content: end
-        justify-items: end
-        align-items: start
-
-      card_mod:
-        style: |
-          :host{
-            justify-self: end !important;
-            width: max-content !important;
-            --ha-card-padding: 0;
-            --ha-card-background: transparent;
-            --ha-card-border-color: transparent;
-            --ha-card-box-shadow: none;
-          }
-          ha-card{
-            width: max-content !important;
-            transition: none !important;
-          }
-
-      cards:
-        - type: custom:button-card
-          template: hemma_time
-          styles:
-            card:
-              - padding-top: 3px
-              - width: 100%
-              - justify-self: end
-              - text-align: right
+    - type: custom:button-card
+      template: hemma_time
+      styles:
+        card:
+          - width: 100%
+          - text-align: right
+          - padding-right: 8vw
+          - padding-top: 5px

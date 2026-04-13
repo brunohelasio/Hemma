@@ -11,6 +11,8 @@ hemma_badge_humidity:
 
   extra_styles: >
     [[[
+      const SVG_URL = '/local/hemma/icons/humidity.svg';
+
       // Robust enabled check (see hemma_badge_base.yaml for pattern docs)
       const ev = variables?.enabled;
       const enabled = (ev === undefined || ev === null) ? true :
@@ -24,7 +26,20 @@ hemma_badge_humidity:
       const v       = parseFloat(stRaw);
       const hide    = !enabled || !hasEnt || !stRaw || ['unknown','unavailable','none'].includes(st) || Number.isNaN(v);
 
-      return `:host{display:${hide ? 'none' : 'inline-block'} !important;}`;
+      return `
+        :host{display:${hide ? 'none' : 'inline-block'} !important;}
+        #img-cell, .img-cell { position: relative; }
+        #img-cell #icon, .img-cell #icon { color: transparent !important; opacity: 0 !important; }
+        #img-cell::before, .img-cell::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-color: var(--hemma-icon-color, var(--primary-text-color));
+          -webkit-mask: url('${SVG_URL}') no-repeat center / 85% 85%;
+          mask: url('${SVG_URL}') no-repeat center / 85% 85%;
+          transform: translateZ(0);
+        }
+      `;
     ]]]
 
   styles:
@@ -46,15 +61,16 @@ hemma_badge_humidity:
 
             return hide ? 'none' : 'inline-grid';
           ]]]
-    icon:
-      - color: >
+      - --hemma-icon-color: >
           [[[
             const v = parseFloat(entity?.state);
             if (isNaN(v)) return 'var(--disabled-text-color)';
-            if (v <= 29.99) return '#ffb254';
-            if (v >= 61)    return '#4bd1fa';
-            return '#45dced';
+            if (v <= 29.99) return 'var(--hemma-badge-humidity-dry-color)';
+            if (v >= 61)    return 'var(--hemma-badge-humidity-high-color)';
+            return 'var(--hemma-badge-climate-color)';
           ]]]
+    icon:
+      - color: transparent
 
   name: >
     [[[
@@ -67,11 +83,12 @@ hemma_badge_humidity:
       }
 
       const esc = (t) => String(t || '').replaceAll('"','&quot;');
+      const vStr = !isNaN(v) ? ` · ${Math.round(v)}%` : '';
 
       return `
-        <div class="mp-wrap">
-          <div class="mp-title">Humidity</div>
-          <div class="mp-sub">${esc(label)}</div>
+        <div class="badge-wrap">
+          <div class="badge-title">Humidity</div>
+          <div class="badge-sub">${esc(label)}${vStr}</div>
         </div>
       `;
     ]]]

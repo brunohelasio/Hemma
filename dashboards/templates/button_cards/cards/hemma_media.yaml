@@ -5,22 +5,27 @@ hemma_media:
     - hemma_entity
 
   variables:
-    icon: |
-      [[[
-        const id = entity?.entity_id || "";
-        const type = entity?.attributes?.media_content_type || "";
-        if (id.includes("apple_tv")) return "apple";
-        if (id.includes("homepod")) return "apple";
-        if (id.includes("spotify")) return "music";
-        if (id.includes("playstation")) return "sony";
-        if (type === "music") return "speaker";
-        if (type === "video") return "tv";
-        return "speaker";
-      ]]]
+    icon: ''
+
+  triggers_update:
+    - sensor.youtube_watching
 
   show_last_changed: false
   show_entity_picture: true
   show_icon: false
+
+  entity_picture: >
+    [[[
+      const icon = variables?.icon;
+      if (icon) return `/local/hemma/icons/${icon}.svg`;
+      const state = String(entity?.state || "").toLowerCase();
+      const appName = String(entity?.attributes?.app_name || "").toLowerCase();
+      if (state === "playing" && appName.includes("youtube")) {
+        const thumb = states['sensor.youtube_watching']?.attributes?.thumbnail;
+        if (thumb) return thumb;
+      }
+      return entity?.attributes?.entity_picture || '/local/hemma/icons/speaker.svg';
+    ]]]
 
   state_display: |
     [[[
@@ -94,6 +99,10 @@ hemma_media:
   hold_action:
     action: more-info
 
+  icon_tap_action:
+    action: more-info
+    entity: '[[[ return entity.entity_id ]]]'
+
   styles:
     grid:
       - grid-template-areas: |
@@ -112,13 +121,19 @@ hemma_media:
       - background-position: center
       - background-image: |
           [[[
-            const isActive = ["playing","paused"].includes(String(entity?.state || "").toLowerCase());
-            const pic = entity?.attributes?.entity_picture || "";
-            if (isActive && pic) {
-              const path = pic.startsWith("/") ? `${window.location.origin}${pic}` : pic;
-              return `linear-gradient(rgba(70, 70, 70, 0.7), rgba(70, 70, 70, 0.7)), url('${path}')`;
+            const state = String(entity?.state || "").toLowerCase();
+            if (state !== "playing") return "none";
+            const appName = String(entity?.attributes?.app_name || "").toLowerCase();
+            const isYouTube = appName.includes("youtube");
+            let pic = "";
+            if (isYouTube) {
+              pic = states['sensor.youtube_watching']?.attributes?.thumbnail || entity?.attributes?.entity_picture || "";
+            } else {
+              pic = entity?.attributes?.entity_picture || "";
             }
-            return "none";
+            if (!pic) return "none";
+            const path = pic.startsWith("/") ? `${window.location.origin}${pic}` : pic;
+            return `linear-gradient(rgba(70, 70, 70, 0.7), rgba(70, 70, 70, 0.7)), url('${path}')`;
           ]]]
 
     name:
@@ -133,3 +148,20 @@ hemma_media:
       - white-space: nowrap
       - overflow: hidden
       - text-overflow: ellipsis
+
+  extra_styles: |
+    #img-cell { overflow: visible !important; }
+    @media (hover: hover) {
+      #img-cell:hover img {
+        opacity: 1 !important;
+        filter: brightness(1.2) !important;
+        transform: scale(1.05);
+      }
+    }
+    @media (hover: none) {
+      #img-cell:active img {
+        opacity: 1 !important;
+        filter: brightness(1.2) !important;
+        transform: scale(1.05);
+      }
+    }

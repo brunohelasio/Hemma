@@ -3,9 +3,12 @@ hemma_badge_base:
   styles:
     card:
       - background: var(--badge-background, rgba(0,0,0,0.18))
-      - box-shadow: var(--badge-shadow, none)
-      - backdrop-filter: blur(var(--badge-blur, 8px))
-      - -webkit-backdrop-filter: blur(var(--badge-blur, 8px))
+      - backdrop-filter: blur(var(--badge-blur, 14px))
+      - -webkit-backdrop-filter: blur(var(--badge-blur, 14px))
+      - box-shadow: none
+      - --ha-card-box-shadow: none
+      - --ha-shadow-light-hover: none
+      - border: none !important
       - border-radius: var(--badge-br, 9999px)
       - padding: var(--badge-padding-current, var(--badge-padding, 6px 14px))
       - min-height: var(--badge-min-height-current, var(--badge-min-height, 44px))
@@ -34,8 +37,9 @@ hemma_badge_base:
       - overflow: hidden
       - transition: background-color .22s ease,
                     box-shadow .24s ease,
-                    transform .14s ease,
-                    filter .18s ease !important
+                    transform .24s ease,
+                    filter .18s ease,
+                    opacity .35s ease !important
 
     grid:
       - grid-template-areas: '"i l"'
@@ -57,8 +61,8 @@ hemma_badge_base:
 
     icon:
       - grid-area: i
-      - width: var(--badge-icon-size-current, var(--badge-icon-size, 28px))
-      - height: var(--badge-icon-size-current, var(--badge-icon-size, 28px))
+      - width: var(--badge-icon-size-current, var(--badge-icon-size, 30px))
+      - height: var(--badge-icon-size-current, var(--badge-icon-size, 30px))
       - color: var(--primary-text-color)
       - z-index: 4
 
@@ -85,45 +89,56 @@ hemma_badge_base:
 
   extra_styles: |
     :host{
-      --media-sub-opacity: .82;
+      --badge-sub-opacity: .82;
       --badge-after-z:  2;
       --badge-before-z: 3;
     }
 
     @media (max-width: 767px) and (orientation: portrait) {
       ha-card {
-        min-height: 43px !important;
-        padding: 1px 14px 1px 6px !important;
+        min-height: var(--badge-min-height-current, 43px) !important;
+        padding: var(--badge-padding-current, 1px 14px 1px 6px) !important;
       }
       #img-cell, .img-cell {
-        width: 32px !important;
-        height: 32px !important;
+        width: var(--badge-icon-size-current, 32px) !important;
+        height: var(--badge-icon-size-current, 32px) !important;
       }
-      #name { font-size: 13px !important; }
-      .mp-title { font-size: 13px !important; }
-      .mp-sub { font-size: 12px !important; }
+      #name { font-size: var(--badge-font-size-current, 13px) !important; }
+      .badge-title { font-size: var(--badge-font-size-current, 13px) !important; }
+      .badge-sub { font-size: calc(var(--badge-font-size-current, 13px) - 1px) !important; }
     }
 
     @media (max-height: 600px) and (orientation: landscape) {
       ha-card {
-        min-height: 36px !important;
-        padding: 1px 12px 1px 6px !important;
+        min-height: var(--badge-min-height-current, 36px) !important;
+        padding: var(--badge-padding-current, 1px 12px 1px 6px) !important;
       }
       #img-cell, .img-cell {
-        width: 26px !important;
-        height: 26px !important;
+        width: var(--badge-icon-size-current, 26px) !important;
+        height: var(--badge-icon-size-current, 26px) !important;
       }
-      #name { font-size: 12px !important; }
-      .mp-title { font-size: 12px !important; }
-      .mp-sub { font-size: 11px !important; }
+      #name { font-size: var(--badge-font-size-current, 12px) !important; }
+      .badge-title { font-size: var(--badge-font-size-current, 12px) !important; }
+      .badge-sub { font-size: calc(var(--badge-font-size-current, 12px) - 1px) !important; }
+    }
+
+    ha-card {
+      opacity: var(--hemma-row-fade, 1);
+      transform: translateY(calc((1 - var(--hemma-row-fade, 1)) * -10px))
+                 translateX(calc((1 - var(--hemma-row-fade, 1)) * -2px));
+      box-shadow: none !important;
+    }
+
+    ha-card:hover {
+      box-shadow: none !important;
     }
 
     ha-card::after{  z-index: var(--badge-after-z, 2) !important; }
     ha-card::before{ z-index: var(--badge-before-z, 3) !important; }
 
     #img-cell{
-      width:  var(--badge-icon-size-current, var(--badge-icon-size, 32px)) !important;
-      height: var(--badge-icon-size-current, var(--badge-icon-size, 32px)) !important;
+      width:  var(--badge-icon-size-current, var(--badge-icon-size, 30px)) !important;
+      height: var(--badge-icon-size-current, var(--badge-icon-size, 30px)) !important;
       border-radius: 9999px !important;
       overflow: hidden !important;
       display: block !important;
@@ -138,41 +153,46 @@ hemma_badge_base:
       border-radius: inherit !important;
     }
 
+    #icon{
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
     #name{
       display:flex !important;
       align-items:center !important;
-      padding-block: 2px !important;
       min-width: 0 !important;
       overflow: hidden !important;
       line-height: normal !important;
     }
 
-    .mp-wrap{
+    .badge-wrap{
       display:flex;
       flex-direction:column;
       align-items:flex-start;
-      gap: 2px;
+      gap: 1px;
       min-width:0;
       max-width:100%;
       padding-top: 0 !important;
-      padding-bottom: 2px !important;
+      padding-bottom: 0 !important;
     }
 
-    .mp-title{
+    .badge-title{
       font-size: var(--badge-font-size-current, 13px);
       font-weight: 700;
-      line-height: 1.1;
+      line-height: 1.2;
       color: var(--badge-title-color, var(--secondary-text-color));
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
     }
 
-    .mp-sub{
+    .badge-sub{
       font-size: calc(var(--badge-font-size-current, 13px) - 1px);
       font-weight: 500;
-      line-height: 1.05;
-      opacity: var(--media-sub-opacity, .82);
+      line-height: 1.2;
+      opacity: var(--badge-sub-opacity, .82);
       color: var(--badge-sub-color, var(--secondary-text-color));
       white-space:nowrap;
       overflow:hidden;

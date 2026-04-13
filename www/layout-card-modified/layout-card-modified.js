@@ -2205,7 +2205,7 @@ var ye = function() {
                         var r = P(i[n], 2),
                             o = r[0],
                             a = r[1];
-                        (o.startsWith("grid") || "grid" === o || "place-items" === o || "place-content" === o || "width"=== o|| "scroll-snap-type" === o|| "inset" === o || "position" === o|| "background" === o|| "padding" === o|| "backdrop-filter" === o|| "display" === o|| "height" === o|| "margin" === o|| "overflow-y" === o) && e.style.setProperty(o, a)
+                        (o.startsWith("grid") || o.startsWith("align") || o.startsWith("justify") || o.startsWith("overflow") || o.startsWith("overscroll") || "grid" === o || "place-items" === o || "place-content" === o || "width"=== o|| "max-width" === o|| "min-width" === o|| "min-height" === o|| "max-height" === o|| "scroll-snap-type" === o|| "inset" === o || "position" === o|| "background" === o|| "padding" === o|| "backdrop-filter" === o|| "display" === o|| "height" === o|| "margin" === o|| "touch-action" === o|| "overflow-anchor" === o|| "scrollbar-width" === o|| "-ms-overflow-style" === o|| "-webkit-overflow-scrolling" === o|| o.startsWith("mask")) && e.style.setProperty(o, a)
                     }
                 };
                 e.style.cssText = "", this._config.layout && n(this._config.layout);
@@ -2273,7 +2273,7 @@ var ye = function() {
     }], [{
         key: "styles",
         get: function() {
-            return [this._fab_styles, it(h || (h = $(["\n        :host {\n          height: 100%;\n          box-sizing: border-box;\n        }\n        #root {\n          display: grid;\n          justify-content: stretch;\n          margin: var(--layout-margin);\n          padding: var(--layout-padding);\n          height: var(--layout-height);\n          overflow-y: var(--layout-overflow);\n        }\n        #root > * {\n          margin: var(--masonry-view-card-margin, 4px 4px 8px);\n        }\n      "])))]
+            return [this._fab_styles, it(h || (h = $(["\n        :host {\n          height: 100%;\n          box-sizing: border-box;\n        }\n        #root {\n          display: grid;\n          justify-content: stretch;\n          margin: var(--layout-margin);\n          padding: var(--layout-padding);\n          height: var(--layout-height);\n          overflow-y: var(--layout-overflow);\n        }\n        #root > * {\n          margin: var(--masonry-view-card-margin, 4px 4px 8px);\n        }\n"])))]
         }
     }]);
     var e, n, i
