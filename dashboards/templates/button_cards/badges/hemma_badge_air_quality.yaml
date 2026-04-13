@@ -24,8 +24,8 @@ hemma_badge_air_quality:
       const hide    = !enabled || !hasEnt || !stRaw || ['unknown','unavailable','none'].includes(st);
 
       const svgUrl = ['bad', 'very bad'].includes(st)
-        ? '/local/hemma/icons/aqi-high.svg'
-        : '/local/hemma/icons/aqi-medium.svg';
+        ? '/local/Hemma-main/www/hemma/icons/aqi-high.svg'
+        : '/local/Hemma-main/www/hemma/icons/aqi-medium.svg';
 
       return `
         :host{display:${hide ? 'none' : 'inline-block'} !important;}
