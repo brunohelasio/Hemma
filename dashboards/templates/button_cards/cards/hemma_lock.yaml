@@ -10,9 +10,9 @@ hemma_lock:
 
   entity_picture: |
     [[[
-      if (entity.state === 'unlocked') return '/local/hemma/icons/lock-open.svg';
-      if (entity.state === 'unlocking') return '/local/hemma/icons/lock-unlocking.svg';
-      return '/local/hemma/icons/lock.svg';
+      if (entity.state === 'unlocked') return '/local/Hemma-main/www/hemma/icons/lock-open.svg';
+      if (entity.state === 'unlocking') return '/local/Hemma-main/www/hemma/icons/lock-unlocking.svg';
+      return '/local/Hemma-main/www/hemma/icons/lock.svg';
     ]]]
 
   state_display: |

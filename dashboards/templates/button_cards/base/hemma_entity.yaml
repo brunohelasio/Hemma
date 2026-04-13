@@ -248,7 +248,7 @@ hemma_entity:
   entity_picture: |
     [[[
       const icon = variables.icon || "default";
-      return `/local/hemma/icons/${icon}.svg`;
+      return `/local/Hemma-main/www/hemma/icons/${icon}.svg`;
     ]]]
 
   state_display: |

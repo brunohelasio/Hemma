@@ -58,7 +58,7 @@ hemma_badge_media_group:
 
   extra_styles: >
     [[[
-      const SVG_URL  = "/local/hemma/icons/media.svg";
+      const SVG_URL  = "/local/Hemma-main/www/hemma/icons/media.svg";
       const MASK_PCT = 100;
       const INSET_PX = 2;
 

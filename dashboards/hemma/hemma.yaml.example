@@ -1,4 +1,4 @@
-# /config/dashboards/hemma/hemma.yaml.example
+# /config/Hemma-main/dashboards/hemma/hemma.yaml.example
 # Hemma Dashboard - Example Configuration
 # ============================================================================
 # Copy or rename this file to hemma.yaml and customize the entity IDs to match
@@ -8,7 +8,7 @@
 # OPTIONAL: Adjust room names, add/remove rooms, customize features
 # ============================================================================
 
-button_card_templates: !include_dir_merge_named /config/dashboards/templates/button_cards
+button_card_templates: !include_dir_merge_named /config/Hemma-main/dashboards/templates/button_cards
 
 # Kiosk Mode (optional - requires kiosk-mode HACS integration)
 # Uncomment and customize if you want to hide certain UI elements
@@ -41,7 +41,7 @@ views:
   - type: custom:grid-layout
     title: home
     path: home
-    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
       # ROOM HERO CARD
       - type: custom:button-card
@@ -49,8 +49,8 @@ views:
         name: Home
         variables:
           # Image Configuration
-          # Place your images at: /config/www/hemma/rooms/home.jpg (light mode)
-          #                       /config/www/hemma/rooms/home-night.jpg (dark mode)
+          # Place your images at: /config/Hemma-main/www/hemma/rooms/home.jpg (light mode)
+          #                       /config/Hemma-main/www/hemma/rooms/home-night.jpg (dark mode)
           image: home
           image_position: center center
 
@@ -68,17 +68,17 @@ views:
           # quality_sensor: sensor.YOUR_AIR_QUALITY
 
           # Lights Badge (optional - shows a light group badge)
-          show_lights: false
-          light_group_entity: light.YOUR_HOME_LIGHT_GROUP
-          # light_entity_1: light.YOUR_ROOM_LIGHT_GROUP_1
-          # light_entity_2: light.YOUR_ROOM_LIGHT_GROUP_2
-          # light_entity_3: light.YOUR_ROOM_LIGHT_GROUP_3
-          # light_entity_4: light.YOUR_ROOM_LIGHT_GROUP_4
+          show_lights: true
+          light_group_entity: light.grupo_luzes_sala
+          light_entity_1: light.sala_switch_1
+          light_entity_2: light.sala_switch_2
+          light_entity_3: light.sala_switch_3
+          light_entity_4: light.sala_2_switch_2
 
           # Weather Widget
-          show_weather: true
-          weather_entity: weather.YOUR_WEATHER            # e.g., weather.home, weather.pirateweather
-          weather_temp_sensor: sensor.YOUR_OUTDOOR_TEMP   # e.g., sensor.outdoor_temperature
+          show_weather: false
+          # weather_entity: weather.home
+          # weather_temp_sensor: sensor.outdoor_temperature
 
           # Temperature Unit (affects comfort labels like "Cool", "Warm", etc.)
           temp_unit: 'F'                                  # 'F' for Fahrenheit, 'C' for Celsius
@@ -94,69 +94,49 @@ views:
           # Media Player Badges (shows what's playing across rooms)
           show_media: true
           show_media_player_1: true
-          media_player_1: media_player.YOUR_ENTITY        # e.g., media_player.spotify
+          media_player_1: media_player.android_tv_192_168_3_17
           show_media_player_2: true
-          media_player_2: media_player.YOUR_ENTITY        # e.g., media_player.living_room_apple_tv
+          media_player_2: media_player.echo_show
           show_media_player_3: true
-          media_player_3: media_player.YOUR_ENTITY        # e.g., media_player.bedroom_apple_tv
+          media_player_3: media_player.echo_pop_quarto_casal
           show_media_player_4: true
-          media_player_4: media_player.YOUR_ENTITY        # e.g., media_player.kitchen
+          media_player_4: media_player.echo_pop_marina
 
       # MOBILE NAVBAR
-      - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
+      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
       # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/dashboards/templates/includes/hemma_entity_layout.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
-          # Thermostat
-          - type: custom:button-card
-            template: hemma_thermostat
-            entity: climate.YOUR_HOME_THERMOSTAT  # e.g., climate.home
-            name: Thermostat
-            variables:
-              temp_sensor: sensor.YOUR_HOME_TEMPERATURE
+          # Thermostat (configure when room temperature sensor is available)
+          # - type: custom:button-card
+          #   template: hemma_thermostat
+          #   entity: climate.ac_office
+          #   name: Thermostat
+          #   variables:
+          #     temp_sensor: sensor.office_temperature
 
           # Front Door Lock
           - type: custom:button-card
             template: hemma_lock
-            entity: lock.YOUR_FRONT_DOOR  # e.g., lock.front_door
+            entity: lock.sl_fechadura_operate_lock
             name: Front Door
             variables:
               icon: door
               show_toggle: true
-              battery_entity: sensor.YOUR_LOCK_BATTERY          # Optional
 
           # Doorbell Camera
           - type: custom:button-card
             template: hemma_doorbell
-            entity: camera.YOUR_DOORBELL  # e.g., camera.front_door
-            name: Doorbell
+            entity: camera.sl_camera_2
+            name: Sala Camera
             variables:
               icon: doorbell
-              battery_entity: sensor.YOUR_DOORBELL_BATTERY  # Optional
 
-          # Network Speed (shows WAN download / upload from router integration)
-          - type: custom:button-card
-            template: hemma_network
-            entity: sensor.YOUR_WAN_DOWNLOAD_SPEED  # e.g., sensor.rt_ax86u_wan_download_speed
-            name: Network
-            variables:
-              upload_sensor: sensor.YOUR_WAN_UPLOAD_SPEED  # e.g., sensor.rt_ax86u_wan_upload_speed
-
-          # Energy (shows current energy consumption)
-          - type: custom:button-card
-            template: hemma_energy
-            entity: sensor.YOUR_ENERGY_CONSUMPTION
-            name: Active Energy
-
-          # Updates (shows available HA updates)
-          - type: custom:button-card
-            template: hemma_updates
-            entity: sensor.YOUR_UPDATES
-            name: Available Updates
+          # Network/Energy/Updates cards intentionally disabled until sensors are mapped.
 
           # Motion Overview Card
           # Shows active room name when motion is detected, "Clear" when none.
@@ -166,9 +146,9 @@ views:
           #   template: hemma_motion
           #   variables:
           #     default_name: Home          # shown when no motion detected
-          #     sensor_1: binary_sensor.YOUR_LIVING_ROOM_MOTION
+          #     sensor_1: binary_sensor.living_room_hub_motion
           #     label_1: Living Room
-          #     sensor_2: binary_sensor.YOUR_BEDROOM_MOTION
+          #     sensor_2: binary_sensor.hue_motion_sensor_motion
           #     label_2: Bedroom
           #     sensor_3: binary_sensor.YOUR_KITCHEN_MOTION
           #     label_3: Kitchen
@@ -179,7 +159,7 @@ views:
   - type: custom:grid-layout
     title: living-room
     path: living-room
-    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
       # ROOM HERO CARD
       - type: custom:button-card
@@ -200,8 +180,8 @@ views:
           # quality_sensor: sensor.YOUR_AIR_QUALITY
 
           # Light Badge (optional)
-          show_lights: false
-          # light_entity_1: light.YOUR_LIVING_ROOM_LIGHTS
+          show_lights: true
+          light_entity_1: light.grupo_luzes_sala
 
           # Weather Widget (optional - set show_weather: true and add weather_entity to enable)
           show_weather: false
@@ -210,75 +190,51 @@ views:
           temp_unit: 'F'                                  # 'F' for Fahrenheit, 'C' for Celsius
 
           # Media Player Badges (optional - shows what's playing in this room)
-          show_media: false
-          # show_media_player_1: true
-          # media_player_1: media_player.YOUR_LIVING_ROOM_PLAYER
+          show_media: true
+          show_media_player_1: true
+          media_player_1: media_player.android_tv_192_168_3_17
+          show_media_player_2: true
+          media_player_2: media_player.echo_show
 
       # MOBILE NAVBAR
-      - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
+      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
       # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/dashboards/templates/includes/hemma_entity_layout.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
           - type: custom:button-card
-            template: hemma_thermostat
-            entity: climate.YOUR_LIVING_ROOM_CLIMATE
-            name: Thermostat
-            variables:
-              temp_sensor: sensor.YOUR_LIVING_ROOM_TEMP
-
-          - type: custom:button-card
             template: hemma_media
-            entity: media_player.YOUR_LIVING_ROOM_TV
-            name: Apple TV
-            variables:
-              icon: apple_tv
-              show_progress: true
-              progress_entity: media_player.YOUR_LIVING_ROOM_TV
-
-          - type: custom:button-card
-            template: hemma_media
-            entity: media_player.YOUR_TV
-            name: TV
+            entity: media_player.android_tv_192_168_3_17
+            name: Smart TV Pro
             variables:
               icon: tv
+              show_progress: true
+              progress_entity: media_player.android_tv_192_168_3_17
+
+          - type: custom:button-card
+            template: hemma_media
+            entity: media_player.echo_show
+            name: Echo Show
+            variables:
+              icon: speaker
               show_toggle: true
 
           - type: custom:button-card
             template: hemma_media
-            entity: media_player.YOUR_MEDIA_PLAYER
-            name: Sonos
+            entity: media_player.echo_pop_quarto_casal
+            name: Echo Quarto Casal
             variables:
               icon: speaker
 
           - type: custom:button-card
-            template: hemma_curtain
-            entity: cover.YOUR_CURTAIN
-            name: Curtain
+            template: hemma_doorbell
+            entity: camera.vr_camera_2
+            name: Varanda Camera
             variables:
-              icon: curtain
-
-          - type: custom:button-card
-            template: hemma_fan
-            entity: fan.YOUR_FAN
-            name: Fan
-            variables:
-              icon: fan
-
-          - type: custom:button-card
-            template: hemma_plant
-            entity: plant.YOUR_PLANT
-            name: Rubber Tree
-            variables:
-              sensors:
-                - sensor.YOUR_PLANT_MOISTURE
-                - sensor.YOUR_PLANET_ILLUMINANCE
-                - sensor.YOUR_PLANT_TEMPERATURE
-                - sensor.YOUR_PLANT_AIR_HUMIDITY
-                - sensor.YOUR_PLANT_CONDUCTIVITY
+              icon: doorbell
 
   # ------------------------------------------------------
   # KITCHEN
@@ -286,7 +242,7 @@ views:
   - type: custom:grid-layout
     title: kitchen
     path: kitchen
-    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
       # ROOM HERO CARD
       - type: custom:button-card
@@ -311,8 +267,8 @@ views:
           temp_unit: 'F'
 
           # Light Badge (optional)
-          show_lights: false
-          # light_entity_1: light.YOUR_KITCHEN_LIGHTS
+          show_lights: true
+          light_entity_1: light.grupo_luzes_cozinha
 
           # Media Player Badges (optional)
           show_media: false
@@ -320,34 +276,27 @@ views:
           # media_player_1: media_player.YOUR_KITCHEN_PLAYER
 
       # MOBILE NAVBAR
-      - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
+      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
       # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/dashboards/templates/includes/hemma_entity_layout.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
           - type: custom:button-card
-            template: hemma_vacuum
-            entity: vacuum.YOUR_VACUUM
-            name: Robot Vacuum
+            template: hemma_doorbell
+            entity: camera.cz_camera_2
+            name: Cozinha Camera
             variables:
-              icon: vacuum
+              icon: doorbell
 
           - type: custom:button-card
-            template: hemma_media
-            entity: media_player.YOUR_KITCHEN_MEDIA_PLAYER
-            name: Speaker
+            template: hemma_doorbell
+            entity: camera.as_camera_2
+            name: Lavanderia Camera
             variables:
-              icon: speaker
-
-          - type: custom:button-card
-            template: hemma_media
-            entity: media_player.YOUR_KITCHEN_MEDIA_PLAYER
-            name: HomePod
-            variables:
-              icon: homepod
+              icon: doorbell
 
   # ------------------------------------------------------
   # BEDROOM
@@ -355,7 +304,7 @@ views:
   - type: custom:grid-layout
     title: bedroom
     path: bedroom
-    layout: !include /config/dashboards/templates/includes/hemma_screen_layout.yaml
+    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
       # ROOM HERO CARD
       - type: custom:button-card
@@ -380,79 +329,43 @@ views:
           temp_unit: 'F'
 
           # Light Badge (optional)
-          show_lights: false
-          # light_entity_1: light.YOUR_BEDROOM_LIGHTS
+          show_lights: true
+          light_entity_1: light.grupo_quarto_casal
 
           # Media Player Badges (optional)
-          show_media: false
-          # show_media_player_1: true
-          # media_player_1: media_player.YOUR_BEDROOM_PLAYER
+          show_media: true
+          show_media_player_1: true
+          media_player_1: media_player.echo_pop_quarto_casal
+          show_media_player_2: true
+          media_player_2: media_player.echo_pop_marina
 
       # MOBILE NAVBAR
-      - !include /config/dashboards/templates/includes/hemma_navbar_mobile.yaml
+      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
       # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/dashboards/templates/includes/hemma_entity_layout.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
           - type: custom:button-card
-            template: hemma_thermostat
-            entity: climate.YOUR_BEDROOM_CLIMATE
-            name: Thermostat
-            variables:
-              temp_sensor: sensor.YOUR_BEDROOM_TEMP
-
-          - type: custom:button-card
             template: hemma_media
-            entity: media_player.YOUR_BEDROOM_TV
-            name: Apple TV
-            variables:
-              icon: apple_tv
-
-          - type: custom:button-card
-            template: hemma_entity
-            entity: media_player.YOUR_BEDROOM_TV_ENTITY
-            name: TV
-            variables:
-              icon: tv
-              show_toggle: true
-
-          - type: custom:button-card
-            template: hemma_media
-            entity: media_player.YOUR_BEDROOM_MEDIA_PLAYER
-            name: Speaker
+            entity: media_player.echo_pop_quarto_casal
+            name: Echo Quarto Casal
             variables:
               icon: speaker
 
           - type: custom:button-card
-            template: hemma_fan
-            entity: fan.YOUR_BEDROOM_FAN
-            name: Fan
+            template: hemma_media
+            entity: media_player.echo_pop_marina
+            name: Echo Marina
             variables:
-              icon: fan
+              icon: speaker
               show_toggle: true
 
           - type: custom:button-card
-            template: hemma_curtain
-            entity: cover.YOUR_BEDROOM_CURTAIN
-            name: Curtain
+            template: hemma_doorbell
+            entity: camera.camera_quarto_casal_2
+            name: Camera Quarto Casal
             variables:
-              icon: curtain
-
-          - type: custom:button-card
-            template: hemma_air_purifier
-            entity: fan.YOUR_AIR_PURIFIER
-            name: Air Purifier
-            variables:
-              icon: purifier
-              show_toggle: true
-
-          - type: custom:button-card
-            template: hemma_humidifier
-            entity: humidifier.YOUR_HUMIDIFIER
-            name: Humidifier
-            variables:
-              icon: humidifier
-              show_toggle: true
+              icon: doorbell

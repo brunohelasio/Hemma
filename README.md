@@ -120,21 +120,22 @@ Example layout:
 Make a full Home Assistant backup/snapshot before you start. YAML dashboards + themes are easy to roll back, but you'll be happier if you can restore quickly if something goes sideways.
 
 ### 2) Copy Hemma into your Home Assistant config
-Copy these folders/files from this repo into your HA `/config`:
+Copy this repo into your HA `/config/Hemma-main` directory (preserve the folder structure).
 
-- `dashboards/hemma/` → `/config/dashboards/hemma/`
-- `dashboards/templates/` → `/config/dashboards/templates/` (merge if you already have templates)
-- `themes/hemma/` → `/config/themes/hemma/`
-- `packages/hemma_helpers.yaml` → `/config/packages/`
-- `www/hemma/` → `/config/www/hemma/`
-- `www/layout-card-modified/` → `/config/www/layout-card-modified/`
+Then expose that folder to `/local` by creating a symlink:
+
+```bash
+ln -s /config/Hemma-main /config/www/Hemma-main
+```
+
+This allows assets in `/config/Hemma-main/www/...` to be served from `/local/Hemma-main/www/...`.
 
 ### 3) Add Lovelace resources
 In Settings → Dashboards → Resources (or YAML), add:
 
-- `/local/layout-card-modified/layout-card-modified.js` (from this repo)
-- `/local/navbar-popup-caret/navbar-popup-caret.js`(from this repo)
-- `/local/navbar-sidebar-offset/navbar-sidebar-offset.js`(from this repo)
+- `/local/Hemma-main/www/layout-card-modified/layout-card-modified.js` (from this repo)
+- `/local/Hemma-main/www/navbar-popup-caret/navbar-popup-caret.js`(from this repo)
+- `/local/Hemma-main/www/navbar-sidebar-offset/navbar-sidebar-offset.js`(from this repo)
 - `/hacsfiles/button-card/button-card.js` (should already be present if installed via HACS)
 - `/hacsfiles/lovelace-navbar-card/navbar-card.js` (should already be present if installed via HACS)
 
@@ -152,14 +153,14 @@ lovelace:
       title: "Hemma"
       icon: mdi:home
       show_in_sidebar: true
-      filename: dashboards/hemma/hemma.yaml
+      filename: Hemma-main/dashboards/hemma/hemma.yaml
 ```
 
 Restart Home Assistant.
 
 ### 5) Create your dashboard from the example file
 
-In `/config/dashboards/hemma/`:
+In `/config/Hemma-main/dashboards/hemma/`:
 
 - Copy or rename `hemma.yaml.example` → `hemma.yaml`
 - Open `hemma.yaml` and replace all placeholders (search for `YOUR_`)
@@ -173,9 +174,9 @@ This is the main file you edit to map Hemma to your devices/entities.
 
 ### 7) Add your room images + icons
 
-- Room images live in: `/config/www/hemma/rooms/`
+- Room images live in: `/config/Hemma-main/www/hemma/rooms/`
   - Example: `home.jpg` (light) and `home-night.jpg` (dark)
-- Icons live in: `/config/www/hemma/icons/`
+- Icons live in: `/config/Hemma-main/www/hemma/icons/`
 
 ---
 
@@ -183,7 +184,7 @@ This is the main file you edit to map Hemma to your devices/entities.
 
 You'll configure most of Hemma by editing your dashboard file:
 
-- `/config/dashboards/hemma/hemma.yaml`
+- `/config/Hemma-main/dashboards/hemma/hemma.yaml`
 
 ### Key view building blocks
 
