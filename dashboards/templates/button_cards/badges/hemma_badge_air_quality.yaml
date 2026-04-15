@@ -64,11 +64,11 @@ hemma_badge_air_quality:
       - --hemma-icon-color: >
           [[[
             const s = String(entity?.state || 'unknown').toLowerCase();
-            if (s === 'excellent') return 'var(--hemma-badge-temp-comfortable-color)';
-            if (s === 'good')      return 'var(--hemma-badge-air-quality-good-color)';
-            if (s === 'moderate')  return 'var(--hemma-badge-air-quality-moderate-color)';
-            if (s === 'bad')       return 'var(--hemma-badge-temp-hot-color)';
-            if (s === 'very bad')  return 'var(--hemma-badge-temp-very-hot-color)';
+            if (s === 'excellent') return '#67f5a0';
+            if (s === 'good')      return '#44e371';
+            if (s === 'moderate')  return '#f0c741';
+            if (s === 'bad')       return '#f5962a';
+            if (s === 'very bad')  return '#e53552';
             return 'var(--disabled-text-color)';
           ]]]
     icon:

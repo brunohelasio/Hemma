@@ -13,6 +13,28 @@ hemma_curtain:
   hold_action:
     action: toggle
 
+  state:
+    - operator: template
+      value: |
+        [[[
+          const s = (entity?.state || '').toLowerCase();
+          return ['open', 'opening'].includes(s);
+        ]]]
+      styles:
+        card:
+          - background: var(--ha-card-background-active)
+          - box-shadow: var(--button-card-box-shadow-active, var(--button-card-box-shadow)) !important
+        name:
+          - color: var(--hemma-entity-active, var(--primary-text-color))
+        state:
+          - color: var(--secondary-text-color)
+        img_cell:
+          - opacity: var(--hemma-entity-picture-active-opacity, 1) !important
+          - filter: var(--hemma-entity-picture-active-filter, none) !important
+        entity_picture:
+          - opacity: var(--hemma-entity-picture-active-opacity, 1) !important
+          - filter: var(--hemma-entity-picture-active-filter, none) !important
+
   icon_tap_action:
     action: call-service
     service: |

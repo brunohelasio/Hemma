@@ -8,7 +8,6 @@ hemma_thermostat:
   variables:
     thermostat_toggle_helper: input_boolean.hemma_thermostat_overlay
     temp_sensor:
-    show_toggle: false
 
   state_display: |
     [[[
@@ -46,6 +45,19 @@ hemma_thermostat:
         show_state: false
         tap_action:
           action: more-info
+        state_display: |
+          [[[
+            let raw;
+            const eid = variables.temp_sensor;
+            if (eid && states[eid] && !["unknown","unavailable"].includes(states[eid].state)) {
+              raw = states[eid].state;
+            } else {
+              raw = entity?.attributes?.current_temperature;
+            }
+            const n = Math.round(Number(raw));
+            if (raw == null || Number.isNaN(n)) return '';
+            return `${n}`;
+          ]]]
         custom_fields:
           temp_display: |
             [[[
@@ -65,15 +77,25 @@ hemma_thermostat:
             - background: |
                 [[[
                   const s = String(entity?.state || '').toLowerCase();
-                  if (s === 'cool') return 'var(--hemma-puck-icon-color-active)';
-                  if (s === 'heat') return 'var(--hemma-puck-icon-color-active)';
-                  return 'var(--hemma-puck-icon-color)';
+                  if (s === 'cool') return 'rgba(180, 180, 180, 0.02)';
+                  if (s === 'heat') return 'rgba(0, 0, 0, 0.08)';
+                  return 'rgba(255,255,255,0)';
                 ]]]
+            - border: 1.5px solid
+            - border-color: |
+                [[[
+                  const s = String(entity?.state || '').toLowerCase();
+                  const isActive = ["cool","heat"].includes(s);
+                  const c = isActive
+                    ? 'var(--hemma-entity-active, var(--primary-text-color))'
+                    : 'var(--hemma-entity-inactive, var(--secondary-text-color))';
+                  return `color-mix(in srgb, ${c} 75%, transparent)`;
+                ]]]
+            - border-radius: 50%
             - width: 100%
             - height: 100%
-            - padding: var(--hemma-puck-padding, 8px)
-            - border: none !important
-            - box-shadow: 0 0px 12px rgba(0,0,0,0.08) !important
+            - padding: var(--puck-padding, 6px)
+            - box-shadow: none
             - opacity: 0.8
             - transition: opacity 0.2s ease, transform 0.15s ease, filter 0.2s ease
             - cursor: pointer
@@ -95,11 +117,11 @@ hemma_thermostat:
                     const s = String(entity?.state || '').toLowerCase();
                     const isActive = ["cool","heat"].includes(s);
                     const c = isActive
-                      ? 'var(--hemma-puck-font-color-active, var(--secondary-text-color))'
-                      : 'var(--hemma-puck-font-color, var(--secondary-text-color))';
+                      ? 'var(--hemma-entity-active, var(--secondary-text-color))'
+                      : 'var(--hemma-entity-inactive, var(--secondary-text-color))';
                     return `color-mix(in srgb, ${c} 100%, transparent)`;
                   ]]]
-              - font-weight: 800
+              - font-weight: 500
               - line-height: 1
               - font-size: |
                   [[[
@@ -107,15 +129,11 @@ hemma_thermostat:
                     return isMobile ? '13px' : '16px';
                   ]]]
         extra_styles: |
-          ha-card {
-            box-shadow: none !important;
-          }
           @media (hover: hover) {
             :host ha-card:hover {
               opacity: 1 !important;
               filter: brightness(1.2);
               transform: scale(1.05);
-              box-shadow: none !important;
             }
           }
           @media (hover: none) {
@@ -123,101 +141,102 @@ hemma_thermostat:
               opacity: 1 !important;
               filter: brightness(1.2);
               transform: scale(1.05);
-              box-shadow: none !important;
             }
           }
 
     cooling_modes:
       card:
-        type: custom:button-card
-        entity: '[[[ return entity.entity_id ]]]'
-        show_name: false
-        show_state: false
-        show_icon: false
-        tap_action:
-          action: call-service
-          service: climate.set_hvac_mode
-          data:
-            entity_id: '[[[ return entity.entity_id ]]]'
-            hvac_mode: |
+        type: custom:layout-card
+        layout_type: custom:grid-layout
+        layout:
+          position: absolute
+          inset: 0 0 0 auto
+          width: var(--rail-w)
+          grid-template-columns: 1fr
+          grid-template-rows: repeat(2, 1fr)
+          height: 100%
+          margin: 0
+          padding: 0
+          align-items: stretch
+          justify-items: stretch
+        cards:
+
+          - type: custom:button-card
+            template: [hemma_default]
+            show_entity_picture: true
+            entity_picture: |
               [[[
-                if (['cool','heat'].includes(entity.state)) return 'off';
-                return states['input_select.hemma_thermostat_mode']?.state || 'cool';
+                return ['cool','heat'].includes(entity.state)
+                  ? '/local/hemma/icons/power_on.svg'
+                  : '/local/hemma/icons/power_off.svg';
               ]]]
-        custom_fields:
-          svg: |
-            [[[
-              const KF_ID = 'hemma-toggle-kf-v7';
-              if (!document.getElementById(KF_ID)) {
-                const s = document.createElement('style');
-                s.id = KF_ID;
-                s.textContent = [
-                  '@keyframes hemma-thumb-on-d{from{transform:translateX(0)}to{transform:translateX(16px)}}',
-                  '@keyframes hemma-thumb-off-d{from{transform:translateX(16px)}to{transform:translateX(0)}}',
-                  '@keyframes hemma-thumb-on-m{from{transform:translateX(0)}to{transform:translateX(12px)}}',
-                  '@keyframes hemma-thumb-off-m{from{transform:translateX(12px)}to{transform:translateX(0)}}'
-                ].join('');
-                document.head.appendChild(s);
-              }
-              const st = entity.state;
-              const isOn = ['cool','heat'].includes(st);
-              const mob = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
-              const W = mob ? 34 : 40, H = mob ? 22 : 24, r = mob ? 7 : 7, cx0 = mob ? 12 : 13;
-              const SW = W + 2;
-              const travel = mob ? 12 : 16;
-              const stateKey = '_hemma_toggle_' + entity.entity_id;
-              const shouldAnimate = window[stateKey] !== undefined && window[stateKey] !== isOn;
-              window[stateKey] = isOn;
-              const anim = isOn ? (mob ? 'hemma-thumb-on-m' : 'hemma-thumb-on-d') : (mob ? 'hemma-thumb-off-m' : 'hemma-thumb-off-d');
-              const animStyle = shouldAnimate ? `animation:${anim} 0.2s ease forwards;` : '';
-              const circleCx = (!shouldAnimate && isOn) ? cx0 + travel : cx0;
-              const mid = 'htm-' + entity.entity_id.replace(/[^a-z0-9]/gi, '-');
-              if (isOn) {
-                return `<svg width="${SW}" height="${H}" viewBox="0 0 ${SW} ${H}" style="display:block;overflow:visible;"><defs><mask id="${mid}"><rect x="2" y="1" width="${W-2}" height="${H-2}" rx="${(H-2)/2}" fill="white"/><circle cx="${circleCx}" cy="${H/2}" r="${r}" fill="black" style="${animStyle}"/></mask></defs><rect x="2" y="1" width="${W-2}" height="${H-2}" rx="${(H-2)/2}" fill="rgba(255,255,255,0.7)" mask="url(#${mid})"/></svg>`;
-              } else {
-                return `<svg width="${SW}" height="${H}" viewBox="0 0 ${SW} ${H}" style="display:block;overflow:visible;"><rect x="2" y="1" width="${W-2}" height="${H-2}" rx="${(H-2)/2}" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2"/><circle cx="${circleCx}" cy="${H/2}" r="${r}" fill="rgba(255,255,255,0.4)" style="${animStyle}"/></svg>`;
-              }
-            ]]]
-        styles:
-          card:
-            - background: transparent !important
-            - background-color: transparent !important
-            - --ha-card-background: transparent
-            - box-shadow: none !important
-            - border: none !important
-            - backdrop-filter: none !important
-            - "-webkit-backdrop-filter": none !important
-            - padding: 0 !important
-            - overflow: visible !important
-            - "--button-card-ripple-color": transparent !important
-            - "-webkit-tap-highlight-color": transparent !important
-            - border-radius: 0 !important
-          grid:
-            - padding: 0 !important
-            - overflow: visible !important
-          custom_fields:
-            svg:
-              - line-height: 0
-        extra_styles: |
-          :host {
-            display: block !important;
-            width: 42px !important;
-            height: 24px !important;
-            overflow: visible !important;
-            cursor: pointer;
-          }
-          @media (max-width: 767px), (max-height: 600px) {
-            :host { width: 36px !important; height: 22px !important; }
-          }
-          ha-card, #container {
-            overflow: visible !important;
-            background: transparent !important;
-            --ha-card-background: transparent !important;
-          }
-          @media (hover: hover) {
-            :host { transition: filter 0.2s ease; }
-            :host(:hover) { filter: brightness(1.5) !important; }
-          }
+            tap_action:
+              action: call-service
+              service: climate.set_hvac_mode
+              data:
+                entity_id: '[[[ return entity.entity_id ]]]'
+                hvac_mode: "off"
+            styles:
+              card:
+                - height: 100%
+                - min-height: 0
+                - padding: 0
+                - box-shadow: none !important
+                - backdrop-filter: none !important
+                - background: |
+                    [[[
+                      return entity.state === 'off'
+                        ? 'var(--hemma-control-on)'
+                        : 'var(--hemma-control-off)';
+                    ]]]
+              img_cell: [ { width: '70%' }, { aspect-ratio: '1' } ]
+
+          - type: custom:button-card
+            template: [hemma_default]
+            show_entity_picture: true
+            entity_picture: |
+              [[[
+                const sel = states['input_select.hemma_thermostat_mode']?.state || 'cool';
+                return sel === 'heat'
+                  ? '/local/hemma/icons/heating.svg'
+                  : '/local/hemma/icons/cooling.svg';
+              ]]]
+
+            tap_action:
+              action: call-service
+              service: climate.set_hvac_mode
+              data:
+                entity_id: '[[[ return entity.entity_id ]]]'
+                hvac_mode: |
+                  [[[
+                    return states['input_select.hemma_thermostat_mode']?.state || 'cool';
+                  ]]]
+
+            hold_action:
+              action: call-service
+              service: input_select.select_option
+              data:
+                entity_id: input_select.hemma_thermostat_mode
+                option: |
+                  [[[
+                    const sel = states['input_select.hemma_thermostat_mode']?.state || 'cool';
+                    return sel === 'heat' ? 'cool' : 'heat';
+                  ]]]
+
+            styles:
+              card:
+                - height: 100%
+                - min-height: 0
+                - padding: 0
+                - box-shadow: none !important
+                - backdrop-filter: none !important
+                - background: |
+                    [[[
+                      return ['cool','heat'].includes(entity.state)
+                        ? 'var(--hemma-control-on)'
+                        : 'var(--hemma-control-off)';
+                    ]]]
+              img_cell: [ { width: '74%' }, { aspect-ratio: '1' } ]
 
     target_temperature:
       card:
@@ -243,15 +262,6 @@ hemma_thermostat:
                 return variables.thermostat_toggle_helper;
               ]]]
 
-        extra_styles: |
-          ha-card {
-            box-shadow: none !important;
-            border: none !important;
-          }
-          ha-card::before {
-            display: none !important;
-          }
-
         styles:
           card:
             - background: transparent !important
@@ -260,7 +270,7 @@ hemma_thermostat:
             - animation: none !important
             - box-shadow: none !important
             - border: none !important
-            - padding-right: 0
+            - padding-right: var(--rail-w)
           icon:
             - background: transparent !important
           img_cell:
@@ -268,21 +278,10 @@ hemma_thermostat:
           custom_fields:
             temperature_controls:
               - position: absolute
-              - top: var(--hemma-entity-inner-pad-current, var(--hemma-entity-inner-pad-desktop, 22px))
-              - right: |
-                  [[[
-                    const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
-                    return isMobile ? '14px' : '22px';
-                  ]]]
-              - bottom: var(--hemma-entity-inner-pad-current, var(--hemma-entity-inner-pad-desktop, 22px))
+              - top: 0
+              - right: 0
+              - bottom: 0
               - width: var(--rail-w)
-              - border-radius: |
-                  [[[
-                    const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
-                    return isMobile ? '20px' : '24px';
-                  ]]]
-              - overflow: hidden
-              - background: rgba(255,255,255,0.09)
 
         custom_fields:
           temperature_controls:
@@ -300,18 +299,9 @@ hemma_thermostat:
                 padding: 0
                 align-items: stretch
                 justify-items: stretch
-              card_mod:
-                style: |
-                  ha-card {
-                    background: transparent !important;
-                    border: none !important;
-                    box-shadow: none !important;
-                  }
               cards:
                 - type: custom:button-card
                   template: [hemma_default]
-                  show_name: false
-                  show_state: false
                   show_entity_picture: true
                   entity_picture: /local/Hemma-main/www/hemma/icons/increase.svg
                   tap_action:
@@ -324,40 +314,14 @@ hemma_thermostat:
                       - height: 100%
                       - min-height: 0
                       - padding: 0
-                      - background: transparent
+                      - background: var(--hemma-control-on)
+                      - border-bottom: "0.5px solid rgba(255,255,255,0.1)"
                       - box-shadow: none !important
-                      - border: none !important
                       - backdrop-filter: none !important
-                      - "--button-card-ripple-color": transparent !important
-                      - "-webkit-tap-highlight-color": transparent !important
-                    img_cell:
-                      - width: |
-                          [[[
-                            const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
-                            return isMobile ? '74%' : '78%';
-                          ]]]
-                      - aspect-ratio: '1'
-                  extra_styles: |
-                    ha-card { background: transparent !important; }
-                    #container::before {
-                      content: '';
-                      position: absolute;
-                      inset: 0;
-                      background: radial-gradient(circle calc(var(--rail-w) / 2 - 5px) at center, rgba(255,255,255,0.07) 95%, transparent 96%);
-                      opacity: 0;
-                      pointer-events: none;
-                      z-index: 0;
-                    }
-                    @media (hover: hover) {
-                      :host(:hover) #container::before { opacity: 1; }
-                    }
-                    @media (hover: none) {
-                      :host(:active) #container::before { opacity: 1; }
-                    }
+                    img_cell: [ { width: '54%' }, { aspect-ratio: '1' } ]
 
                 - type: custom:button-card
                   template: [hemma_default]
-                  show_state: false
                   name: SET
                   tap_action:
                     action: call-service
@@ -375,43 +339,18 @@ hemma_thermostat:
                       - height: 100%
                       - min-height: 0
                       - padding: 0
-                      - background: transparent
+                      - background: var(--hemma-control-on)
                       - box-shadow: none !important
-                      - border: none !important
+                      - border-bottom: "0.5px solid rgba(255,255,255,0.1)"
                       - backdrop-filter: none !important
-                      - "--button-card-ripple-color": transparent !important
-                      - "-webkit-tap-highlight-color": transparent !important
                     name:
-                      - font-size: |
-                          [[[
-                            const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
-                            return isMobile ? '10px' : '12px';
-                          ]]]
-                      - letter-spacing: 1px
+                      - font-size: 10px
+                      - letter-spacing: 2px
                       - text-transform: uppercase
                       - font-weight: 600
-                  extra_styles: |
-                    ha-card { background: transparent !important; }
-                    #container::before {
-                      content: '';
-                      position: absolute;
-                      inset: 0;
-                      background: radial-gradient(circle calc(var(--rail-w) / 2 - 5px) at center, rgba(255,255,255,0.07) 95%, transparent 96%);
-                      opacity: 0;
-                      pointer-events: none;
-                      z-index: 0;
-                    }
-                    @media (hover: hover) {
-                      :host(:hover) #container::before { opacity: 1; }
-                    }
-                    @media (hover: none) {
-                      :host(:active) #container::before { opacity: 1; }
-                    }
 
                 - type: custom:button-card
                   template: [hemma_default]
-                  show_name: false
-                  show_state: false
                   show_entity_picture: true
                   entity_picture: /local/Hemma-main/www/hemma/icons/decrease.svg
                   tap_action:
@@ -424,52 +363,22 @@ hemma_thermostat:
                       - height: 100%
                       - min-height: 0
                       - padding: 0
-                      - background: transparent
                       - box-shadow: none !important
-                      - border: none !important
                       - backdrop-filter: none !important
-                      - "--button-card-ripple-color": transparent !important
-                      - "-webkit-tap-highlight-color": transparent !important
-                    img_cell:
-                      - width: |
-                          [[[
-                            const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
-                            return isMobile ? '74%' : '78%';
-                          ]]]
-                      - aspect-ratio: '1'
-                  extra_styles: |
-                    ha-card { background: transparent !important; }
-                    #container::before {
-                      content: '';
-                      position: absolute;
-                      inset: 0;
-                      background: radial-gradient(circle calc(var(--rail-w) / 2 - 5px) at center, rgba(255,255,255,0.07) 95%, transparent 96%);
-                      opacity: 0;
-                      pointer-events: none;
-                      z-index: 0;
-                    }
-                    @media (hover: hover) {
-                      :host(:hover) #container::before { opacity: 1; }
-                    }
-                    @media (hover: none) {
-                      :host(:active) #container::before { opacity: 1; }
-                    }
+                      - background: var(--hemma-control-on)
+                    img_cell: [ { width: '54%' }, { aspect-ratio: '1' } ]
 
   styles:
     card:
       - --rail-w: |
           [[[
             const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
-            return isMobile ? '42px' : '52px';
+            return isMobile ? '48px' : '60px';
           ]]]
-      - --hemma-puck-padding: |
+      - --puck-padding: |
           [[[
             const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
-            return isMobile ? '7px' : '8px';
-          ]]]
-      - --thermostat-control-opacity: |
-          [[[
-            return ['cool','heat'].includes(entity.state) ? '1' : '0.8';
+            return isMobile ? '5px' : '7px';
           ]]]
     name:
       - opacity: |
@@ -496,10 +405,12 @@ hemma_thermostat:
 
       cooling_modes:
         - position: absolute
-        - top: calc(var(--hemma-entity-inner-pad-current, var(--hemma-entity-inner-pad-desktop, 20px)) + (var(--hemma-entity-icon-size-current, var(--hemma-entity-icon-size-desktop, 34px)) - 20px) / 2)
-        - right: var(--hemma-entity-inner-pad-current, var(--hemma-entity-inner-pad-desktop, 22px))
+        - top: 0
+        - right: 0
+        - bottom: 0
+        - width: var(--rail-w)
         - z-index: 2
-        - line-height: 0
+        - pointer-events: auto
         - display: |
             [[[
               const on = states[variables.thermostat_toggle_helper]?.state === "on";

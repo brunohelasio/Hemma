@@ -57,7 +57,7 @@ hemma_weather:
           [[[
             const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
             const isTablet = !isMobile && window.matchMedia('(max-width: 1024px)').matches;
-            if (isMobile) return 'var(--weather-icon-size-mobile, 26px)';
+            if (isMobile) return 'var(--weather-icon-size-mobile, 34px)';
             if (isTablet) return 'var(--weather-icon-size-tablet, 34px)';
             return 'var(--weather-icon-size-desktop, 34px)';
           ]]]
@@ -75,11 +75,7 @@ hemma_weather:
           [[[
             return variables.hero_mode ? 'min-content' : 'min-content min-content';
           ]]]
-      - column-gap: |
-          [[[
-            const isMobile = window.matchMedia('(max-width: 767px), (max-height: 600px)').matches;
-            return isMobile ? '7px' : '5px';
-          ]]]
+      - column-gap: 4px
       - row-gap: 2px
       - justify-content: >
           [[[
@@ -135,7 +131,7 @@ hemma_weather:
       - top: 50%
       - left: 50%
       - transform: translate(-50%, -50%)
-      - width: auto
+      - width: var(--weather-icon-size, 34px)
       - height: var(--weather-icon-size, 34px)
       - object-fit: contain
       - border-radius: 0
@@ -184,13 +180,13 @@ hemma_weather:
             'sunny':           'clear-day',
             'clear-night':     'clear-night',
             'partlycloudy':    'partly-cloudy-day',
-            'cloudy':          'cloudy',
-            'overcast':        'cloudy',
+            'cloudy':          'weather-mixed',
+            'overcast':        'weather-mixed',
             'rainy':           'rain',
             'pouring':         'rain-heavy',
             'snowy':           'snow',
             'snow':            'snow',
-            'snowy-rainy':     'eather-mixed',
+            'snowy-rainy':     'snow',
             'hail':            'rain-heavy',
             'lightning':       'thunder',
             'lightning-rainy': 'lightning-rainy',
@@ -252,13 +248,13 @@ hemma_weather:
         'sunny':           'clear-day',
         'clear-night':     'clear-night',
         'partlycloudy':    'partly-cloudy-day',
-        'cloudy':          'cloudy',
-        'overcast':        'cloudy',
+        'cloudy':          'weather-mixed',
+        'overcast':        'weather-mixed',
         'rainy':           'rain',
         'pouring':         'rain-heavy',
         'snowy':           'snow',
         'snow':            'snow',
-        'snowy-rainy':     'weather-mixed',
+        'snowy-rainy':     'snow',
         'hail':            'rain-heavy',
         'lightning':       'thunder',
         'lightning-rainy': 'lightning-rainy',

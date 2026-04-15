@@ -1,9 +1,12 @@
-# -------- Desktop / Tablet --------
+# -------- Desktop / Tablet — Square buttons --------
+# Same as hemma_entity_layout.yaml but with narrower columns (180px)
+# to create square entity buttons. AC cards should use
+# view_layout: { grid-column: span 2 } to remain wider.
 position: absolute
 z-index: 3
 display: grid
 grid-auto-flow: column
-grid-auto-columns: var(--hemma-entity-col-width-current, var(--hemma-entity-col-width-desktop, 300px))
+grid-auto-columns: var(--hemma-entity-col-width-current, var(--hemma-entity-col-width-desktop, 180px))
 grid-template-rows: var(--hemma-entity-rows-current, var(--hemma-entity-rows-desktop, repeat(1, auto)))
 justify-content: var(--hemma-entity-justify-current, var(--hemma-entity-justify-desktop, flex-start))
 grid-column-gap: 8px
@@ -43,7 +46,7 @@ mediaquery:
     display: grid
     grid-auto-flow: row
     grid-auto-columns: none
-    grid-template-columns: repeat(2, minmax(0, 1fr))
+    grid-template-columns: repeat(3, minmax(0, 1fr))
     grid-template-rows: auto
     grid-column-gap: 8px
     grid-row-gap: 8px
@@ -67,13 +70,13 @@ mediaquery:
       var(--hemma-tiles-right-pad-landscape, 0px)
       auto
       auto
-    width: calc((2 * var(--hemma-entity-col-width-landscape, 160px)) + 8px)
+    width: calc((3 * var(--hemma-entity-col-width-landscape, 140px)) + 16px)
     margin: 0
     padding: 0
     box-sizing: border-box
     display: grid
     grid-auto-flow: row
-    grid-template-columns: repeat(2, var(--hemma-entity-col-width-landscape, 160px))
+    grid-template-columns: repeat(3, var(--hemma-entity-col-width-landscape, 140px))
     grid-auto-rows: min-content
     gap: 8px
     justify-items: stretch
