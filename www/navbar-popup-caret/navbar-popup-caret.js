@@ -4,7 +4,7 @@
  *
  * Usage — register as a Lovelace resource:
  *   resources:
- *     - url: /local/hemma/navbar-popup-caret.js
+ *     - url: /local/Hemma-main/www/hemma/navbar-popup-caret.js
  *       type: module
  */
 (function () {

@@ -92,7 +92,7 @@ hemma_motion:
 
   entity_picture: |
     [[[
-      return '/local/hemma/icons/motion.svg';
+      return '/local/Hemma-main/www/hemma/icons/motion.svg';
     ]]]
 
   # In multi-sensor mode (no entity), shows active room label or default_name.
