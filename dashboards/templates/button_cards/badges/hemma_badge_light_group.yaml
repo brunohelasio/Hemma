@@ -1,0 +1,167 @@
+# Light Group Badge
+# Shows consolidated light status for multiple light entities.
+# Tap to expand/collapse the individual light sub-badges row
+# (driven by input_select.hemma_expanded_row).
+#
+# Variables:
+#   enabled             - show/hide this badge (default: true)
+#   entity_1 – entity_8 - entity IDs of light entities to track
+hemma_badge_light_group:
+  template: [hemma_badge_base]
+
+  entity: input_select.hemma_expanded_row
+
+  variables:
+    enabled: true
+    entity_1: null
+    entity_2: null
+    entity_3: null
+    entity_4: null
+    entity_5: null
+    entity_6: null
+    entity_7: null
+    entity_8: null
+
+  show_state: false
+  show_label: false
+  show_icon: true
+  icon: mdi:lightbulb-group
+
+  tap_action:
+    action: call-service
+    service: input_select.select_option
+    service_data:
+      entity_id: input_select.hemma_expanded_row
+      option: >
+        [[[
+          return states['input_select.hemma_expanded_row']?.state === 'lights' ? 'none' : 'lights';
+        ]]]
+
+  hold_action:
+    action: more-info
+
+  double_tap_action:
+    action: none
+
+  triggers_update:
+    - '[[[ return variables?.entity_1 ]]]'
+    - '[[[ return variables?.entity_2 ]]]'
+    - '[[[ return variables?.entity_3 ]]]'
+    - '[[[ return variables?.entity_4 ]]]'
+    - '[[[ return variables?.entity_5 ]]]'
+    - '[[[ return variables?.entity_6 ]]]'
+    - '[[[ return variables?.entity_7 ]]]'
+    - '[[[ return variables?.entity_8 ]]]'
+
+  extra_styles: >
+    [[[
+      const v = variables?.enabled;
+      const enabled = (v === undefined || v === null) ? true :
+        (typeof v === 'boolean') ? v :
+        (typeof v === 'number') ? v !== 0 :
+        !['false','0','no','off','disabled'].includes(String(v).trim().toLowerCase());
+
+      const eids = [
+        variables?.entity_1, variables?.entity_2, variables?.entity_3, variables?.entity_4,
+        variables?.entity_5, variables?.entity_6, variables?.entity_7, variables?.entity_8
+      ].filter(Boolean);
+
+      const SVG_URL  = "/local/hemma/icons/light-fill.svg";
+      const ICON_PCT = 78;
+      const INSET_PX = 0;
+
+      return `
+        :host{display:${(enabled && eids.length > 0) ? 'inline-block' : 'none'} !important;}
+
+        #img-cell, .img-cell{ position: relative; }
+
+        #img-cell #icon, .img-cell #icon{
+          color: transparent !important;
+          opacity: 0 !important;
+        }
+
+        #img-cell::before,
+        .img-cell::before{
+          content: '';
+          position: absolute;
+          inset: ${INSET_PX}px;
+          background-color: var(--hemma-icon-color, var(--primary-text-color)) !important;
+
+          -webkit-mask: url('${SVG_URL}') no-repeat center / ${ICON_PCT}% ${ICON_PCT}%;
+          mask: url('${SVG_URL}') no-repeat center / ${ICON_PCT}% ${ICON_PCT}%;
+
+          transform: translateZ(0);
+        }
+      `;
+    ]]]
+
+  styles:
+
+    card:
+      - background: >
+          [[[
+            return entity?.state === 'lights'
+              ? 'var(--badge-active-color, rgba(255,255,255,0.85))'
+              : 'var(--badge-background, rgba(0,0,0,0.18))';
+          ]]]
+      - display: >
+          [[[
+            const v = variables?.enabled;
+            const enabled = (v === undefined || v === null) ? true :
+              (typeof v === 'boolean') ? v :
+              (typeof v === 'number') ? v !== 0 :
+              !['false','0','no','off','disabled'].includes(String(v).trim().toLowerCase());
+            if (!enabled) return 'none';
+            const eids = [
+              variables?.entity_1, variables?.entity_2, variables?.entity_3, variables?.entity_4,
+              variables?.entity_5, variables?.entity_6, variables?.entity_7, variables?.entity_8
+            ].filter(Boolean);
+            return eids.length > 0 ? 'inline-grid' : 'none';
+          ]]]
+      - --badge-title-color: >
+          [[[
+            return entity?.state === 'lights' ? 'rgba(0,0,0,0.85)' : 'var(--primary-text-color)';
+          ]]]
+      - --badge-sub-color: >
+          [[[
+            return entity?.state === 'lights' ? 'rgba(0,0,0,0.6)' : 'var(--secondary-text-color)';
+          ]]]
+      - --hemma-icon-color: >
+          [[[
+            if (entity?.state === 'lights') return 'rgba(0,0,0,0.75)';
+            const cfgEids = [
+              variables?.entity_1, variables?.entity_2, variables?.entity_3, variables?.entity_4,
+              variables?.entity_5, variables?.entity_6, variables?.entity_7, variables?.entity_8
+            ].filter(Boolean);
+            const eids = cfgEids.flatMap(eid => {
+              const m = hass.states[eid]?.attributes?.entity_id;
+              return (Array.isArray(m) && m.length > 0) ? m : [eid];
+            });
+            const onCount = eids.filter(eid => hass.states[eid]?.state === 'on').length;
+            return onCount > 0 ? '#ffd700' : 'var(--badge-title-inactive)';
+          ]]]
+
+  name: >
+    [[[
+      const cfgEids = [
+        variables?.entity_1, variables?.entity_2, variables?.entity_3, variables?.entity_4,
+        variables?.entity_5, variables?.entity_6, variables?.entity_7, variables?.entity_8
+      ].filter(Boolean);
+      const eids = cfgEids.flatMap(eid => {
+        const m = hass.states[eid]?.attributes?.entity_id;
+        return (Array.isArray(m) && m.length > 0) ? m : [eid];
+      });
+
+      const onCount = eids.filter(eid => hass.states[eid]?.state === 'on').length;
+      const sub = onCount === 0 ? 'All Off'
+                : onCount === eids.length ? 'All On'
+                : onCount === 1 ? '1 On'
+                : `${onCount} On`;
+
+      return `
+        <div class="badge-wrap">
+          <div class="badge-title">Lights</div>
+          <div class="badge-sub">${sub}</div>
+        </div>
+      `;
+    ]]]
