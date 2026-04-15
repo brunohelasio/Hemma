@@ -383,28 +383,28 @@ cards:
         # Home
         - url: /dashboard-hemma/home
           label: Home
-          image: /local/hemma/icons/home.svg
-          image_selected: /local/hemma/icons/home.svg
-          icon: /local/hemma/icons/home.svg
-          icon_selected: /local/hemma/icons/home.svg
+          image: /local/Hemma-main/www/hemma/icons/home.svg
+          image_selected: /local/Hemma-main/www/hemma/icons/home.svg
+          icon: /local/Hemma-main/www/hemma/icons/home.svg
+          icon_selected: /local/Hemma-main/www/hemma/icons/home.svg
 
         # Cômodos (Dropdown Menu)
         - label: Cômodos
           image: >
             [[[
               const p = window.location.pathname || '';
-              if (p.includes('quarto')) return '/local/hemma/icons/bedroom.svg';
-              if (p.includes('cozinha')) return '/local/hemma/icons/kitchen.svg';
-              if (p.includes('office')) return '/local/hemma/icons/console.svg';
-              return '/local/hemma/icons/living_room.svg';
+              if (p === '/dashboard-hemma/bedroom') return '/local/Hemma-main/www/hemma/icons/bedroom.svg';
+              if (p === '/dashboard-hemma/kitchen') return '/local/Hemma-main/www/hemma/icons/kitchen.svg';
+              if (p === '/dashboard-hemma/living-room') return '/local/Hemma-main/www/hemma/icons/living-room.svg';
+              return '/local/Hemma-main/www/hemma/icons/living-room.svg';
             ]]]
           image_selected: >
             [[[
               const p = window.location.pathname || '';
-              if (p.includes('quarto')) return '/local/hemma/icons/bedroom.svg';
-              if (p.includes('cozinha')) return '/local/hemma/icons/kitchen.svg';
-              if (p.includes('office')) return '/local/hemma/icons/console.svg';
-              return '/local/hemma/icons/living_room.svg';
+              if (p === '/dashboard-hemma/bedroom') return '/local/Hemma-main/www/hemma/icons/bedroom.svg';
+              if (p === '/dashboard-hemma/kitchen') return '/local/Hemma-main/www/hemma/icons/kitchen.svg';
+              if (p === '/dashboard-hemma/living-room') return '/local/Hemma-main/www/hemma/icons/living-room.svg';
+              return '/local/Hemma-main/www/hemma/icons/living-room.svg';
             ]]]
           tap_action:
             action: open-popup
@@ -415,34 +415,38 @@ cards:
                 && !['/dashboard-hemma/home','/dashboard-hemma/seguranca'].includes(p);
             ]]]
           popup:
-            - label: Sala
-              url: /dashboard-hemma/sala
-              image: /local/hemma/icons/living_room.svg
-            - label: Cozinha
-              url: /dashboard-hemma/cozinha
-              image: /local/hemma/icons/kitchen.svg
-            - label: Lavabo
-              url: /dashboard-hemma/lavabo
-              image: /local/hemma/icons/console.svg
-            - label: Office
-              url: /dashboard-hemma/office
-              image: /local/hemma/icons/console.svg
-            - label: Quarto Casal
-              url: /dashboard-hemma/quarto_casal
-              image: /local/hemma/icons/bedroom.svg
-            - label: Quarto Marina
-              url: /dashboard-hemma/quarto_marina
-              image: /local/hemma/icons/bedroom.svg
-            - label: Quarto Miguel
-              url: /dashboard-hemma/quarto_miguel
-              image: /local/hemma/icons/bedroom.svg
+            - label: Bedroom
+              url: /dashboard-hemma/bedroom
+              image: /local/Hemma-main/www/hemma/icons/bedroom.svg
+              badge:
+                show: >
+                  [[[
+                    const _s = hass.states['input_text.hemma_motion_bedroom']?.state?.trim();
+                    return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                      && !!_s && hass.states[_s]?.state === 'on';
+                  ]]]
+                color: '#ffd700'
+            - label: Kitchen
+              url: /dashboard-hemma/kitchen
+              image: /local/Hemma-main/www/hemma/icons/kitchen.svg
+            - label: Living Room
+              url: /dashboard-hemma/living-room
+              image: /local/Hemma-main/www/hemma/icons/living-room.svg
+              badge:
+                show: >
+                  [[[
+                    const _s = hass.states['input_text.hemma_motion_living_room']?.state?.trim();
+                    return hass.states['input_boolean.hemma_motion_badges']?.state === 'on'
+                      && !!_s && hass.states[_s]?.state === 'on';
+                  ]]]
+                color: '#ffd700'
 
         # Scenes (Dropdown Menu)
-        - label: Cenas
-          image: /local/hemma/icons/scenes.svg
-          image_selected: /local/hemma/icons/scenes.svg
-          icon: /local/hemma/icons/scenes.svg
-          icon_selected: /local/hemma/icons/scenes.svg
+        - label: Scenes
+          image: /local/Hemma-main/www/hemma/icons/scenes.svg
+          image_selected: /local/Hemma-main/www/hemma/icons/scenes.svg
+          icon: /local/Hemma-main/www/hemma/icons/scenes.svg
+          icon_selected: /local/Hemma-main/www/hemma/icons/scenes.svg
           tap_action:
             action: open-popup
           popup:

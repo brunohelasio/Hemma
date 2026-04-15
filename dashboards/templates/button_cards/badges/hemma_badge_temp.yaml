@@ -30,9 +30,9 @@ hemma_badge_temp:
         : { cool: 21, warm: 27 };
 
       let svgUrl;
-      if      (v <= t.cool) svgUrl = '/local/hemma/icons/temp-low.svg';
-      else if (v <= t.warm) svgUrl = '/local/hemma/icons/temp-medium.svg';
-      else                  svgUrl = '/local/hemma/icons/temp-high.svg';
+      if      (v <= t.cool) svgUrl = '/local/Hemma-main/www/hemma/icons/temp-low.svg';
+      else if (v <= t.warm) svgUrl = '/local/Hemma-main/www/hemma/icons/temp-medium.svg';
+      else                  svgUrl = '/local/Hemma-main/www/hemma/icons/temp-high.svg';
 
       return `
         :host{display:${hide ? 'none' : 'inline-block'} !important;}

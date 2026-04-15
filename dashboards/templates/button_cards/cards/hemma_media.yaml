@@ -19,9 +19,14 @@ hemma_media:
       if (['playing', 'paused'].includes(s) && pic) return pic;
 
       const icon = variables?.icon;
-      if (icon) return `/local/hemma/icons/${icon}.svg`;
-
-      return '/local/hemma/icons/speaker.svg';
+      if (icon) return `/local/Hemma-main/www/hemma/icons/${icon}.svg`;
+      const state = String(entity?.state || "").toLowerCase();
+      const appName = String(entity?.attributes?.app_name || "").toLowerCase();
+      if (state === "playing" && appName.includes("youtube")) {
+        const thumb = states['sensor.youtube_watching']?.attributes?.thumbnail;
+        if (thumb) return thumb;
+      }
+      return entity?.attributes?.entity_picture || '/local/Hemma-main/www/hemma/icons/speaker.svg';
     ]]]
 
   state_display: |

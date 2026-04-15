@@ -41,9 +41,9 @@ hemma_vacuum:
   entity_picture: |
     [[[
       const s = (entity?.state || '').toLowerCase();
-      if (s === 'cleaning' || s === 'returning') return '/local/hemma/icons/vacuum-clean.svg';
-      if (s === 'charging')                      return '/local/hemma/icons/vacuum-charge.svg';
-      return '/local/hemma/icons/vacuum.svg';
+      if (s === 'cleaning' || s === 'returning') return '/local/Hemma-main/www/hemma/icons/vacuum-clean.svg';
+      if (s === 'charging')                      return '/local/Hemma-main/www/hemma/icons/vacuum-charge.svg';
+      return '/local/Hemma-main/www/hemma/icons/vacuum.svg';
     ]]]
 
   show_entity_picture: |

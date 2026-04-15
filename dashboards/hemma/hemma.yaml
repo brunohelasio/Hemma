@@ -1,1181 +1,434 @@
-# ==============================================================================
-# HEMMA DASHBOARD — PAINEL BRUNO (CÓDIGO LIMPO E CENTRALIZADO)
-# ==============================================================================
+# /config/Hemma-main/dashboards/hemma/hemma.yaml.example
+# Hemma Dashboard - Example Configuration
+# ============================================================================
+# Copy or rename this file to hemma.yaml and customize the entity IDs to match
+# your Home Assistant setup. Search for "YOUR_" to find all placeholders.
+#
+# REQUIRED: Replace all entity IDs with your own entities
+# OPTIONAL: Adjust room names, add/remove rooms, customize features
+# ============================================================================
 
 button_card_templates: !include_dir_merge_named /config/Hemma-main/dashboards/templates/button_cards
 
-# Kiosk Mode
-kiosk_mode:
-  hide_header: true
-  hide_sidebar: true
-  hide_dialog_light_settings_actions: true
-  hide_dialog_logbook: true
-  mobile_settings:
-    hide_header: true
-    hide_sidebar: false
-  user_settings:
-    - users:
-      - "tablet"
-      hide_header: true
-      hide_sidebar: false
-      hide_dialog_logbook: true
-      hide_dialog_light_settings_actions: true
-      hide_dialog_header_breadcrumb_navigation: true
-      hide_dialog_header_history: true
-      hide_dialog_attributes: true
+# Kiosk Mode (optional - requires kiosk-mode HACS integration)
+# Uncomment and customize if you want to hide certain UI elements
+# kiosk_mode:
+#   hide_header: true
+#   hide_sidebar: false
+#   hide_dialog_light_settings_actions: true
+#   hide_dialog_logbook: true
+#   mobile_settings:
+#     hide_header: true
+#     hide_sidebar: false
+#   user_settings:
+#     - users:
+#       - "tablet"
+#       hide_header: true
+#       hide_sidebar: false
+#       hide_dialog_logbook: true
+#       hide_dialog_light_settings_actions: true
+#       hide_dialog_header_breadcrumb_navigation: true
+#       hide_dialog_header_history: true
+#       hide_dialog_attributes: true
 
 views:
-
-  # ============================================================
-  # 1. HOME
-  # ============================================================
+  # ------------------------------------------------------
+  # HOME
+  # ------------------------------------------------------
+  # The main overview room - typically shows whole-home controls
+  # and media player status across all rooms
+  # ------------------------------------------------------
   - type: custom:grid-layout
     title: home
     path: home
     layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
-
+      # ROOM HERO CARD
       - type: custom:button-card
         template: hemma_room
         name: Home
         variables:
+          # Image Configuration
+          # Place your images at: /config/Hemma-main/www/hemma/rooms/home.jpg (light mode)
+          #                       /config/Hemma-main/www/hemma/rooms/home-night.jpg (dark mode)
           image: home
           image_position: center center
+
+          # Climate (shows group badge + expandable sub-badges for temp/humidity/quality)
           show_climate: false
-          temp_unit: 'C'
+          # climate_entity_1: climate.YOUR_THERMOSTAT
+          # climate_entity_2: climate.YOUR_THERMOSTAT_2   # optional, up to 3
+
+          # Sensors (used by the climate sub-badges when show_climate is true)
+          # temp_sensor_1: sensor.YOUR_HOME_TEMPERATURE
+          # temp_sensor_2: sensor.YOUR_TEMPERATURE_2      # optional additional temp sensor
+          # temp_sensor_3: sensor.YOUR_TEMPERATURE_3      # optional additional temp sensor
+          # temp_sensor_4: sensor.YOUR_TEMPERATURE_4      # optional additional temp sensor
+          # humidity_sensor: sensor.YOUR_HUMIDITY
+          # quality_sensor: sensor.YOUR_AIR_QUALITY
+
+          # Lights Badge (optional - shows a light group badge)
           show_lights: true
-          light_entity_1: light.todas_as_luzes
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
+          light_group_entity: light.grupo_luzes_sala
+          light_entity_1: light.sala_switch_1
+          light_entity_2: light.sala_switch_2
+          light_entity_3: light.sala_switch_3
+          light_entity_4: light.sala_2_switch_2
+
+          # Weather Widget
+          show_weather: false
+          # weather_entity: weather.home
+          # weather_temp_sensor: sensor.outdoor_temperature
+
+          # Temperature Unit (affects comfort labels like "Cool", "Warm", etc.)
+          temp_unit: 'F'                                  # 'F' for Fahrenheit, 'C' for Celsius
+
+          # Presence Badges (optional - requires person/status sensors)
+          # Shows a group badge on the hero card; tap to expand individual badges
+          show_presence: false
+          # presence_entity_1: sensor.YOUR_PERSON_1_STATUS  # optional, up to 4
+          # presence_entity_2: sensor.YOUR_PERSON_2_STATUS
+          # presence_entity_3: sensor.YOUR_PERSON_3_STATUS
+          # presence_entity_4: sensor.YOUR_PERSON_4_STATUS
+
+          # Media Player Badges (shows what's playing across rooms)
           show_media: true
           show_media_player_1: true
           media_player_1: media_player.android_tv_192_168_3_17
           show_media_player_2: true
-          media_player_2: media_player.spotifyplus_bruno_helasio
-          show_media_player_3: false
-          show_media_player_4: false
-          show_weather: true
-          weather_entity: weather.forecast_casa
+          media_player_2: media_player.echo_show
+          show_media_player_3: true
+          media_player_3: media_player.echo_pop_quarto_casal
+          show_media_player_4: true
+          media_player_4: media_player.echo_pop_marina
 
+      # MOBILE NAVBAR
       - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
+      # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
+          # Thermostat (configure when room temperature sensor is available)
+          # - type: custom:button-card
+          #   template: hemma_thermostat
+          #   entity: climate.ac_office
+          #   name: Thermostat
+          #   variables:
+          #     temp_sensor: sensor.office_temperature
+
+          # Front Door Lock
+          - type: custom:button-card
+            template: hemma_lock
+            entity: lock.sl_fechadura_operate_lock
+            name: Front Door
+            variables:
+              icon: door
+              show_toggle: true
 
           - type: custom:button-card
-            template: [hemma_entity, icon_door]
-            entity: sun.sun
-            name: "Porta"
-            tap_action: {action: none}
-
-          - type: custom:button-card
-            template: 
-              - hemma_entity
-              - icon_home_planta
-            entity: sun.sun
-            name: "Planta"
-            tap_action:
-              action: fire-dom-event
-              browser_mod:
-                service: browser_mod.popup
-                data:
-                  title: ""
-                  size: fullscreen
-                  content:
-                    type: picture-elements
-                    image: /Hemma-main/local/images/planta_apartamento_home_assistant.png?v=6
-                    elements:
-                      - type: state-icon
-                        entity: light.sala_switch_2
-                        title: Sala
-                        style: {top: 47%, left: 32%, color: "rgba(255,255,255,0.5)", "--color": "#f9a825", transform: scale(1.4)}
-                      - type: state-icon
-                        entity: light.office_switch_3
-                        title: Office
-                        style: {top: 22%, left: 62%, color: "rgba(255,255,255,0.5)", "--color": "#f9a825", transform: scale(1.4)}
-                      - type: state-icon
-                        entity: light.cozinha_switch_2
-                        title: Cozinha
-                        style: {top: 62%, left: 22%, color: "rgba(255,255,255,0.5)", "--color": "#f9a825", transform: scale(1.4)}
-                      - type: state-icon
-                        entity: light.lavabo_switch_2
-                        title: Lavabo
-                        style: {top: 42%, left: 52%, color: "rgba(255,255,255,0.5)", "--color": "#f9a825", transform: scale(1.4)}
-                      - type: state-icon
-                        entity: light.qc_luz_principal
-                        title: Quarto Casal
-                        style: {top: 22%, left: 22%, color: "rgba(255,255,255,0.5)", "--color": "#f9a825", transform: scale(1.4)}
-                      - type: state-icon
-                        entity: light.quarto_marina_switch_4
-                        title: Quarto Marina
-                        style: {top: 22%, left: 37%, color: "rgba(255,255,255,0.5)", "--color": "#f9a825", transform: scale(1.4)}
-                      - type: state-icon
-                        entity: switch.quarto_miguel_switch_2
-                        title: Quarto Miguel
-                        style: {top: 22%, left: 52%, color: "rgba(255,255,255,0.5)", "--color": "#f9a825", transform: scale(1.4)}
-                      - type: state-icon
-                        entity: switch.corredor_switch_1
-                        title: Corredor
-                        style: {top: 42%, left: 37%, color: "rgba(255,255,255,0.5)", "--color": "#f9a825", transform: scale(1.4)}
-
-          - type: custom:button-card
-            template: 
-              - hemma_vacuum
-              - icon_vacuum
-            entity: vacuum.roborock_s7
-            name: "Aspirador"
-            tap_action:
-              action: fire-dom-event
-              browser_mod:
-                service: browser_mod.popup
-                data:
-                  title: ""
-                  size: fullscreen
-                  content:
-                    type: custom:xiaomi-vacuum-map-card
-                    vacuum_platform: Roborock
-                    entity: vacuum.roborock_s7
-                    map_source: {camera: image.roborock_s7_map_0_custom}
-                    calibration_source: {camera: true}
-                    map_locked: false
-                    two_finger_pan: true
-                    icons:
-                      - icon: mdi:play
-                        tap_action: {action: call-service, service: vacuum.start, service_data: {entity_id: vacuum.roborock_s7}}
-                      - icon: mdi:pause
-                        tap_action: {action: call-service, service: vacuum.pause, service_data: {entity_id: vacuum.roborock_s7}}
-                      - icon: mdi:home-map-marker
-                        tap_action: {action: call-service, service: vacuum.return_to_base, service_data: {entity_id: vacuum.roborock_s7}}
-
-          - type: custom:button-card
-            template: 
-              - hemma_entity
-              - icon_doorbell
-            entity: sun.sun
-            name: "Segurança"
-            tap_action:
-              action: navigate
-              navigation_path: /dashboard-hemma/seguranca
-
-  # ============================================================
-  # 2. SEGURANÇA
-  # ============================================================
-  - type: custom:grid-layout
-    title: seguranca
-    path: seguranca
-    layout:
-      grid-template-columns: 1fr
-      grid-template-rows: auto auto 1fr
-      margin: 0
-      padding: 0
-      height: 100vh
-    cards:
-      - type: custom:button-card
-        show_name: false
-        show_icon: false
-        styles:
-          card:
-            - position: fixed
-            - top: 0
-            - left: 0
-            - width: 100vw
-            - height: 100vh
-            - z-index: -1
-            - background-image: "url('/Hemma-main/local/hemma/rooms/home.jpg')"
-            - background-size: cover
-            - background-position: center
-            - filter: blur(1px) saturate(1.0) brightness(0.5)
-            - border: none
-            - border-radius: 0
-            - pointer-events: none
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navigation.yaml
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        view_layout: {grid-column: 1, grid-row: 2}
-        layout_type: custom:grid-layout
-        layout:
-          grid-template-columns: repeat(3, 1fr)
-          grid-template-rows: repeat(2, auto)
-          grid-gap: 12px
-          margin: 0 4vw
-          padding: 120px 0 24px 0
-        cards:
-          - type: picture-entity
-            entity: camera.sl_camera
+            template: hemma_light
+            entity: light.grupo_luzes_sala
             name: Sala
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.vr_camera
-            name: Varanda
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.cz_camera
+            variables:
+              icon: living-room
+
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.grupo_luzes_cozinha
             name: Cozinha
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.as_camera
-            name: Área Serviço
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.of_camera
-            name: Office
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.camera_quarto_casal
+            variables:
+              icon: kitchen
+
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.grupo_quarto_casal
             name: Quarto Casal
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.qma_camera
-            name: Quarto Marina
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.qmi_camera
-            name: Quarto Miguel
-            aspect_ratio: 16x9
-            view_layout: {grid-column: 2}
+            variables:
+              icon: bedroom
 
-  # ============================================================
-  # 3. SALA DE ESTAR
-  # ============================================================
+          # Doorbell Camera
+          - type: custom:button-card
+            template: hemma_doorbell
+            entity: camera.sl_camera_2
+            name: Sala Camera
+            variables:
+              icon: doorbell
+
+          # Network/Energy/Updates cards intentionally disabled until sensors are mapped.
+
+          # Motion Overview Card
+          # Shows active room name when motion is detected, "Clear" when none.
+          # Sensor entity IDs for navbar badge are configured separately
+          # in packages/hemma_helpers.yaml (input_text section).
+          # - type: custom:button-card
+          #   template: hemma_motion
+          #   variables:
+          #     default_name: Home          # shown when no motion detected
+          #     sensor_1: binary_sensor.living_room_hub_motion
+          #     label_1: Living Room
+          #     sensor_2: binary_sensor.hue_motion_sensor_motion
+          #     label_2: Bedroom
+          #     sensor_3: binary_sensor.YOUR_KITCHEN_MOTION
+          #     label_3: Kitchen
+
+  # ------------------------------------------------------
+  # LIVING ROOM
+  # ------------------------------------------------------
   - type: custom:grid-layout
-    title: sala
-    path: sala
+    title: living-room
+    path: living-room
     layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
+      # ROOM HERO CARD
       - type: custom:button-card
         template: hemma_room
-        name: "Sala de Estar"
-        variables: 
-          image: sala_estar
+        name: Living Room
+        variables:
+          image: livingroom
           image_position: center center
+
+          # Climate (optional - shows group badge + expandable sub-badges for temp/humidity/quality)
           show_climate: false
-          temp_unit: 'C'
+          # climate_entity_1: climate.YOUR_LIVING_ROOM_CLIMATE
+
+          # Sensors (used by the climate sub-badges when show_climate is true)
+          # temp_sensor_1: sensor.YOUR_LIVING_ROOM_TEMP
+          # temp_sensor_2: sensor.YOUR_TEMP_2          # optional additional sensors
+          # humidity_sensor: sensor.YOUR_LIVING_ROOM_HUMIDITY
+          # quality_sensor: sensor.YOUR_AIR_QUALITY
+
+          # Light Badge (optional)
           show_lights: true
-          light_entity_1: light.luzes_sala
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
+          light_entity_1: light.grupo_luzes_sala
+
+          # Weather Widget (optional - set show_weather: true and add weather_entity to enable)
+          show_weather: false
+          # weather_entity: weather.YOUR_WEATHER
+          # weather_temp_sensor: sensor.YOUR_OUTDOOR_TEMP
+          temp_unit: 'F'                                  # 'F' for Fahrenheit, 'C' for Celsius
+
+          # Media Player Badges (optional - shows what's playing in this room)
           show_media: true
           show_media_player_1: true
-          media_player_1: media_player.spotifyplus_bruno_helasio
-          show_weather: false
+          media_player_1: media_player.android_tv_192_168_3_17
+          show_media_player_2: true
+          media_player_2: media_player.echo_show
 
+      # MOBILE NAVBAR
       - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
+      # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
           - type: custom:button-card
-            template: [hemma_thermostat, icon_climate]
-            entity: climate.ar_condicionado_sala
-            name: "Ar-condicionado"
-
-          - type: custom:button-card
-            template: [hemma_media, icon_tv]
+            template: hemma_media
             entity: media_player.android_tv_192_168_3_17
-            name: "TV"
-            state:
-              - operator: template
-                value: "[[[ return (entity && entity.state && (entity.state.toLowerCase() === 'playing' || entity.state.toLowerCase() === 'on' || (entity.state.toLowerCase() === 'idle' && entity.attributes.entity_picture))); ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
+            name: Smart TV Pro
+            variables:
+              icon: tv
+              show_progress: true
+              progress_entity: media_player.android_tv_192_168_3_17
 
           - type: custom:button-card
-            template: [hemma_media, icon_spotify]
-            entity: media_player.spotifyplus_bruno_helasio
-            name: "Spotify"
-            state:
-              - operator: template
-                value: "[[[ return entity.state === 'playing'; ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
+            template: hemma_media
+            entity: media_player.echo_show
+            name: Echo Show
+            variables:
+              icon: speaker
+              show_toggle: true
 
           - type: custom:button-card
-            template: 
-              - hemma_curtain
-              - icon_shade
-            entity: sun.sun
-            name: "Cortina"
-            tap_action:
-              action: none
+            template: hemma_media
+            entity: media_player.echo_pop_quarto_casal
+            name: Echo Quarto Casal
+            variables:
+              icon: speaker
 
           - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_sala
-            name: "Luzes"
+            template: hemma_light
+            entity: light.grupo_luzes_sala
+            name: Luzes Sala
+            variables:
+              icon: light
 
-  # ============================================================
-  # 4. COZINHA
-  # ============================================================
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.varanda_switch_1
+            name: Area Gourmet
+            variables:
+              icon: light
+
+          - type: custom:button-card
+            template: hemma_doorbell
+            entity: camera.vr_camera_2
+            name: Varanda Camera
+            variables:
+              icon: doorbell
+
+  # ------------------------------------------------------
+  # KITCHEN
+  # ------------------------------------------------------
   - type: custom:grid-layout
-    title: cozinha
-    path: cozinha
+    title: kitchen
+    path: kitchen
     layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
+      # ROOM HERO CARD
       - type: custom:button-card
         template: hemma_room
-        name: "Cozinha"
-        variables: 
-          image: cozinha
+        name: Kitchen
+        variables:
+          image: kitchen
           image_position: center center
+
+          # Climate (optional - shows group badge + expandable sub-badges for temp/humidity/quality)
           show_climate: false
-          temp_unit: 'C'
+          # climate_entity_1: climate.YOUR_KITCHEN_CLIMATE
+
+          # Sensors (used by the climate sub-badges when show_climate is true)
+          # temp_sensor_1: sensor.YOUR_KITCHEN_TEMP
+          # humidity_sensor: sensor.YOUR_KITCHEN_HUMIDITY
+          # quality_sensor: sensor.YOUR_AIR_QUALITY
+
+          show_weather: false
+          # weather_entity: weather.YOUR_WEATHER
+          # weather_temp_sensor: sensor.YOUR_OUTDOOR_TEMP
+          temp_unit: 'F'
+
+          # Light Badge (optional)
           show_lights: true
-          light_entity_1: light.luzes_cozinha
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
+          light_entity_1: light.grupo_luzes_cozinha
+
+          # Media Player Badges (optional)
           show_media: false
-          show_weather: false
+          # show_media_player_1: true
+          # media_player_1: media_player.YOUR_KITCHEN_PLAYER
 
+      # MOBILE NAVBAR
       - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
+      # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
           - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_cozinha
-            name: "Luzes"
+            template: hemma_doorbell
+            entity: camera.cz_camera_2
+            name: Cozinha Camera
+            variables:
+              icon: doorbell
 
-  # ============================================================
-  # 5. LAVABO
-  # ============================================================
+          - type: custom:button-card
+            template: hemma_doorbell
+            entity: camera.as_camera_2
+            name: Lavanderia Camera
+            variables:
+              icon: doorbell
+
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.grupo_luzes_cozinha
+            name: Luzes Cozinha
+            variables:
+              icon: light
+
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.cozinha_switch_2
+            name: Cozinha Principal
+            variables:
+              icon: light
+
+  # ------------------------------------------------------
+  # BEDROOM
+  # ------------------------------------------------------
   - type: custom:grid-layout
-    title: lavabo
-    path: lavabo
+    title: bedroom
+    path: bedroom
     layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
     cards:
+      # ROOM HERO CARD
       - type: custom:button-card
         template: hemma_room
-        name: "Lavabo"
-        variables: 
-          image: lavabo
+        name: Bedroom
+        variables:
+          image: bedroom
           image_position: center center
+
+          # Climate (optional - shows group badge + expandable sub-badges for temp/humidity/quality)
           show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_lavabo
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: false
+          # climate_entity_1: climate.YOUR_BEDROOM_CLIMATE
+
+          # Sensors (used by the climate sub-badges when show_climate is true)
+          # temp_sensor_1: sensor.YOUR_BEDROOM_TEMP
+          # humidity_sensor: sensor.YOUR_BEDROOM_HUMIDITY
+          # quality_sensor: sensor.YOUR_BEDROOM_AIR_QUALITY
+
           show_weather: false
+          # weather_entity: weather.YOUR_WEATHER
+          # weather_temp_sensor: sensor.YOUR_OUTDOOR_TEMP
+          temp_unit: 'F'
 
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_lavabo
-            name: "Luzes"
-
-  # ============================================================
-  # 6. CIRCULAÇÃO
-  # ============================================================
-  - type: custom:grid-layout
-    title: circulacao
-    path: circulacao
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Circulação"
-        variables: 
-          image: circulacao
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
+          # Light Badge (optional)
           show_lights: true
-          light_entity_1: switch.corredor_switch_1
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: false
-          show_weather: false
+          light_entity_1: light.grupo_quarto_casal
 
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: switch.corredor_switch_1
-            name: "Luz Corredor"
-
-  # ============================================================
-  # 7. OFFICE
-  # ============================================================
-  - type: custom:grid-layout
-    title: office
-    path: office
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Office"
-        variables: 
-          image: office
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_office
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
+          # Media Player Badges (optional)
           show_media: true
           show_media_player_1: true
-          media_player_1: media_player.spotifyplus_bruno_helasio
-          show_weather: false
+          media_player_1: media_player.echo_pop_quarto_casal
+          show_media_player_2: true
+          media_player_2: media_player.echo_pop_marina
 
+      # MOBILE NAVBAR
       - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
 
+      # ENTITY CARDS
       - type: custom:layout-card
         class: hemma-entities
         layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
+        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout.yaml
         cards:
           - type: custom:button-card
-            template: [hemma_thermostat, icon_climate]
-            entity: climate.ar_condicionado_office
-            name: "Ar-condicionado"
+            template: hemma_media
+            entity: media_player.echo_pop_quarto_casal
+            name: Echo Quarto Casal
+            variables:
+              icon: speaker
 
           - type: custom:button-card
-            template: [hemma_media, icon_spotify]
-            entity: media_player.spotifyplus_bruno_helasio
-            name: "Spotify"
-            state:
-              - operator: template
-                value: "[[[ return entity.state === 'playing'; ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
+            template: hemma_media
+            entity: media_player.echo_pop_marina
+            name: Echo Marina
+            variables:
+              icon: speaker
+              show_toggle: true
 
           - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_office
-            name: "Luzes"
-
-  # ============================================================
-  # 8. QUARTO CASAL
-  # ============================================================
-  - type: custom:grid-layout
-    title: quarto-casal
-    path: quarto_casal
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Quarto Casal"
-        variables: 
-          image: quarto_casal
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_quarto_casal
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: true
-          show_media_player_1: true
-          media_player_1: media_player.spotifyplus_bruno_helasio
-          show_weather: false
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_thermostat, icon_climate]
-            entity: climate.ar_condicionado_casal
-            name: "Ar-condicionado"
+            template: hemma_doorbell
+            entity: camera.camera_quarto_casal_2
+            name: Camera Quarto Casal
+            variables:
+              icon: doorbell
 
           - type: custom:button-card
-            template: [hemma_entity, icon_tv]
-            entity: sun.sun
-            name: "Smart TV"
-            tap_action: {action: none}
+            template: hemma_light
+            entity: light.grupo_quarto_casal
+            name: Luzes Quarto Casal
+            variables:
+              icon: light
 
           - type: custom:button-card
-            template: [hemma_media, icon_spotify]
-            entity: media_player.spotifyplus_bruno_helasio
-            name: "Spotify"
-            state:
-              - operator: template
-                value: "[[[ return entity.state === 'playing'; ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
-
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_quarto_casal
-            name: "Luzes"
-
-  # ============================================================
-  # 9. QUARTO MARINA
-  # ============================================================
-  - type: custom:grid-layout
-    title: quarto-marina
-    path: quarto_marina
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Quarto Marina"
-        variables: 
-          image: quarto_marina
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_quarto_marina
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: true
-          show_media_player_1: true
-          media_player_1: media_player.spotifyplus_bruno_helasio
-          show_weather: false
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_thermostat, icon_climate]
-            entity: climate.ar_condicionado_marina
-            name: "Ar-condicionado"
-
-          - type: custom:button-card
-            template: [hemma_entity, icon_tv]
-            entity: sun.sun
-            name: "Smart TV"
-            tap_action: {action: none}
-
-          - type: custom:button-card
-            template: [hemma_media, icon_spotify]
-            entity: media_player.spotifyplus_bruno_helasio
-            name: "Spotify"
-            state:
-              - operator: template
-                value: "[[[ return entity.state === 'playing'; ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
-
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_quarto_marina
-            name: "Luzes"
-
-  # ============================================================
-  # 10. QUARTO MIGUEL
-  # ============================================================
-  - type: custom:grid-layout
-    title: quarto-miguel
-    path: quarto_miguel
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Quarto Miguel"
-        variables: 
-          image: quarto_miguel
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_quarto_miguel
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: true
-          show_media_player_1: true
-          media_player_1: media_player.spotifyplus_bruno_helasio
-          show_weather: false
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_thermostat, icon_climate]
-            entity: sun.sun
-            name: "Ar-condicionado"
-            tap_action: {action: none}
-
-          - type: custom:button-card
-            template: [hemma_entity, icon_tv]
-            entity: sun.sun
-            name: "Smart TV"
-            tap_action: {action: none}
-
-          - type: custom:button-card
-            template: [hemma_media, icon_spotify]
-            entity: media_player.spotifyplus_bruno_helasio
-            name: "Spotify"
-            state:
-              - operator: template
-                value: "[[[ return entity.state === 'playing'; ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
-
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_quarto_miguel
-            name: "Luzes"
-
-  # ============================================================
-  # 2. SEGURANÇA
-  # ============================================================
-  - type: custom:grid-layout
-    title: seguranca
-    path: seguranca
-    layout:
-      grid-template-columns: 1fr
-      grid-template-rows: auto auto 1fr
-      margin: 0
-      padding: 0
-      height: 100vh
-    cards:
-      - type: custom:button-card
-        show_name: false
-        show_icon: false
-        styles:
-          card:
-            - position: fixed
-            - top: 0
-            - left: 0
-            - width: 100vw
-            - height: 100vh
-            - z-index: -1
-            - background-image: "url('/local/hemma/rooms/home.jpg')"
-            - background-size: cover
-            - background-position: center
-            - filter: blur(1px) saturate(1.0) brightness(0.5)
-            - border: none
-            - border-radius: 0
-            - pointer-events: none
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navigation.yaml
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        view_layout:
-          grid-column: 1
-          grid-row: 2
-        layout_type: custom:grid-layout
-        layout:
-          grid-template-columns: repeat(3, 1fr)
-          grid-template-rows: repeat(2, auto)
-          grid-gap: 12px
-          margin: 0 4vw
-          padding: 120px 0 24px 0
-        cards:
-          - type: picture-entity
-            entity: camera.sl_camera
-            name: Sala
-            camera_view: auto
-            show_state: false
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.vr_camera
-            name: Varanda
-            camera_view: auto
-            show_state: false
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.cz_camera
-            name: Cozinha
-            camera_view: auto
-            show_state: false
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.as_camera
-            name: Área Serviço
-            camera_view: auto
-            show_state: false
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.of_camera
-            name: Office
-            camera_view: auto
-            show_state: false
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.camera_quarto_casal
-            name: Quarto Casal
-            camera_view: auto
-            show_state: false
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.qma_camera
-            name: Quarto Marina
-            camera_view: auto
-            show_state: false
-            aspect_ratio: 16x9
-          - type: picture-entity
-            entity: camera.qmi_camera
-            name: Quarto Miguel
-            camera_view: auto
-            show_state: false
-            aspect_ratio: 16x9
-            view_layout:
-              grid-column: 2
-
-  # ============================================================
-  # 3. SALA DE ESTAR
-  # ============================================================
-  - type: custom:grid-layout
-    title: sala
-    path: sala
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Sala de Estar"
-        variables: 
-          image: sala_estar
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_sala
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: true
-          show_media_player_1: true
-          media_player_1: media_player.spotifyplus_bruno_helasio
-          show_weather: false
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_thermostat, icon_climate]
-            entity: climate.ar_condicionado_sala
-            name: "Ar-condicionado"
-
-          - type: custom:button-card
-            template: [hemma_media, icon_tv]
-            entity: media_player.android_tv_192_168_3_17
-            name: "TV"
-            state:
-              - operator: template
-                value: "[[[ return (entity && entity.state && (entity.state.toLowerCase() === 'playing' || entity.state.toLowerCase() === 'on' || (entity.state.toLowerCase() === 'idle' && entity.attributes.entity_picture))); ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
-
-          - type: custom:button-card
-            template: [hemma_media, icon_spotify]
-            entity: media_player.spotifyplus_bruno_helasio
-            name: "Spotify"
-            state:
-              - operator: template
-                value: "[[[ return entity.state === 'playing'; ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
-
-          - type: custom:button-card
-            template: [hemma_curtain, icon_shade]
-            entity: sun.sun
-            name: "Cortina"
-            tap_action: {action: none}
-
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_sala
-            name: "Luzes"
-
-  # ============================================================
-  # 4. COZINHA
-  # ============================================================
-  - type: custom:grid-layout
-    title: cozinha
-    path: cozinha
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Cozinha"
-        variables: 
-          image: cozinha
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_cozinha
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: false
-          show_weather: false
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_cozinha
-            name: "Luzes"
-
-  # ============================================================
-  # 5. LAVABO
-  # ============================================================
-  - type: custom:grid-layout
-    title: lavabo
-    path: lavabo
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Lavabo"
-        variables: 
-          image: lavabo
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_lavabo
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: false
-          show_weather: false
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_lavabo
-            name: "Luzes"
-
- # ============================================================
-  # 6. CIRCULAÇÃO
-  # ============================================================
-  - type: custom:grid-layout
-    title: circulacao
-    path: circulacao
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Circulação"
-        variables: 
-          image: circulacao
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: switch.corredor_switch_1
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: false
-          show_weather: false
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: switch.corredor_switch_1
-            name: "Luz Corredor"
-
-  # ============================================================
-  # 7. OFFICE
-  # ============================================================
-  - type: custom:grid-layout
-    title: office
-    path: office
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Office"
-        variables: 
-          image: office
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_office
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: true
-          show_media_player_1: true
-          media_player_1: media_player.spotifyplus_bruno_helasio
-          show_weather: false
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_thermostat, icon_climate]
-            entity: climate.ar_condicionado_office
-            name: "Ar-condicionado"
-
-          - type: custom:button-card
-            template: [hemma_media, icon_spotify]
-            entity: media_player.spotifyplus_bruno_helasio
-            name: "Spotify"
-            state:
-              - operator: template
-                value: "[[[ return entity.state === 'playing'; ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
-
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_office
-            name: "Luzes"
-
-  # ============================================================
-  # 8. QUARTO CASAL
-  # ============================================================
-  - type: custom:grid-layout
-    title: quarto-casal
-    path: quarto_casal
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Quarto Casal"
-        variables: 
-          image: quarto_casal
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_quarto_casal
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: true
-          show_media_player_1: true
-          media_player_1: media_player.spotifyplus_bruno_helasio
-          show_weather: false
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_thermostat, icon_climate]
-            entity: climate.ar_condicionado_casal
-            name: "Ar-condicionado"
-
-          - type: custom:button-card
-            template: [hemma_entity, icon_tv]
-            entity: sun.sun
-            name: "Smart TV"
-            tap_action: {action: none}
-
-          - type: custom:button-card
-            template: [hemma_media, icon_spotify]
-            entity: media_player.spotifyplus_bruno_helasio
-            name: "Spotify"
-            state:
-              - operator: template
-                value: "[[[ return entity.state === 'playing'; ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
-
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_quarto_casal
-            name: "Luzes"
-
-  # ============================================================
-  # 9. QUARTO MARINA
-  # ============================================================
-  - type: custom:grid-layout
-    title: quarto-marina
-    path: quarto_marina
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Quarto Marina"
-        variables: 
-          image: quarto_marina
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_quarto_marina
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: true
-          show_media_player_1: true
-          media_player_1: media_player.spotifyplus_bruno_helasio
-          show_weather: false
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_thermostat, icon_climate]
-            entity: climate.ar_condicionado_marina
-            name: "Ar-condicionado"
-
-          - type: custom:button-card
-            template: [hemma_entity, icon_tv]
-            entity: sun.sun
-            name: "Smart TV"
-            tap_action: {action: none}
-
-          - type: custom:button-card
-            template: [hemma_media, icon_spotify]
-            entity: media_player.spotifyplus_bruno_helasio
-            name: "Spotify"
-            state:
-              - operator: template
-                value: "[[[ return entity.state === 'playing'; ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
-
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_quarto_marina
-            name: "Luzes"
-
-  # ============================================================
-  # 10. QUARTO MIGUEL
-  # ============================================================
-  - type: custom:grid-layout
-    title: quarto-miguel
-    path: quarto_miguel
-    layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_screen_layout.yaml
-    cards:
-      - type: custom:button-card
-        template: hemma_room
-        name: "Quarto Miguel"
-        variables: 
-          image: quarto_miguel
-          image_position: center center
-          show_climate: false
-          temp_unit: 'C'
-          show_lights: true
-          light_entity_1: light.luzes_quarto_miguel
-          show_presence: true
-          presence_entity_1: person.bruno_helasio
-          show_motion: false
-          show_media: true
-          show_media_player_1: true
-          media_player_1: media_player.spotifyplus_bruno_helasio
-          show_weather: false
-
-      - !include /config/Hemma-main/dashboards/templates/includes/hemma_navbar_mobile.yaml
-
-      - type: custom:layout-card
-        class: hemma-entities
-        layout_type: custom:grid-layout
-        layout: !include /config/Hemma-main/dashboards/templates/includes/hemma_entity_layout_square.yaml
-        cards:
-          - type: custom:button-card
-            template: [hemma_thermostat, icon_climate]
-            entity: sun.sun
-            name: "Ar-condicionado"
-            tap_action: {action: none}
-
-          - type: custom:button-card
-            template: [hemma_entity, icon_tv]
-            entity: sun.sun
-            name: "Smart TV"
-            tap_action: {action: none}
-
-          - type: custom:button-card
-            template: [hemma_media, icon_spotify]
-            entity: media_player.spotifyplus_bruno_helasio
-            name: "Spotify"
-            state:
-              - operator: template
-                value: "[[[ return entity.state === 'playing'; ]]]"
-                styles:
-                  card:
-                    - background-image: "[[[ return entity.attributes.entity_picture ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${entity.attributes.entity_picture}')` : 'none'; ]]]"
-                    - background-size: cover
-
-          - type: custom:button-card
-            template: [hemma_light, icon_lamp]
-            entity: light.luzes_quarto_miguel
-            name: "Luzes"
+            template: hemma_light
+            entity: light.qc_luz_principal
+            name: Luz Principal
+            variables:
+              icon: light

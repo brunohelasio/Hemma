@@ -128,6 +128,27 @@ views:
               icon: door
               show_toggle: true
 
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.grupo_luzes_sala
+            name: Sala
+            variables:
+              icon: living-room
+
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.grupo_luzes_cozinha
+            name: Cozinha
+            variables:
+              icon: kitchen
+
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.grupo_quarto_casal
+            name: Quarto Casal
+            variables:
+              icon: bedroom
+
           # Doorbell Camera
           - type: custom:button-card
             template: hemma_doorbell
@@ -230,6 +251,20 @@ views:
               icon: speaker
 
           - type: custom:button-card
+            template: hemma_light
+            entity: light.grupo_luzes_sala
+            name: Luzes Sala
+            variables:
+              icon: light
+
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.varanda_switch_1
+            name: Area Gourmet
+            variables:
+              icon: light
+
+          - type: custom:button-card
             template: hemma_doorbell
             entity: camera.vr_camera_2
             name: Varanda Camera
@@ -297,6 +332,20 @@ views:
             name: Lavanderia Camera
             variables:
               icon: doorbell
+
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.grupo_luzes_cozinha
+            name: Luzes Cozinha
+            variables:
+              icon: light
+
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.cozinha_switch_2
+            name: Cozinha Principal
+            variables:
+              icon: light
 
   # ------------------------------------------------------
   # BEDROOM
@@ -369,3 +418,17 @@ views:
             name: Camera Quarto Casal
             variables:
               icon: doorbell
+
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.grupo_quarto_casal
+            name: Luzes Quarto Casal
+            variables:
+              icon: light
+
+          - type: custom:button-card
+            template: hemma_light
+            entity: light.qc_luz_principal
+            name: Luz Principal
+            variables:
+              icon: light

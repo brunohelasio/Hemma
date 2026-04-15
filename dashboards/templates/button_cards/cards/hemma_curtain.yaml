@@ -49,8 +49,8 @@ hemma_curtain:
     [[[
       const s = (entity?.state || '').toLowerCase();
       return ['open', 'opening'].includes(s)
-        ? '/local/hemma/icons/curtain-open.svg'
-        : '/local/hemma/icons/curtain-closed.svg';
+        ? '/local/Hemma-main/www/hemma/icons/curtain-open.svg'
+        : '/local/Hemma-main/www/hemma/icons/curtain-closed.svg';
     ]]]
 
   extra_styles: |

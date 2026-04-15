@@ -303,7 +303,7 @@ hemma_thermostat:
                 - type: custom:button-card
                   template: [hemma_default]
                   show_entity_picture: true
-                  entity_picture: /local/hemma/icons/increase.svg
+                  entity_picture: /local/Hemma-main/www/hemma/icons/increase.svg
                   tap_action:
                     action: call-service
                     service: input_number.increment
@@ -352,7 +352,7 @@ hemma_thermostat:
                 - type: custom:button-card
                   template: [hemma_default]
                   show_entity_picture: true
-                  entity_picture: /local/hemma/icons/decrease.svg
+                  entity_picture: /local/Hemma-main/www/hemma/icons/decrease.svg
                   tap_action:
                     action: call-service
                     service: input_number.decrement

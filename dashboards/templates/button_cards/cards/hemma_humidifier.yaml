@@ -26,8 +26,8 @@ hemma_humidifier:
     [[[
       const s = (entity?.state || '').toLowerCase();
       return s === 'on'
-        ? '/local/hemma/icons/humidifier-on.svg'
-        : '/local/hemma/icons/humidifier.svg';
+        ? '/local/Hemma-main/www/hemma/icons/humidifier-on.svg'
+        : '/local/Hemma-main/www/hemma/icons/humidifier.svg';
     ]]]
 
   styles:

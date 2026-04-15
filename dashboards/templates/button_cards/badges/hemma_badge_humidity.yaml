@@ -11,7 +11,7 @@ hemma_badge_humidity:
 
   extra_styles: >
     [[[
-      const SVG_URL = '/local/hemma/icons/humidity.svg';
+      const SVG_URL = '/local/Hemma-main/www/hemma/icons/humidity.svg';
 
       // Robust enabled check (see hemma_badge_base.yaml for pattern docs)
       const ev = variables?.enabled;
